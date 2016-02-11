@@ -1,0 +1,2 @@
+filename,experiment_id,sample_name,strand_start,strand_stop,scale_factor,downsample_factor,used_,comment_
+//proline/Users/dmccloskey/Resequencing_DNA/Evo04ptsHIcrrEvo04EP/Evo04ptsHIcrrEvo04EP/data/Evo04ptsHIcrrEvo04EP_reference.gff,ALEsKOs01,140807_11_OxicEvo04ptsHIcrrEvo04EPEcoliGlcM9_Broth-1,0,4640000,FALSE,2000,TRUE,

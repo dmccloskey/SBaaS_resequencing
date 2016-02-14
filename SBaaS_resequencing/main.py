@@ -15,10 +15,10 @@ session = pg_orm.get_session();
 engine = pg_orm.get_engine();
 
 # your app...
-sys.path.append(pg_settings.datadir_settings['drive']+'/SBaaS_LIMS')
-sys.path.append(pg_settings.datadir_settings['drive']+'/SBaaS_statistics')
-sys.path.append(pg_settings.datadir_settings['drive']+'/SBaaS_resequencing')
-sys.path.append(pg_settings.datadir_settings['drive']+'/SBaaS_models')
+sys.path.append(pg_settings.datadir_settings['github']+'/SBaaS_LIMS')
+sys.path.append(pg_settings.datadir_settings['github']+'/SBaaS_statistics')
+sys.path.append(pg_settings.datadir_settings['github']+'/SBaaS_resequencing')
+sys.path.append(pg_settings.datadir_settings['github']+'/SBaaS_models')
 sys.path.append(pg_settings.datadir_settings['github']+'/sequencing_utilities')
 sys.path.append(pg_settings.datadir_settings['github']+'/sequencing_analysis')
 sys.path.append(pg_settings.datadir_settings['github']+'/io_utilities')

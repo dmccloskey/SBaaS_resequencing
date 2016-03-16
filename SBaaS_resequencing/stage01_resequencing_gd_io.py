@@ -40,6 +40,111 @@ class stage01_resequencing_gd_io(stage01_resequencing_gd_query,
         #self.add_dataStage01ResequencingMutations(mutations);
         #self.add_dataStage01ResequencingEvidence(evidence);
         #self.add_dataStage01ResequencingValidation(validation);
+
+    def import_dataStage01ResequencingMetadata_add(self, filename):
+        '''table adds'''
+        data = base_importData();
+        data.read_csv(filename);
+        data.format_data();
+        self.add_dataStage01ResequencingMetadata(data.data);
+        data.clear_data();
+    def import_dataStage01ResequencingMetadata_update(self, filename):
+        '''table updates'''
+        data = base_importData();
+        data.read_csv(filename);
+        data.format_data();
+        self.update_dataStage01ResequencingMetadata(data.data);
+        data.clear_data();
+
+    def import_dataStage01ResequencingMutations_add(self, filename):
+        '''table adds'''
+        data = base_importData();
+        data.read_csv(filename);
+        data.format_data();
+        self.add_dataStage01ResequencingMutations(data.data);
+        data.clear_data();
+    def import_dataStage01ResequencingMutations_update(self, filename):
+        '''table updates'''
+        data = base_importData();
+        data.read_csv(filename);
+        data.format_data();
+        self.update_dataStage01ResequencingMutations(data.data);
+        data.clear_data();
+
+    def import_dataStage01ResequencingEvidence_add(self, filename):
+        '''table adds'''
+        data = base_importData();
+        data.read_csv(filename);
+        data.format_data();
+        self.add_dataStage01ResequencingEvidence(data.data);
+        data.clear_data();
+    def import_dataStage01ResequencingEvidence_update(self, filename):
+        '''table updates'''
+        data = base_importData();
+        data.read_csv(filename);
+        data.format_data();
+        self.update_dataStage01ResequencingEvidence(data.data);
+        data.clear_data();
+
+    def import_dataStage01ResequencingValidation_add(self, filename):
+        '''table adds'''
+        data = base_importData();
+        data.read_csv(filename);
+        data.format_data();
+        self.add_dataStage01ResequencingValidation(data.data);
+        data.clear_data();
+    def import_dataStage01ResequencingValidation_update(self, filename):
+        '''table updates'''
+        data = base_importData();
+        data.read_csv(filename);
+        data.format_data();
+        self.update_dataStage01ResequencingValidation(data.data);
+        data.clear_data();
+
+    def import_dataStage01ResequencingMutationsFiltered_add(self, filename):
+        '''table adds'''
+        data = base_importData();
+        data.read_csv(filename);
+        data.format_data();
+        self.add_dataStage01ResequencingMutationsFiltered(data.data);
+        data.clear_data();
+    def import_dataStage01ResequencingMutationsFiltered_update(self, filename):
+        '''table updates'''
+        data = base_importData();
+        data.read_csv(filename);
+        data.format_data();
+        self.update_dataStage01ResequencingMutationsFiltered(data.data);
+        data.clear_data();
+
+    def import_dataStage01ResequencingMutationsAnnotated_add(self, filename):
+        '''table adds'''
+        data = base_importData();
+        data.read_csv(filename);
+        data.format_data();
+        self.add_dataStage01ResequencingMutationsAnnotated(data.data);
+        data.clear_data();
+    def import_dataStage01ResequencingMutationsAnnotated_update(self, filename):
+        '''table updates'''
+        data = base_importData();
+        data.read_csv(filename);
+        data.format_data();
+        self.update_dataStage01ResequencingMutationsAnnotated(data.data);
+        data.clear_data();
+
+    def import_dataStage01ResequencingMutationsSeqChanges_add(self, filename):
+        '''table adds'''
+        data = base_importData();
+        data.read_csv(filename);
+        data.format_data();
+        self.add_dataStage01ResequencingMutationsSeqChanges(data.data);
+        data.clear_data();
+    def import_dataStage01ResequencingMutationsSeqChanges_update(self, filename):
+        '''table updates'''
+        data = base_importData();
+        data.read_csv(filename);
+        data.format_data();
+        self.update_dataStage01ResequencingMutationsSeqChanges(data.data);
+        data.clear_data();
         
     def export_dataStage01ResequencingMutationsAnnotatedLineage_js(self,analysis_id_I,mutation_id_exclusion_list=[],frequency_threshold=0.1,max_position=4630000,data_dir_I="tmp"):
         '''export data_stage01_resequencing_mutationsAnnotated to js file
@@ -168,8 +273,8 @@ class stage01_resequencing_gd_io(stage01_resequencing_gd_query,
         formparameters_O = {'htmlid':'filtermenuform1','htmltype':'form_01',"formsubmitbuttonidtext":{'id':'submit1','text':'submit'},"formresetbuttonidtext":{'id':'reset1','text':'reset'},"formupdatebuttonidtext":{'id':'update1','text':'update'}};
         formtileparameters_O.update(formparameters_O);
         svgparameters_O = {
-                            #"svgtype":'scatterlineplot2d_01', #split testing...
-                            "svgtype":'horizontalareaplot2d_01',
+                            "svgtype":'scatterlineplot2d_01', #split testing...
+                            #"svgtype":'horizontalareaplot2d_01',
                             "svgkeymap":[data1_keymap,data1_keymap],
                             'svgid':'svg1',
                             "svgmargin":{ 'top': 50, 'right': 150, 'bottom': 50, 'left': 50 },
@@ -190,126 +295,14 @@ class stage01_resequencing_gd_io(stage01_resequencing_gd_query,
         parametersobject_O = [formtileparameters_O,svgtileparameters_O,tabletileparameters_O];
         tile2datamap_O = {"filtermenu1":[0],"tile2":[0,1],"tile3":[0]};
         # dump the data to a json file
-        data_str = 'var ' + 'data' + ' = ' + json.dumps(dataobject_O) + ';';
-        parameters_str = 'var ' + 'parameters' + ' = ' + json.dumps(parametersobject_O) + ';';
-        tile2datamap_str = 'var ' + 'tile2datamap' + ' = ' + json.dumps(tile2datamap_O) + ';';
+        ddtutilities = ddt_container(parameters_I = parametersobject_O,data_I = dataobject_O,tile2datamap_I = tile2datamap_O,filtermenu_I = None);
         if data_dir_I=='tmp':
             filename_str = self.settings['visualization_data'] + '/tmp/ddt_data.js'
-        elif data_dir_I=='project':
-            filename_str = self.settings['visualization_data'] + '/project/' + analysis_id_I + '_data_stage01_resequencing_mutationsAnnotated' + '.js'
         elif data_dir_I=='data_json':
-            data_json_O = data_str + '\n' + parameters_str + '\n' + tile2datamap_str;
+            data_json_O = ddtutilities.get_allObjects_js();
             return data_json_O;
         with open(filename_str,'w') as file:
-            file.write(data_str);
-            file.write(parameters_str);
-            file.write(tile2datamap_str);
-
-    def import_dataStage01ResequencingMetadata_add(self, filename):
-        '''table adds'''
-        data = base_importData();
-        data.read_csv(filename);
-        data.format_data();
-        self.add_dataStage01ResequencingMetadata(data.data);
-        data.clear_data();
-    def import_dataStage01ResequencingMetadata_update(self, filename):
-        '''table updates'''
-        data = base_importData();
-        data.read_csv(filename);
-        data.format_data();
-        self.update_dataStage01ResequencingMetadata(data.data);
-        data.clear_data();
-
-    def import_dataStage01ResequencingMutations_add(self, filename):
-        '''table adds'''
-        data = base_importData();
-        data.read_csv(filename);
-        data.format_data();
-        self.add_dataStage01ResequencingMutations(data.data);
-        data.clear_data();
-    def import_dataStage01ResequencingMutations_update(self, filename):
-        '''table updates'''
-        data = base_importData();
-        data.read_csv(filename);
-        data.format_data();
-        self.update_dataStage01ResequencingMutations(data.data);
-        data.clear_data();
-
-    def import_dataStage01ResequencingEvidence_add(self, filename):
-        '''table adds'''
-        data = base_importData();
-        data.read_csv(filename);
-        data.format_data();
-        self.add_dataStage01ResequencingEvidence(data.data);
-        data.clear_data();
-    def import_dataStage01ResequencingEvidence_update(self, filename):
-        '''table updates'''
-        data = base_importData();
-        data.read_csv(filename);
-        data.format_data();
-        self.update_dataStage01ResequencingEvidence(data.data);
-        data.clear_data();
-
-    def import_dataStage01ResequencingValidation_add(self, filename):
-        '''table adds'''
-        data = base_importData();
-        data.read_csv(filename);
-        data.format_data();
-        self.add_dataStage01ResequencingValidation(data.data);
-        data.clear_data();
-    def import_dataStage01ResequencingValidation_update(self, filename):
-        '''table updates'''
-        data = base_importData();
-        data.read_csv(filename);
-        data.format_data();
-        self.update_dataStage01ResequencingValidation(data.data);
-        data.clear_data();
-
-    def import_dataStage01ResequencingMutationsFiltered_add(self, filename):
-        '''table adds'''
-        data = base_importData();
-        data.read_csv(filename);
-        data.format_data();
-        self.add_dataStage01ResequencingMutationsFiltered(data.data);
-        data.clear_data();
-    def import_dataStage01ResequencingMutationsFiltered_update(self, filename):
-        '''table updates'''
-        data = base_importData();
-        data.read_csv(filename);
-        data.format_data();
-        self.update_dataStage01ResequencingMutationsFiltered(data.data);
-        data.clear_data();
-
-    def import_dataStage01ResequencingMutationsAnnotated_add(self, filename):
-        '''table adds'''
-        data = base_importData();
-        data.read_csv(filename);
-        data.format_data();
-        self.add_dataStage01ResequencingMutationsAnnotated(data.data);
-        data.clear_data();
-    def import_dataStage01ResequencingMutationsAnnotated_update(self, filename):
-        '''table updates'''
-        data = base_importData();
-        data.read_csv(filename);
-        data.format_data();
-        self.update_dataStage01ResequencingMutationsAnnotated(data.data);
-        data.clear_data();
-
-    def import_dataStage01ResequencingMutationsSeqChanges_add(self, filename):
-        '''table adds'''
-        data = base_importData();
-        data.read_csv(filename);
-        data.format_data();
-        self.add_dataStage01ResequencingMutationsSeqChanges(data.data);
-        data.clear_data();
-    def import_dataStage01ResequencingMutationsSeqChanges_update(self, filename):
-        '''table updates'''
-        data = base_importData();
-        data.read_csv(filename);
-        data.format_data();
-        self.update_dataStage01ResequencingMutationsSeqChanges(data.data);
-        data.clear_data();
-        
+            file.write(ddtutilities.get_allObjects());        
     def export_dataStage01ResequencingMutationsSeqChanges_js(self,analysis_id_I,mutation_id_exclusion_list=[],frequency_threshold=0.1,data_dir_I="tmp"):
         '''export data_stage01_resequencing_mutationsSeqChanges to js file'''
         
@@ -465,6 +458,7 @@ class stage01_resequencing_gd_io(stage01_resequencing_gd_query,
         tableparameters_O = {"tabletype":'responsivetable_01',
                     'tableid':'table1',
                     "tablefilters":None,
+                    'ntablerows':100000.0,
                     "tableheaders":['experiment_id',
                                     'sample_name',
                                     'mutation_type',
@@ -500,20 +494,14 @@ class stage01_resequencing_gd_io(stage01_resequencing_gd_query,
         parametersobject_O = [formtileparameters_O,tabletileparameters_O];
         tile2datamap_O = {"filtermenu1":[0],"tile2":[0]};
         # dump the data to a json file
-        data_str = 'var ' + 'data' + ' = ' + json.dumps(dataobject_O) + ';';
-        parameters_str = 'var ' + 'parameters' + ' = ' + json.dumps(parametersobject_O) + ';';
-        tile2datamap_str = 'var ' + 'tile2datamap' + ' = ' + json.dumps(tile2datamap_O) + ';';
+        ddtutilities = ddt_container(parameters_I = parametersobject_O,data_I = dataobject_O,tile2datamap_I = tile2datamap_O,filtermenu_I = None);
         if data_dir_I=='tmp':
             filename_str = self.settings['visualization_data'] + '/tmp/ddt_data.js'
-        elif data_dir_I=='project':
-            filename_str = self.settings['visualization_data'] + '/project/' + analysis_id_I + '_data_stage01_resequencing_mutationsAnnotated' + '.js'
         elif data_dir_I=='data_json':
-            data_json_O = data_str + '\n' + parameters_str + '\n' + tile2datamap_str;
+            data_json_O = ddtutilities.get_allObjects_js();
             return data_json_O;
         with open(filename_str,'w') as file:
-            file.write(data_str);
-            file.write(parameters_str);
-            file.write(tile2datamap_str);       
+            file.write(ddtutilities.get_allObjects());     
     def export_dataStage01ResequencingMutationsSeqChangesAndAnnotated_js(self,analysis_id_I,mutation_id_exclusion_list=[],frequency_threshold=0.1,data_dir_I="tmp"):
         '''export join of data_stage01_resequencing_mutationsSeqChanges and data_stage01_resequencing_mutationsAnnotated to js file'''
         
@@ -690,6 +678,7 @@ class stage01_resequencing_gd_io(stage01_resequencing_gd_query,
         tableparameters_O = {"tabletype":'responsivetable_01',
                     'tableid':'table1',
                     "tablefilters":None,
+                    'ntablerows':100000.0,
                     "tableheaders":['experiment_id',
                                     'sample_name',
                                     'mutation_frequency',
@@ -729,35 +718,14 @@ class stage01_resequencing_gd_io(stage01_resequencing_gd_query,
         parametersobject_O = [formtileparameters_O,tabletileparameters_O];
         tile2datamap_O = {"filtermenu1":[0],"tile2":[0]};
         # dump the data to a json file
-        data_str = 'var ' + 'data' + ' = ' + json.dumps(dataobject_O) + ';';
-        parameters_str = 'var ' + 'parameters' + ' = ' + json.dumps(parametersobject_O) + ';';
-        tile2datamap_str = 'var ' + 'tile2datamap' + ' = ' + json.dumps(tile2datamap_O) + ';';
+        ddtutilities = ddt_container(parameters_I = parametersobject_O,data_I = dataobject_O,tile2datamap_I = tile2datamap_O,filtermenu_I = None);
         if data_dir_I=='tmp':
             filename_str = self.settings['visualization_data'] + '/tmp/ddt_data.js'
-        elif data_dir_I=='project':
-            filename_str = self.settings['visualization_data'] + '/project/' + analysis_id_I + '_data_stage01_resequencing_mutationsAnnotated' + '.js'
         elif data_dir_I=='data_json':
-            data_json_O = data_str + '\n' + parameters_str + '\n' + tile2datamap_str;
+            data_json_O = ddtutilities.get_allObjects_js();
             return data_json_O;
         with open(filename_str,'w') as file:
-            file.write(data_str);
-            file.write(parameters_str);
-            file.write(tile2datamap_str);
-    def export_mapGeneName2ModelReaction_csv(self,rows_I,
-                                             filename_O):
-        """return the model reaction rows whose enzymes are produced by a given gene
-        INPUT:
-        rows_I = rows from data_stage02_physiology_modelReactions
-        OUTPUT:
-        filename_O = name of output file
-                    rows from data_stage02_physiology_modelReactions in a .csv file
-        """
-        if rows_I:
-            io = base_exportData(rows_I);
-            io.write_dict2csv(filename_O);
-        else:
-            print('no rows found');
-            
+            file.write(ddtutilities.get_allObjects());            
     def export_dataStage01ResequencingMutationsAnnotated_js(self,analysis_id_I,mutation_id_exclusion_list=[],frequency_threshold=0.1,max_position=4630000,data_dir_I="tmp"):
         '''export data_stage01_resequencing_mutationsAnnotated to js file
         Visualization: Table of the annotated mutations
@@ -910,20 +878,14 @@ class stage01_resequencing_gd_io(stage01_resequencing_gd_query,
         parametersobject_O = [formtileparameters_O,tabletileparameters_O];
         tile2datamap_O = {"filtermenu1":[0],"tile2":[0]};
         # dump the data to a json file
-        data_str = 'var ' + 'data' + ' = ' + json.dumps(dataobject_O) + ';';
-        parameters_str = 'var ' + 'parameters' + ' = ' + json.dumps(parametersobject_O) + ';';
-        tile2datamap_str = 'var ' + 'tile2datamap' + ' = ' + json.dumps(tile2datamap_O) + ';';
+        ddtutilities = ddt_container(parameters_I = parametersobject_O,data_I = dataobject_O,tile2datamap_I = tile2datamap_O,filtermenu_I = None);
         if data_dir_I=='tmp':
             filename_str = self.settings['visualization_data'] + '/tmp/ddt_data.js'
-        elif data_dir_I=='project':
-            filename_str = self.settings['visualization_data'] + '/project/' + analysis_id_I + '_data_stage01_resequencing_mutationsAnnotated' + '.js'
         elif data_dir_I=='data_json':
-            data_json_O = data_str + '\n' + parameters_str + '\n' + tile2datamap_str;
+            data_json_O = ddtutilities.get_allObjects_js();
             return data_json_O;
         with open(filename_str,'w') as file:
-            file.write(data_str);
-            file.write(parameters_str);
-            file.write(tile2datamap_str);
+            file.write(ddtutilities.get_allObjects()); 
     def export_dataStage01ResequencingMutationsAnnotated_js(self,analysis_id_I,mutation_id_exclusion_list=[],frequency_threshold=0.1,max_position=4630000,data_dir_I="tmp"):
         '''export data_stage01_resequencing_mutationsAnnotated to js file
         Visualization: treemap of the mutations
@@ -1064,8 +1026,6 @@ class stage01_resequencing_gd_io(stage01_resequencing_gd_query,
             return data_json_O;
         with open(filename_str,'w') as file:
             file.write(ddtutilities.get_allObjects());
-
-            
     def export_dataStage01ResequencingMutationsAnnotatedLineageArea_js(self,analysis_id_I,mutation_id_exclusion_list=[],frequency_threshold=0.1,max_position=4630000,data_dir_I="tmp"):
         '''export data_stage01_resequencing_mutationsAnnotated to js file
         Visualization: scatterlineplot of mutation frequency across jump time
@@ -1229,3 +1189,17 @@ class stage01_resequencing_gd_io(stage01_resequencing_gd_query,
             return data_json_O;
         with open(filename_str,'w') as file:
             file.write(ddtutilities.get_allObjects());
+    def export_mapGeneName2ModelReaction_csv(self,rows_I,
+                                             filename_O):
+        """return the model reaction rows whose enzymes are produced by a given gene
+        INPUT:
+        rows_I = rows from data_stage02_physiology_modelReactions
+        OUTPUT:
+        filename_O = name of output file
+                    rows from data_stage02_physiology_modelReactions in a .csv file
+        """
+        if rows_I:
+            io = base_exportData(rows_I);
+            io.write_dict2csv(filename_O);
+        else:
+            print('no rows found');

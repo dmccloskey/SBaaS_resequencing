@@ -12,6 +12,7 @@ from SBaaS_base.sbaas_template_io import sbaas_template_io
 from io_utilities.base_importData import base_importData
 from io_utilities.base_exportData import base_exportData
 from sequencing_analysis.gff_coverage import gff_coverage
+from ddt_python.ddt_container import ddt_container
 
 class stage01_resequencing_coverage_io(
     stage01_resequencing_coverage_query,
@@ -198,22 +199,14 @@ class stage01_resequencing_coverage_io(
                 "filtermenusubmitbuttonid":"submit3","filtermenuresetbuttonid":"reset3",
                 "filtermenuupdatebuttonid":"update3"}];
         # dump the data to a json file
-        data_str = 'var ' + 'data' + ' = ' + json.dumps(dataobject_O) + ';';
-        parameters_str = 'var ' + 'parameters' + ' = ' + json.dumps(parametersobject_O) + ';';
-        tile2datamap_str = 'var ' + 'tile2datamap' + ' = ' + json.dumps(tile2datamap_O) + ';';
-        filtermenu_str = 'var ' + 'filtermenu' + ' = ' + json.dumps(filtermenuobject_O) + ';';
+        ddtutilities = ddt_container(parameters_I = parametersobject_O,data_I = dataobject_O,tile2datamap_I = tile2datamap_O,filtermenu_I = filtermenuobject_O);
         if data_dir_I=='tmp':
             filename_str = self.settings['visualization_data'] + '/tmp/ddt_data.js'
-        elif data_dir_I=='project':
-            filename_str = self.settings['visualization_data'] + '/project/' + analysis_id_I + '_data_stage01_resequencing_lineage' + '.js'
         elif data_dir_I=='data_json':
-            data_json_O = data_str + '\n' + parameters_str + '\n' + tile2datamap_str + '\n' + filtermenu_str;
+            data_json_O = ddtutilities.get_allObjects_js();
             return data_json_O;
         with open(filename_str,'w') as file:
-            file.write(data_str);
-            file.write(parameters_str);
-            file.write(tile2datamap_str);
-            file.write(filtermenu_str);
+            file.write(ddtutilities.get_allObjects());
 
     def export_dataStage01ResequencingCoverage_js(self,analysis_id_I,data_dir_I="tmp"):
         """export heatmap to js file"""
@@ -314,17 +307,11 @@ class stage01_resequencing_coverage_io(
         parametersobject_O = [formtileparameters_O,svgtileparameters_O,tabletileparameters_O];
         tile2datamap_O = {"filtermenu1":[0],"tile2":[0,0],"tile3":[1]};
         # dump the data to a json file
-        data_str = 'var ' + 'data' + ' = ' + json.dumps(dataobject_O) + ';';
-        parameters_str = 'var ' + 'parameters' + ' = ' + json.dumps(parametersobject_O) + ';';
-        tile2datamap_str = 'var ' + 'tile2datamap' + ' = ' + json.dumps(tile2datamap_O) + ';';
+        ddtutilities = ddt_container(parameters_I = parametersobject_O,data_I = dataobject_O,tile2datamap_I = tile2datamap_O,filtermenu_I = None);
         if data_dir_I=='tmp':
             filename_str = self.settings['visualization_data'] + '/tmp/ddt_data.js'
-        elif data_dir_I=='project':
-            filename_str = self.settings['visualization_data'] + '/project/' + analysis_id_I + '_data_stage01_resequencing_lineage' + '.js'
         elif data_dir_I=='data_json':
-            data_json_O = data_str + '\n' + parameters_str + '\n' + tile2datamap_str;
+            data_json_O = ddtutilities.get_allObjects_js();
             return data_json_O;
         with open(filename_str,'w') as file:
-            file.write(data_str);
-            file.write(parameters_str);
-            file.write(tile2datamap_str);
+            file.write(ddtutilities.get_allObjects());

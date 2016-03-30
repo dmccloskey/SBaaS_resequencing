@@ -10,8 +10,18 @@ class data_stage01_resequencing_metadata(Base):
     refseq = Column(String(500))
     readseq = Column(postgresql.ARRAY(String(500)))
     author = Column(String(100))
+    
+    def __init__(self,
+                row_dict_I,
+                ):
+        self.experiment_id=row_dict_I['experiment_id'];
+        self.author=row_dict_I['author'];
+        self.readseq=row_dict_I['readseq'];
+        self.refseq=row_dict_I['refseq'];
+        self.genome_diff=row_dict_I['genome_diff'];
+        self.sample_name=row_dict_I['sample_name'];
 
-    def __init__(self, experiment_id_I,
+    def __set__row__(self, experiment_id_I,
             sample_name_I,
             genome_diff_I,
             refseq_I,
@@ -50,8 +60,16 @@ class data_stage01_resequencing_mutations(Base):
     __table_args__ = (
             UniqueConstraint('experiment_id','sample_name','mutation_id'),
             )
+    def __init__(self,
+                row_dict_I,
+                ):
+        self.parent_ids=row_dict_I['parent_ids'];
+        self.mutation_data=row_dict_I['mutation_data'];
+        self.sample_name=row_dict_I['sample_name'];
+        self.mutation_id=row_dict_I['mutation_id'];
+        self.experiment_id=row_dict_I['experiment_id'];
 
-    def __init__(self, experiment_id_I,
+    def __set__row__(self, experiment_id_I,
                 sample_name_I,
                 mutation_id_I,
                 parent_ids_I,
@@ -86,8 +104,15 @@ class data_stage01_resequencing_evidence(Base):
     __table_args__ = (
             UniqueConstraint('experiment_id','sample_name','parent_id'),
             )
+    def __init__(self,
+                row_dict_I,
+                ):
+        self.evidence_data=row_dict_I['evidence_data'];
+        self.parent_id=row_dict_I['parent_id'];
+        self.sample_name=row_dict_I['sample_name'];
+        self.experiment_id=row_dict_I['experiment_id'];
 
-    def __init__(self, experiment_id_I,
+    def __set__row__(self, experiment_id_I,
             sample_name_I,
             parent_id_I,
             evidence_data_I):
@@ -119,8 +144,16 @@ class data_stage01_resequencing_validation(Base):
     __table_args__ = (
             UniqueConstraint('experiment_id','sample_name','validation_id'),
             )
+    
+    def __init__(self,
+                row_dict_I,
+                ):
+        self.validation_id=row_dict_I['validation_id'];
+        self.sample_name=row_dict_I['sample_name'];
+        self.experiment_id=row_dict_I['experiment_id'];
+        self.validation_data=row_dict_I['validation_data'];
 
-    def __init__(self, experiment_id_I,
+    def __set__row__(self, experiment_id_I,
             sample_name_I,
             validation_id_I,
             validation_data_I):
@@ -153,8 +186,17 @@ class data_stage01_resequencing_mutationsFiltered(Base):
     __table_args__ = (
             UniqueConstraint('experiment_id','sample_name','mutation_id'),
             )
+    
+    def __init__(self,
+                row_dict_I,
+                ):
+        self.mutation_data=row_dict_I['mutation_data'];
+        self.experiment_id=row_dict_I['experiment_id'];
+        self.sample_name=row_dict_I['sample_name'];
+        self.mutation_id=row_dict_I['mutation_id'];
+        self.parent_ids=row_dict_I['parent_ids'];
 
-    def __init__(self, experiment_id_I,
+    def __set__row__(self, experiment_id_I,
                 sample_name_I,
                 mutation_id_I,
                 parent_ids_I,
@@ -192,8 +234,24 @@ class data_stage01_resequencing_mutationsAnnotated(Base):
     mutation_links = Column(postgresql.ARRAY(String(500)))
     used_ = Column(Boolean)
     comment_ = Column(Text)
+    
+    def __init__(self,
+                row_dict_I,
+                ):
+        self.mutation_genes=row_dict_I['mutation_genes'];
+        self.experiment_id=row_dict_I['experiment_id'];
+        self.sample_name=row_dict_I['sample_name'];
+        self.mutation_frequency=row_dict_I['mutation_frequency'];
+        self.mutation_type=row_dict_I['mutation_type'];
+        self.mutation_position=row_dict_I['mutation_position'];
+        self.mutation_data=row_dict_I['mutation_data'];
+        self.mutation_annotations=row_dict_I['mutation_annotations'];
+        self.mutation_locations=row_dict_I['mutation_locations'];
+        self.mutation_links=row_dict_I['mutation_links'];
+        self.used_=row_dict_I['used_'];
+        self.comment_=row_dict_I['comment_'];
 
-    def __init__(self, experiment_id_I,
+    def __set__row__(self, experiment_id_I,
                 sample_name_I,
                 mutation_frequency_I,
                 mutation_type_I,
@@ -268,8 +326,41 @@ class data_stage01_resequencing_mutationsSeqChanges(Base):
     mutation_data = Column(postgresql.JSON)
     used_ = Column(Boolean)
     comment_ = Column(Text)
+    
+    def __init__(self,
+                row_dict_I,
+                ):
+        self.sample_name=row_dict_I['sample_name'];
+        self.peptide_feature_new=row_dict_I['peptide_feature_new'];
+        self.peptide_feature_ref=row_dict_I['peptide_feature_ref'];
+        self.peptide_feature_position=row_dict_I['peptide_feature_position'];
+        self.rna_feature_new=row_dict_I['rna_feature_new'];
+        self.rna_feature_ref=row_dict_I['rna_feature_ref'];
+        self.rna_feature_position=row_dict_I['rna_feature_position'];
+        self.dna_feature_new=row_dict_I['dna_feature_new'];
+        self.dna_feature_ref=row_dict_I['dna_feature_ref'];
+        self.dna_feature_position=row_dict_I['dna_feature_position'];
+        self.peptide_features_region=row_dict_I['peptide_features_region'];
+        self.rna_features_region=row_dict_I['rna_features_region'];
+        self.dna_features_region=row_dict_I['dna_features_region'];
+        self.mutation_class=row_dict_I['mutation_class'];
+        self.peptide_sequence_new=row_dict_I['peptide_sequence_new'];
+        self.peptide_sequence_ref=row_dict_I['peptide_sequence_ref'];
+        self.rna_sequence_new=row_dict_I['rna_sequence_new'];
+        self.rna_sequence_ref=row_dict_I['rna_sequence_ref'];
+        self.dna_sequence_new=row_dict_I['dna_sequence_new'];
+        self.dna_sequence_ref=row_dict_I['dna_sequence_ref'];
+        self.mutation_locations=row_dict_I['mutation_locations'];
+        self.mutation_genes=row_dict_I['mutation_genes'];
+        self.mutation_position=row_dict_I['mutation_position'];
+        self.mutation_type=row_dict_I['mutation_type'];
+        self.mutation_frequency=row_dict_I['mutation_frequency'];
+        self.experiment_id=row_dict_I['experiment_id'];
+        self.comment_=row_dict_I['comment_'];
+        self.used_=row_dict_I['used_'];
+        self.mutation_data=row_dict_I['mutation_data'];
 
-    def __init__(self, experiment_id_I,
+    def __set__row__(self, experiment_id_I,
                 sample_name_I,
                 mutation_frequency_I,
                 mutation_type_I,

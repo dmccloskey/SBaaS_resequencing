@@ -21,8 +21,24 @@ class data_stage01_resequencing_lineage(Base):
     #__table_args__ = (
     #    UniqueConstraint('lineage_name','experiment_id','sample_name','intermediate'),
     #        )
+    def __init__(self,
+                row_dict_I,
+                ):
+        self.comment_=row_dict_I['comment_'];
+        self.experiment_id=row_dict_I['experiment_id'];
+        self.lineage_name=row_dict_I['lineage_name'];
+        self.sample_name=row_dict_I['sample_name'];
+        self.intermediate=row_dict_I['intermediate'];
+        self.mutation_frequency=row_dict_I['mutation_frequency'];
+        self.mutation_type=row_dict_I['mutation_type'];
+        self.mutation_position=row_dict_I['mutation_position'];
+        self.mutation_data=row_dict_I['mutation_data'];
+        self.mutation_annotations=row_dict_I['mutation_annotations'];
+        self.mutation_genes=row_dict_I['mutation_genes'];
+        self.mutation_locations=row_dict_I['mutation_locations'];
+        self.mutation_links=row_dict_I['mutation_links'];
 
-    def __init__(self, 
+    def __set__row__(self, 
                 experiment_id_I,
                 lineage_name_I,
                 sample_name_I,

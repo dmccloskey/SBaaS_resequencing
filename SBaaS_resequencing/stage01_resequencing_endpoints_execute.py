@@ -11,6 +11,7 @@ from .stage01_resequencing_endpoints_postgresql_models import *
 #resources
 from sequencing_analysis.genome_annotations import genome_annotations
 from python_statistics.calculate_interface import calculate_interface
+from listDict.listDict import listDict
 
 class stage01_resequencing_endpoints_execute(stage01_resequencing_endpoints_io,
                                              stage01_resequencing_endpoints_dependencies,
@@ -88,22 +89,35 @@ class stage01_resequencing_endpoints_execute(stage01_resequencing_endpoints_io,
             data_tmp = [];
             data_tmp = self._extract_uniqueMutations(analyzed_strain1_mutations,analyzed_strain2_mutations_all,strain1_mutations,analysis_id);
             data_O.extend(data_tmp);
-        for d in data_O:
-            row = [];
-            row = data_stage01_resequencing_endpoints(d['experiment_id'],
-                #TODO: test
-                d['endpoint_name'], #=analysis_id
-                #d['analysis_id'],
-                d['sample_name'],
-                d['mutation_frequency'],
-                d['mutation_type'],
-                d['mutation_position'],
-                d['mutation_data'],
-                #json.dumps(d['mutation_data'],
-                d['isUnique'],
-                None,None,None,None,None);
-            self.session.add(row);
-        self.session.commit();
+        #for d in data_O:
+        #    row = [];
+        #    row = data_stage01_resequencing_endpoints(d['experiment_id'],
+        #        #TODO: test
+        #        d['endpoint_name'], #=analysis_id
+        #        #d['analysis_id'],
+        #        d['sample_name'],
+        #        d['mutation_frequency'],
+        #        d['mutation_type'],
+        #        d['mutation_position'],
+        #        d['mutation_data'],
+        #        #json.dumps(d['mutation_data'],
+        #        d['isUnique'],
+        #        None,None,None,None,None);
+        #    self.session.add(row);
+        #self.session.commit();
+        # add data to the database
+        data_O_listDict = listDict();
+        data_O_listDict.set_listDict(data_O);
+        data_O_listDict.convert_listDict2DataFrame();
+        data_O_listDict.add_column2DataFrame('used_',True);
+        data_O_listDict.add_column2DataFrame('comment_',None);
+        data_O_listDict.add_column2DataFrame('mutation_annotations',None);
+        data_O_listDict.add_column2DataFrame('mutation_genes',None);
+        data_O_listDict.add_column2DataFrame('mutation_locations',None);
+        data_O_listDict.add_column2DataFrame('mutation_links',None);
+        data_O_listDict.change_rowAndColumnNames(
+            column_names_I = {'endpoint_name':'analysis_id'});
+        self.add_rows_table('data_stage01_resequencing_endpoints',data_O);
     def execute_annotateMutations_endpoints(self,analysis_id_I,
                                                  ref_genome_I='data/U00096.2.gb',
                                                  ref_I = 'genbank',biologicalmaterial_id_I='MG1655'):
@@ -160,3 +174,89 @@ class stage01_resequencing_endpoints_execute(stage01_resequencing_endpoints_io,
                 data_O.append(row);
         # update rows in the database
         self.update_dataStage01ResequencingEndpoints(data_O);
+    def execute_analyzeLineageReplicates_population(self,analysis_id_I=None):
+        '''Analyze a endpoint replicates to identify the following:
+        1. conserved mutations among replicates
+        2. unique mutations among replicates
+        INPUT:
+        analysis_id_I = string}
+        OUTPUT:
+        '''
+
+        print('Executing analyzeLineageReplicates_population...')
+
+        stage01resequencinganalysisquery = stage01_resequencing_analysis_query(self.session,self.engine,self.settings);
+        stage01resequencinganalysisquery.initialize_supportedTables();
+
+        # get the analysis info
+        lineages = stage01resequencinganalysisquery.getGroup_experimentIDAndLineageNameAndSampleName_analysisID_dataStage01ResequencingAnalysis(
+            analysis_id_I,
+            output_O = "dictColumn",
+            dictColumn_I = 'lineage_name'
+            );
+
+        # get the data
+        data_O = [];
+        analyzed_lineage1 = []; # lineage1s that have been analyzed
+        analyzed_lineage1_mutations_all = []; # all mutations from strain 1 that have been analyzed
+        analyzed_mutation_pairs = []; # mutation pairs that have been analyzed
+        matched_mutations = {};
+        for lineage1,v1 in lineages.items():
+            # query strain 1 data:
+            lineage1_mutations = [];
+            for v1_row in v1:
+                lineage1_mutations_tmp = self.get_mutations_experimentIDAndSampleName_dataStage01ResequencingMutationsFiltered(v1_row['experiment_id'],v1_row['sample_name']);
+                lineage1_mutations.extend(lineage1_mutations_tmp);
+            analyzed_lineage1.append(lineage1);
+            analyzed_lineage1_mutations = set(); # mutations from strain 1 that have been analyzed
+            analyzed_lineage2_mutations_all = []; # all mutations from strain 2 that have been analyzed
+            lineage2_cnt = 0;
+            for lineage2,v2 in lineages.items():
+                if lineage2 == lineage1: continue; # do not compare the same lineage_names to itself
+                #if lineage2 in analyzed_lineage1: continue;
+                print('comparing ' + lineage1 + ' to ' + lineage2);
+                # query strain 1 data:
+                lineage2_mutations = [];
+                for v2_row in v2:
+                    lineage2_mutations_tmp = self.get_mutations_experimentIDAndSampleName_dataStage01ResequencingMutationsFiltered(v2_row['experiment_id'],v2_row['sample_name']);
+                    lineage2_mutations.extend(lineage2_mutations_tmp);
+                analyzed_lineage2_mutations = set(); # mutations from strain 2 that have been analyzed
+                # extract common mutations
+                analyzed_lineage1_mutations_tmp = [];
+                analyzed_lineage2_mutations_tmp = [];
+                matched_mutations_tmp = {}
+                data_tmp = [];
+                matched_mutations_tmp,\
+                    analyzed_lineage1_mutations_tmp,\
+                    analyzed_lineage2_mutations_tmp,\
+                    data_tmp = self._extract_commonLineageMutations(matched_mutations,\
+                        analyzed_lineage1_mutations,\
+                        analyzed_lineage2_mutations,\
+                        lineage1_mutations,lineage2_mutations,
+                        lineage1,lineage2_cnt,analysis_id_I);
+                
+                analyzed_lineage1_mutations.update(analyzed_lineage1_mutations_tmp)
+                analyzed_lineage2_mutations.update(analyzed_lineage2_mutations_tmp)
+                analyzed_lineage2_mutations_all.append(analyzed_lineage2_mutations);
+                matched_mutations.update(matched_mutations_tmp);
+                data_O.extend(data_tmp);
+                lineage2_cnt += 1;
+            # extract unique mutations
+            data_tmp = [];
+            data_tmp = self._extract_uniqueLineageMutations(analyzed_lineage1_mutations,analyzed_lineage2_mutations_all,lineage1_mutations,analysis_id_I,lineage1);
+            data_O.extend(data_tmp);
+        # add data to the database
+        data_O_listDict = listDict();
+        data_O_listDict.set_listDict(data_O);
+        data_O_listDict.convert_listDict2DataFrame();
+        data_O_listDict.add_column2DataFrame('used_',True);
+        data_O_listDict.add_column2DataFrame('comment_',None);
+        data_O_listDict.add_column2DataFrame('mutation_annotations',None);
+        data_O_listDict.add_column2DataFrame('mutation_genes',None);
+        data_O_listDict.add_column2DataFrame('mutation_locations',None);
+        data_O_listDict.add_column2DataFrame('mutation_links',None);
+        data_O_listDict.change_rowAndColumnNames(
+            column_names_dict_I = {'endpoint_name':'analysis_id'});
+        data_O_listDict.convert_dataFrame2ListDict();
+        data_O = data_O_listDict.get_listDict();
+        self.add_rows_table('data_stage01_resequencing_endpointLineages',data_O);

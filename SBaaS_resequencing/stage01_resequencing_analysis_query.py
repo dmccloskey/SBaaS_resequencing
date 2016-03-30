@@ -210,6 +210,31 @@ class stage01_resequencing_analysis_query(sbaas_template_query):
             return  experiment_id_O,lineage_name_O,sample_name_O,time_point_O;
         except SQLAlchemyError as e:
             print(e);
+    def get_experimentIDAndLineageNameAndSampleName_analysisID_dataStage01ResequencingAnalysis(self,analysis_id_I):
+        '''Query rows that are used from the analysis'''
+        try:
+            data = self.session.query(data_stage01_resequencing_analysis.experiment_id,
+                    data_stage01_resequencing_analysis.lineage_name,
+                    data_stage01_resequencing_analysis.sample_name).filter(
+                    data_stage01_resequencing_analysis.analysis_id.like(analysis_id_I),
+                    data_stage01_resequencing_analysis.used_.is_(True)).group_by(
+                    data_stage01_resequencing_analysis.experiment_id,
+                    data_stage01_resequencing_analysis.lineage_name,
+                    data_stage01_resequencing_analysis.sample_name).order_by(
+                    data_stage01_resequencing_analysis.experiment_id.asc(),
+                    data_stage01_resequencing_analysis.lineage_name.asc(),
+                    data_stage01_resequencing_analysis.sample_name.asc()).all();
+            experiment_id_O = []
+            lineage_name_O = []
+            sample_name_O = []
+            if data: 
+                for d in data:
+                    experiment_id_O.append(d.experiment_id);
+                    lineage_name_O.append(d.lineage_name); 
+                    sample_name_O.append(d.sample_name);            
+            return  experiment_id_O,lineage_name_O,sample_name_O;
+        except SQLAlchemyError as e:
+            print(e);
     def get_rows_analysisID_dataStage01ResequencingAnalysis(self,analysis_id_I):
         '''Query rows that are used from the analysis'''
         try:
@@ -229,3 +254,130 @@ class stage01_resequencing_analysis_query(sbaas_template_query):
             return analysis_O;
         except SQLAlchemyError as e:
             print(e);
+
+    
+    def get_rows_analysisID_dataStage01ResequencingAnalysis(self,
+                analysis_id_I,
+                query_I={},
+                output_O='listDict',
+                dictColumn_I=None):
+        '''Query rows by analysis_id from data_stage01_resequencing_analysis
+        INPUT:
+        analysis_id_I = string
+        query_I = {}
+        output_O = string
+        dictColumn_I = string
+        OUTPUT:
+        data_O = output specified by output_O and dictColumn_I
+        '''
+
+        tables = ['data_stage01_resequencing_analysis'];
+        # get the listDict data
+        data_O = [];
+        query = {};
+        query['select'] = [{"table_name":tables[0]}];
+        query['where'] = [
+            {"table_name":tables[0],
+            'column_name':'analysis_id',
+            'value':analysis_id_I,
+            'operator':'LIKE',
+            'connector':'AND'
+                        },
+            {"table_name":tables[0],
+            'column_name':'used_',
+            'value':'true',
+            'operator':'IS',
+            'connector':'AND'
+                },
+	    ];
+        query['order_by'] = [
+            {"table_name":tables[0],
+            'column_name':'experiment_id',
+            'order':'ASC',
+            },
+            {"table_name":tables[0],
+            'column_name':'sample_name',
+            'order':'ASC',
+            },
+        ];
+
+        #additional blocks
+        for k,v in query_I.items():
+            if not k in query.keys():
+                query[k]=[];
+            for r in v:
+                query[k].append(r);
+        
+        data_O = self.get_rows_tables(
+            tables_I=tables,
+            query_I=query,
+            output_O=output_O,
+            dictColumn_I=dictColumn_I);
+        return data_O;
+    def getGroup_experimentIDAndLineageNameAndSampleName_analysisID_dataStage01ResequencingAnalysis(self,
+                analysis_id_I,
+                query_I={},
+                output_O='listDict',
+                dictColumn_I=None):
+        '''Query rows by analysis_id from data_stage01_resequencing_analysis
+        INPUT:
+        analysis_id_I = string
+        query_I = {}
+        output_O = string
+        dictColumn_I = string
+        OUTPUT:
+        data_O = output specified by output_O and dictColumn_I
+        '''
+
+        tables = ['data_stage01_resequencing_analysis'];
+        # get the listDict data
+        data_O = [];
+        query = {};
+        query['select'] = [
+            {"table_name":tables[0],'column_name':'experiment_id'},
+            {"table_name":tables[0],'column_name':'lineage_name'},
+            {"table_name":tables[0],'column_name':'sample_name'},
+            ];
+        query['where'] = [
+            {"table_name":tables[0],
+            'column_name':'analysis_id',
+            'value':analysis_id_I,
+            'operator':'LIKE',
+            'connector':'AND'
+                        },
+            {"table_name":tables[0],
+            'column_name':'used_',
+            'value':'true',
+            'operator':'IS',
+            'connector':'AND'
+                },
+	    ];
+        query['order_by'] = [
+            {"table_name":tables[0],
+            'column_name':'experiment_id',
+            'order':'ASC',
+            },
+            {"table_name":tables[0],
+            'column_name':'sample_name',
+            'order':'ASC',
+            },
+        ];
+        query['group_by'] = [
+            {"table_name":tables[0],'column_name':'experiment_id'},
+            {"table_name":tables[0],'column_name':'lineage_name'},
+            {"table_name":tables[0],'column_name':'sample_name'},
+            ];
+
+        #additional blocks
+        for k,v in query_I.items():
+            if not k in query.keys():
+                query[k]=[];
+            for r in v:
+                query[k].append(r);
+        
+        data_O = self.get_rows_tables(
+            tables_I=tables,
+            query_I=query,
+            output_O=output_O,
+            dictColumn_I=dictColumn_I);
+        return data_O;

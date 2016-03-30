@@ -15,8 +15,19 @@ class data_stage01_resequencing_count(Base):
     __table_args__ = (
             UniqueConstraint('analysis_id','feature_id','feature_units','element_id',),
             )
+    def __init__(self,
+                row_dict_I,
+                ):
+        self.fraction=row_dict_I['fraction'];
+        self.used_=row_dict_I['used_'];
+        self.comment_=row_dict_I['comment_'];
+        self.analysis_id=row_dict_I['analysis_id'];
+        self.feature_id=row_dict_I['feature_id'];
+        self.feature_units=row_dict_I['feature_units'];
+        self.element_id=row_dict_I['element_id'];
+        self.frequency=row_dict_I['frequency'];
 
-    def __init__(self,analysis_id_I,
+    def __set__row__(self,analysis_id_I,
             feature_id_I,
             feature_units_I,
             element_id_I,
@@ -67,8 +78,23 @@ class data_stage01_resequencing_countPerSample(Base):
     __table_args__ = (
             UniqueConstraint('analysis_id','feature_id','feature_units','element_id','experiment_id','lineage_name','sample_name','time_point'),
             )
+    def __init__(self,
+                row_dict_I,
+                ):
+        self.feature_units=row_dict_I['feature_units'];
+        self.comment_=row_dict_I['comment_'];
+        self.used_=row_dict_I['used_'];
+        self.fraction=row_dict_I['fraction'];
+        self.frequency=row_dict_I['frequency'];
+        self.element_id=row_dict_I['element_id'];
+        self.feature_id=row_dict_I['feature_id'];
+        self.time_point=row_dict_I['time_point'];
+        self.sample_name=row_dict_I['sample_name'];
+        self.lineage_name=row_dict_I['lineage_name'];
+        self.experiment_id=row_dict_I['experiment_id'];
+        self.analysis_id=row_dict_I['analysis_id'];
 
-    def __init__(self,analysis_id_I,
+    def __set__row__(self,analysis_id_I,
             experiment_id_I,
             lineage_name_I,
             sample_name_I,

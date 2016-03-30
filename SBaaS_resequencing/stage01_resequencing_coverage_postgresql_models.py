@@ -23,8 +23,24 @@ class data_stage01_resequencing_coverage(Base):
         #UniqueConstraint('analysis_id','experiment_id','sample_name','genome_chromosome','genome_strand','genome_index'),
         UniqueConstraint('experiment_id','sample_name','genome_chromosome','genome_strand','genome_index'),
             )
+    def __init__(self,
+                row_dict_I,
+                ):
+        self.used_=row_dict_I['used_'];
+        self.comment_=row_dict_I['comment_'];
+        self.experiment_id=row_dict_I['experiment_id'];
+        self.sample_name=row_dict_I['sample_name'];
+        self.data_dir=row_dict_I['data_dir'];
+        self.genome_chromosome=row_dict_I['genome_chromosome'];
+        self.genome_strand=row_dict_I['genome_strand'];
+        self.genome_index=row_dict_I['genome_index'];
+        self.strand_start=row_dict_I['strand_start'];
+        self.strand_stop=row_dict_I['strand_stop'];
+        self.reads=row_dict_I['reads'];
+        self.scale_factor=row_dict_I['scale_factor'];
+        self.downsample_factor=row_dict_I['downsample_factor'];
 
-    def __init__(self, 
+    def __set__row__(self, 
         #analysis_id_I, 
         experiment_id_I,
         sample_name_I,
@@ -102,8 +118,29 @@ class data_stage01_resequencing_coverageStats(Base):
         #UniqueConstraint('analysis_id','experiment_id','sample_name','genome_chromosome','genome_strand'),
         UniqueConstraint('experiment_id','sample_name','genome_chromosome','genome_strand'),
             )
+    def __init__(self,
+                row_dict_I,
+                ):
+        self.reads_median=row_dict_I['reads_median'];
+        self.reads_iq3=row_dict_I['reads_iq3'];
+        self.strand_start=row_dict_I['strand_start'];
+        self.strand_stop=row_dict_I['strand_stop'];
+        self.reads_min=row_dict_I['reads_min'];
+        self.reads_max=row_dict_I['reads_max'];
+        self.reads_lb=row_dict_I['reads_lb'];
+        self.reads_ub=row_dict_I['reads_ub'];
+        self.reads_iq1=row_dict_I['reads_iq1'];
+        self.comment_=row_dict_I['comment_'];
+        self.used_=row_dict_I['used_'];
+        self.reads_n=row_dict_I['reads_n'];
+        self.reads_var=row_dict_I['reads_var'];
+        self.reads_mean=row_dict_I['reads_mean'];
+        self.experiment_id=row_dict_I['experiment_id'];
+        self.sample_name=row_dict_I['sample_name'];
+        self.genome_chromosome=row_dict_I['genome_chromosome'];
+        self.genome_strand=row_dict_I['genome_strand'];
 
-    def __init__(self, 
+    def __set__row__(self, 
         #analysis_id_I,
         experiment_id_I,
         sample_name_I,
@@ -196,8 +233,29 @@ class data_stage01_resequencing_amplifications(Base):
         #UniqueConstraint('analysis_id','experiment_id','sample_name','genome_chromosome','genome_strand','genome_index'),
         UniqueConstraint('experiment_id','sample_name','genome_chromosome','genome_strand','genome_index'),
             )
+    def __init__(self,
+                row_dict_I,
+                ):
+        self.reads_max=row_dict_I['reads_max'];
+        self.reads_min=row_dict_I['reads_min'];
+        self.indices_min=row_dict_I['indices_min'];
+        self.consecutive_tol=row_dict_I['consecutive_tol'];
+        self.used_=row_dict_I['used_'];
+        self.amplification_stop=row_dict_I['amplification_stop'];
+        self.amplification_start=row_dict_I['amplification_start'];
+        self.downsample_factor=row_dict_I['downsample_factor'];
+        self.scale_factor=row_dict_I['scale_factor'];
+        self.experiment_id=row_dict_I['experiment_id'];
+        self.sample_name=row_dict_I['sample_name'];
+        self.genome_chromosome=row_dict_I['genome_chromosome'];
+        self.genome_strand=row_dict_I['genome_strand'];
+        self.comment_=row_dict_I['comment_'];
+        self.genome_index=row_dict_I['genome_index'];
+        self.strand_start=row_dict_I['strand_start'];
+        self.strand_stop=row_dict_I['strand_stop'];
+        self.reads=row_dict_I['reads'];
 
-    def __init__(self, 
+    def __set__row__(self, 
         #analysis_id_I, 
         experiment_id_I,
         sample_name_I,
@@ -292,8 +350,31 @@ class data_stage01_resequencing_amplificationStats(Base):
         #UniqueConstraint('analysis_id','experiment_id','sample_name','genome_chromosome','genome_strand','amplification_start','amplification_stop'),
         UniqueConstraint('experiment_id','sample_name','genome_chromosome','genome_strand','amplification_start','amplification_stop'),
             )
-
     def __init__(self,
+                row_dict_I,
+                ):
+        self.genome_chromosome=row_dict_I['genome_chromosome'];
+        self.experiment_id=row_dict_I['experiment_id'];
+        self.strand_stop=row_dict_I['strand_stop'];
+        self.reads_min=row_dict_I['reads_min'];
+        self.reads_max=row_dict_I['reads_max'];
+        self.reads_lb=row_dict_I['reads_lb'];
+        self.reads_ub=row_dict_I['reads_ub'];
+        self.reads_iq1=row_dict_I['reads_iq1'];
+        self.reads_iq3=row_dict_I['reads_iq3'];
+        self.reads_median=row_dict_I['reads_median'];
+        self.reads_mean=row_dict_I['reads_mean'];
+        self.reads_var=row_dict_I['reads_var'];
+        self.reads_n=row_dict_I['reads_n'];
+        self.amplification_start=row_dict_I['amplification_start'];
+        self.amplification_stop=row_dict_I['amplification_stop'];
+        self.comment_=row_dict_I['comment_'];
+        self.used_=row_dict_I['used_'];
+        self.strand_start=row_dict_I['strand_start'];
+        self.genome_strand=row_dict_I['genome_strand'];
+        self.sample_name=row_dict_I['sample_name'];
+
+    def __set__row__(self,
         #analysis_id_I,
         experiment_id_I,
         sample_name_I,
@@ -394,8 +475,28 @@ class data_stage01_resequencing_amplificationAnnotations(Base):
                          'feature_start','feature_stop','feature_types'
                          ),
             )
-
     def __init__(self,
+                row_dict_I,
+                ):
+        self.feature_annotations=row_dict_I['feature_annotations'];
+        self.strand_stop=row_dict_I['strand_stop'];
+        self.amplification_stop=row_dict_I['amplification_stop'];
+        self.amplification_start=row_dict_I['amplification_start'];
+        self.feature_types=row_dict_I['feature_types'];
+        self.feature_stop=row_dict_I['feature_stop'];
+        self.used_=row_dict_I['used_'];
+        self.strand_start=row_dict_I['strand_start'];
+        self.genome_strand=row_dict_I['genome_strand'];
+        self.genome_chromosome=row_dict_I['genome_chromosome'];
+        self.sample_name=row_dict_I['sample_name'];
+        self.experiment_id=row_dict_I['experiment_id'];
+        self.comment_=row_dict_I['comment_'];
+        self.feature_start=row_dict_I['feature_start'];
+        self.feature_links=row_dict_I['feature_links'];
+        self.feature_locations=row_dict_I['feature_locations'];
+        self.feature_genes=row_dict_I['feature_genes'];
+
+    def __set__row__(self,
         #analysis_id_I,
         experiment_id_I,
         sample_name_I,

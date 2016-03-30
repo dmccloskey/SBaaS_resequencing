@@ -15,8 +15,19 @@ class data_stage01_resequencing_histogram(Base):
     __table_args__ = (
             UniqueConstraint('analysis_id','feature_id','feature_units','bin',),
             )
+    def __init__(self,
+                row_dict_I,
+                ):
+        self.bin_width=row_dict_I['bin_width'];
+        self.frequency=row_dict_I['frequency'];
+        self.used_=row_dict_I['used_'];
+        self.comment_=row_dict_I['comment_'];
+        self.feature_id=row_dict_I['feature_id'];
+        self.analysis_id=row_dict_I['analysis_id'];
+        self.bin=row_dict_I['bin'];
+        self.feature_units=row_dict_I['feature_units'];
 
-    def __init__(self,analysis_id_I,
+    def __set__row__(self,analysis_id_I,
         feature_id_I,
         feature_units_I,
         bin_I,

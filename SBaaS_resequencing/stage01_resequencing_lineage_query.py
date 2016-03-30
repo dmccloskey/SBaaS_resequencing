@@ -277,8 +277,8 @@ class stage01_resequencing_lineage_query(sbaas_template_query):
         try:
             if experiment_id_I:
                 reset = self.session.query(data_stage01_resequencing_lineage).filter(data_stage01_resequencing_lineage.experiment_id.like(experiment_id_I)).delete(synchronize_session=False);
-            else:
-                reset = self.session.query(data_stage01_resequencing_lineage).delete(synchronize_session=False);
+            #else:
+            #    reset = self.session.query(data_stage01_resequencing_lineage).delete(synchronize_session=False);
             self.session.commit();
         except SQLAlchemyError as e:
             print(e);

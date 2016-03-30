@@ -103,13 +103,3 @@ class stage01_resequencing_lineage_execute(stage01_resequencing_lineage_io,
                 data_O.append(row);
         # update rows in the database
         self.update_dataStage01ResequencingLineage(data_O);
-    def execute_analyzeLineageReplicates_population(self,
-            analysis_id_I=None,
-            mutation_id_I=''):
-        '''Analyze a endpoint replicates to identify the following:
-        1. conserved mutations among replicates
-        2. unique mutations among replicates
-        '''
-        #get the lineages for the analysis
-        #get the count for the mutation_id for each lineage
-        #annotate unique/conserved mutations

@@ -8,7 +8,6 @@ from .stage01_resequencing_lineage_query import stage01_resequencing_lineage_que
 #sbaas models
 from .stage01_resequencing_heatmap_postgresql_models import *
 #resources
-from SBaaS_statistics.heatmap import mutations_heatmap
 from python_statistics.calculate_interface import calculate_interface
 from python_statistics.calculate_heatmap import calculate_heatmap
 from sequencing_analysis.genome_diff import genome_diff

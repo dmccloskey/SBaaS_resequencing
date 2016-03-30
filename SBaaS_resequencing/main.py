@@ -1,11 +1,10 @@
 import sys
-sys.path.append('C:/Users/dmccloskey-sbrg/Google Drive/SBaaS_base')
+sys.path.append('C:/Users/dmccloskey-sbrg/Documents/GitHub/SBaaS_base')
 from SBaaS_base.postgresql_settings import postgresql_settings
 from SBaaS_base.postgresql_orm import postgresql_orm
 
 # read in the settings file
-#filename = 'C:/Users/dmccloskey-sbrg/Google Drive/SBaaS_base/settings_1.ini';
-filename = 'C:/Users/dmccloskey-sbrg/Google Drive/SBaaS_base/settings_metabolomics.ini';
+filename = 'C:/Users/dmccloskey-sbrg/Google Drive/SBaaS_settings/settings_metabolomics.ini';
 pg_settings = postgresql_settings(filename);
 
 # connect to the database from the settings file
@@ -70,7 +69,16 @@ from SBaaS_resequencing.stage01_resequencing_gd_execute import stage01_resequenc
 gd01 = stage01_resequencing_gd_execute(session,engine,pg_settings.datadir_settings);
 gd01.initialize_dataStage01_resequencing_gd();
 
-analysis_ids = ['ALEsKOs01_1-2-11_evo04pgiEv01'];
+#make the endpoints table
+from SBaaS_resequencing.stage01_resequencing_endpoints_execute import stage01_resequencing_endpoints_execute
+endpoints01 = stage01_resequencing_endpoints_execute(session,engine,pg_settings.datadir_settings);
+endpoints01.initialize_supportedTables()
+endpoints01.initialize_tables();
+
+analysis_ids = [
+    #'ALEsKOs01_1-2-11_evo04pgiEv01',
+    'ALEsKOs01_1-2-3-11_evo04pgi',
+    ];
 features_histogram = ['mutation_position','mutation_frequency'];
 n_bins_histogram = [
     500, # 0-4640000
@@ -86,7 +94,11 @@ mutation_id_base01 = ['MOB_insA-/-uspC_1977510',
                     'INS__4294403',
                     'DEL_pyrE-/-rph_3813882',
                     'SNP_wcaA_2130811']
-#for analysis in analysis_ids:
+for analysis in analysis_ids:
+    print('running analysis ' + analysis);
+    #endpoint lineages
+    endpoints01.reset_dataStage01_resequencing_endpointLineages(analysis_id_I = analysis);
+    endpoints01.execute_analyzeLineageReplicates_population(analysis);
 #    #generate the histograms
 #    hist01.reset_dataStage01_resequencing_histogram(analysis_id_I=analysis);
 #    hist01.execute_binFeatures(
@@ -114,5 +126,5 @@ mutation_id_base01 = ['MOB_insA-/-uspC_1977510',
 #hist01.export_dataStage01ResequencingHistogram_js('ALEsKOs01_11');
 #count01.export_dataStage01ResequencingCount_js('ALEsKOs01_1-2-11_evo04pgiEv01');
 #count01.export_dataStage01ResequencingCountPerSample_js('ALEsKOs01_1-2-11_evo04pgiEv01');
-gd01.export_dataStage01ResequencingMutationsAnnotatedLineageArea_js('ALEsKOs01_1-2-11_evo04pgiEv01');
+#gd01.export_dataStage01ResequencingMutationsAnnotatedLineageArea_js('ALEsKOs01_1-2-11_evo04pgiEv01');
 

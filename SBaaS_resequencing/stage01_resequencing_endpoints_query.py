@@ -15,6 +15,7 @@ class stage01_resequencing_endpoints_query(sbaas_template_query):
         '''Set the supported tables dict for 
         '''
         tables_supported = {'data_stage01_resequencing_endpoints':data_stage01_resequencing_endpoints,
+                            'data_stage01_resequencing_endpointLineages':data_stage01_resequencing_endpointLineages,
                         };
         self.set_supportedTables(tables_supported);
     def drop_dataStage01_resequencing_endpoints(self):
@@ -28,11 +29,19 @@ class stage01_resequencing_endpoints_query(sbaas_template_query):
                 reset = self.session.query(data_stage01_resequencing_endpoints).filter(data_stage01_resequencing_endpoints.experiment_id.like(experiment_id_I)).delete(synchronize_session=False);
             elif analysis_id_I:
                 reset = self.session.query(data_stage01_resequencing_endpoints).filter(data_stage01_resequencing_endpoints.analysis_id.like(analysis_id_I)).delete(synchronize_session=False);
-            else:
-                reset = self.session.query(data_stage01_resequencing_endpoints).delete(synchronize_session=False);
             self.session.commit();
         except SQLAlchemyError as e:
             print(e);
+    def reset_dataStage01_resequencing_endpointLineages(self,experiment_id_I = None,analysis_id_I = None):
+        try:
+            if experiment_id_I:
+                reset = self.session.query(data_stage01_resequencing_endpointLineages).filter(data_stage01_resequencing_endpointLineages.experiment_id.like(experiment_id_I)).delete(synchronize_session=False);
+            elif analysis_id_I:
+                reset = self.session.query(data_stage01_resequencing_endpointLineages).filter(data_stage01_resequencing_endpointLineages.analysis_id.like(analysis_id_I)).delete(synchronize_session=False);
+            self.session.commit();
+        except SQLAlchemyError as e:
+            print(e);
+
     def initialize_dataStage01_resequencing_endpoints(self):
         try:
             data_stage01_resequencing_endpoints.__table__.create(self.engine,True);

@@ -123,11 +123,13 @@ class stage01_resequencing_gd_query(sbaas_template_query):
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage01_resequencing_mutations(d['experiment_id'],
-                                    d['sample_name'],
-                                    d['mutation_id'],
-                                    d['parent_ids'],
-                                    d['mutation_data']);
+                    data_add = data_stage01_resequencing_mutations(d
+                        #d['experiment_id'],
+                        #d['sample_name'],
+                        #d['mutation_id'],
+                        #d['parent_ids'],
+                        #d['mutation_data']
+                                    );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);
@@ -137,11 +139,13 @@ class stage01_resequencing_gd_query(sbaas_template_query):
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage01_resequencing_mutationsFiltered(d['experiment_id'],
-                                    d['sample_name'],
-                                    d['mutation_id'],
-                                    d['parent_ids'],
-                                    d['mutation_data']);
+                    data_add = data_stage01_resequencing_mutationsFiltered(d
+                        #d['experiment_id'],
+                        #d['sample_name'],
+                        #d['mutation_id'],
+                        #d['parent_ids'],
+                        #d['mutation_data']
+                        );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);
@@ -151,12 +155,14 @@ class stage01_resequencing_gd_query(sbaas_template_query):
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage01_resequencing_metadata(d['experiment_id'],
-                            d['sample_name'],
-                            d['genome_diff'],
-                            d['refseq'],
-                            d['readseq'],
-                            d['author']);
+                    data_add = data_stage01_resequencing_metadata(d
+                        #d['experiment_id'],
+                        #d['sample_name'],
+                        #d['genome_diff'],
+                        #d['refseq'],
+                        #d['readseq'],
+                        #d['author']
+                            );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);
@@ -166,10 +172,12 @@ class stage01_resequencing_gd_query(sbaas_template_query):
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage01_resequencing_evidence(d['experiment_id'],
-                        d['sample_name'],
-                        d['parent_id'],
-                        d['evidence_data']);
+                    data_add = data_stage01_resequencing_evidence(d
+                        #d['experiment_id'],
+                        #d['sample_name'],
+                        #d['parent_id'],
+                        #d['evidence_data']
+                        );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);
@@ -179,10 +187,12 @@ class stage01_resequencing_gd_query(sbaas_template_query):
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage01_resequencing_validation(d['experiment_id'],
-                        d['sample_name'],
-                        d['validation_id'],
-                        d['validation_data']);
+                    data_add = data_stage01_resequencing_validation(d
+                        #d['experiment_id'],
+                        #d['sample_name'],
+                        #d['validation_id'],
+                        #d['validation_data']
+                        );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);
@@ -281,19 +291,20 @@ class stage01_resequencing_gd_query(sbaas_template_query):
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage01_resequencing_mutationsAnnotated(
-                            d['experiment_id'],
-                            d['sample_name'],
-                            d['mutation_frequency'],
-                            d['mutation_type'],
-                            d['mutation_position'],
-                            d['mutation_data'],
-                            d['mutation_annotations'],
-                            d['mutation_genes'],
-                            d['mutation_locations'],
-                            d['mutation_links'],
-                            d['used_'],
-                            d['comment_']);
+                    data_add = data_stage01_resequencing_mutationsAnnotated(d
+                            #d['experiment_id'],
+                            #d['sample_name'],
+                            #d['mutation_frequency'],
+                            #d['mutation_type'],
+                            #d['mutation_position'],
+                            #d['mutation_data'],
+                            #d['mutation_annotations'],
+                            #d['mutation_genes'],
+                            #d['mutation_locations'],
+                            #d['mutation_links'],
+                            #d['used_'],
+                            #d['comment_']
+                            );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);
@@ -328,36 +339,37 @@ class stage01_resequencing_gd_query(sbaas_template_query):
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage01_resequencing_mutationsSeqChanges(
-                            d['experiment_id'],
-                            d['sample_name'],
-                            d['mutation_frequency'],
-                            d['mutation_type'],
-                            d['mutation_position'],
-                            d['mutation_genes'],
-                            d['mutation_locations'],
-                            d['dna_sequence_ref'],
-                            d['dna_sequence_new'],
-                            d['rna_sequence_ref'],
-                            d['rna_sequence_new'],
-                            d['peptide_sequence_ref'],
-                            d['peptide_sequence_new'],
-                            d['mutation_class'],
-                            d['dna_features_region'],
-                            d['rna_features_region'],
-                            d['peptide_features_region'],
-                            d['dna_feature_position'],
-                            d['dna_feature_ref'],
-                            d['dna_feature_new'],
-                            d['rna_feature_position'],
-                            d['rna_feature_ref'],
-                            d['rna_feature_new'],
-                            d['peptide_feature_position'],
-                            d['peptide_feature_ref'],
-                            d['peptide_feature_new'],
-                            d['mutation_data'],
-                            d['used_'],
-                            d['comment_']);
+                    data_add = data_stage01_resequencing_mutationsSeqChanges(d
+                            #d['experiment_id'],
+                            #d['sample_name'],
+                            #d['mutation_frequency'],
+                            #d['mutation_type'],
+                            #d['mutation_position'],
+                            #d['mutation_genes'],
+                            #d['mutation_locations'],
+                            #d['dna_sequence_ref'],
+                            #d['dna_sequence_new'],
+                            #d['rna_sequence_ref'],
+                            #d['rna_sequence_new'],
+                            #d['peptide_sequence_ref'],
+                            #d['peptide_sequence_new'],
+                            #d['mutation_class'],
+                            #d['dna_features_region'],
+                            #d['rna_features_region'],
+                            #d['peptide_features_region'],
+                            #d['dna_feature_position'],
+                            #d['dna_feature_ref'],
+                            #d['dna_feature_new'],
+                            #d['rna_feature_position'],
+                            #d['rna_feature_ref'],
+                            #d['rna_feature_new'],
+                            #d['peptide_feature_position'],
+                            #d['peptide_feature_ref'],
+                            #d['peptide_feature_new'],
+                            #d['mutation_data'],
+                            #d['used_'],
+                            #d['comment_']
+                            );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);

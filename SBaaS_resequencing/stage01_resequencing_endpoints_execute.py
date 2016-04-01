@@ -208,7 +208,7 @@ class stage01_resequencing_endpoints_execute(stage01_resequencing_endpoints_io,
                 lineage1_mutations_tmp = self.get_mutations_experimentIDAndSampleName_dataStage01ResequencingMutationsFiltered(v1_row['experiment_id'],v1_row['sample_name']);
                 lineage1_mutations.extend(lineage1_mutations_tmp);
             analyzed_lineage1.append(lineage1);
-            analyzed_lineage1_mutations = set(); # mutations from strain 1 that have been analyzed
+            analyzed_lineage1_mutations = []; # mutations from strain 1 that have been analyzed
             analyzed_lineage2_mutations_all = []; # all mutations from strain 2 that have been analyzed
             lineage2_cnt = 0;
             for lineage2,v2 in lineages.items():
@@ -220,7 +220,7 @@ class stage01_resequencing_endpoints_execute(stage01_resequencing_endpoints_io,
                 for v2_row in v2:
                     lineage2_mutations_tmp = self.get_mutations_experimentIDAndSampleName_dataStage01ResequencingMutationsFiltered(v2_row['experiment_id'],v2_row['sample_name']);
                     lineage2_mutations.extend(lineage2_mutations_tmp);
-                analyzed_lineage2_mutations = set(); # mutations from strain 2 that have been analyzed
+                analyzed_lineage2_mutations = []; # mutations from strain 2 that have been analyzed
                 # extract common mutations
                 analyzed_lineage1_mutations_tmp = [];
                 analyzed_lineage2_mutations_tmp = [];
@@ -235,15 +235,20 @@ class stage01_resequencing_endpoints_execute(stage01_resequencing_endpoints_io,
                         lineage1_mutations,lineage2_mutations,
                         lineage1,lineage2_cnt,analysis_id_I);
                 
-                analyzed_lineage1_mutations.update(analyzed_lineage1_mutations_tmp)
-                analyzed_lineage2_mutations.update(analyzed_lineage2_mutations_tmp)
+                analyzed_lineage1_mutations.extend(analyzed_lineage1_mutations_tmp)
+                analyzed_lineage2_mutations.extend(analyzed_lineage2_mutations_tmp)
                 analyzed_lineage2_mutations_all.append(analyzed_lineage2_mutations);
                 matched_mutations.update(matched_mutations_tmp);
                 data_O.extend(data_tmp);
                 lineage2_cnt += 1;
             # extract unique mutations
             data_tmp = [];
-            data_tmp = self._extract_uniqueLineageMutations(analyzed_lineage1_mutations,analyzed_lineage2_mutations_all,lineage1_mutations,analysis_id_I,lineage1);
+            data_tmp = self._extract_uniqueLineageMutations(
+                list(set(analyzed_lineage1_mutations)),
+                analyzed_lineage2_mutations_all,
+                lineage1_mutations,
+                analysis_id_I,
+                lineage1);
             data_O.extend(data_tmp);
         # add data to the database
         data_O_listDict = listDict();
@@ -260,3 +265,38 @@ class stage01_resequencing_endpoints_execute(stage01_resequencing_endpoints_io,
         data_O_listDict.convert_dataFrame2ListDict();
         data_O = data_O_listDict.get_listDict();
         self.add_rows_table('data_stage01_resequencing_endpointLineages',data_O);
+    def execute_annotateMutations_endpointLineages(self,analysis_id_I,
+                                                 ref_genome_I='data/U00096.2.gb',
+                                                 ref_I = 'genbank',biologicalmaterial_id_I='MG1655'):
+        '''Annotate mutations for date_stage01_resequencing_endpoints
+        based on position, reference genome, and reference genome biologicalmaterial_id'''
+        
+        genomeannotation = genome_annotations(annotation_I=ref_genome_I,annotation_ref_I=ref_I);
+
+        print('Executing annotateMutations_endpoints...')
+        data_O = [];        
+
+        # get the analysis info
+        rows = [];
+        rows = self.get_rows_analysisID_dataStage01ResequencingEndpointLineages(analysis_id_I);
+        for row in rows:
+            # annotate each mutation based on the position
+            annotation = {};
+            annotation = genomeannotation._find_genesFromMutationPosition(row['mutation_data']['position']);
+            row['mutation_genes'] = annotation['gene']
+            row['mutation_locations'] = annotation['location']
+            row['mutation_annotations'] = annotation['product']
+            # generate a link to ecogene for the genes
+            row['mutation_links'] = [];
+            for bnumber in annotation['locus_tag']:
+                if bnumber:
+                    ecogenes = [];
+                    ecogenes = self.get_ecogeneAccessionNumber_biologicalmaterialIDAndOrderedLocusName_biologicalMaterialGeneReferences(biologicalmaterial_id_I,bnumber);
+                    if ecogenes:
+                        ecogene = ecogenes[0];
+                        ecogene_link = genomeannotation._generate_httplink2gene_ecogene(ecogene['ecogene_accession_number']);
+                        row['mutation_links'].append(ecogene_link)
+                    else: print('no ecogene_accession_number found for ordered_locus_location ' + bnumber);
+            data_O.append(row);
+        # update rows in the database
+        self.update_rows_table('data_stage01_resequencing_endpointLineages',data_O);

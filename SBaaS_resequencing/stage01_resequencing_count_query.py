@@ -44,14 +44,16 @@ class stage01_resequencing_count_query(sbaas_template_query):
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage01_resequencing_count(d['analysis_id'],
-                            d['feature_id'],
-                            d['feature_units'],
-                            d['element_id'],
-                            d['frequency'],
-                            d['fraction'],
-                            d['used_'],
-                            d['comment_'],);
+                    data_add = data_stage01_resequencing_count(d
+                        #d['analysis_id'],
+                        #d['feature_id'],
+                        #d['feature_units'],
+                        #d['element_id'],
+                        #d['frequency'],
+                        #d['fraction'],
+                        #d['used_'],
+                        #d['comment_'],
+                            );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);
@@ -120,18 +122,20 @@ class stage01_resequencing_count_query(sbaas_template_query):
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage01_resequencing_countPerSample(d['analysis_id'],
-                            d['experiment_id'],
-                            d['lineage_name'],
-                            d['sample_name'],
-                            d['time_point'],
-                            d['feature_id'],
-                            d['feature_units'],
-                            d['element_id'],
-                            d['frequency'],
-                            d['fraction'],
-                            d['used_'],
-                            d['comment_'],);
+                    data_add = data_stage01_resequencing_countPerSample(d
+                        #d['analysis_id'],
+                        #d['experiment_id'],
+                        #d['lineage_name'],
+                        #d['sample_name'],
+                        #d['time_point'],
+                        #d['feature_id'],
+                        #d['feature_units'],
+                        #d['element_id'],
+                        #d['frequency'],
+                        #d['fraction'],
+                        #d['used_'],
+                        #d['comment_'],
+                            );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);

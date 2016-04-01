@@ -44,7 +44,7 @@ class stage01_resequencing_endpoints_dependencies():
                     if (strain1_mutation['mutation_data']['type'],strain1_mutation['mutation_data']['position'])==analyzed_strain1_mutation:
                         data_tmp = {};
                         data_tmp['experiment_id'] = strain1_mutation['experiment_id'];
-                        data_tmp['lineage_name'] = strain1_mutation['lineage_name'];
+                        data_tmp['lineage_name'] = lineage_name;
                         data_tmp['sample_name'] = strain1_mutation['sample_name'];
                         frequency = 1.0;
                         if 'frequency' in strain1_mutation['mutation_data']: frequency = strain1_mutation['mutation_data']['frequency'];
@@ -155,7 +155,7 @@ class stage01_resequencing_endpoints_dependencies():
         for lineage1_mutation_cnt,lineage1_mutation in enumerate(lineage1_mutations):
             print('lineage1 mutation type/position ' + lineage1_mutation['mutation_data']['type'] + '/' + str(lineage1_mutation['mutation_data']['position']));
             if lineage2_cnt == 0: # record lineage 1 mutations only once for all lineage 2 mutations
-                analyzed_lineage1_mutations.update((lineage1_mutation['mutation_data']['type'],lineage1_mutation['mutation_data']['position']));
+                analyzed_lineage1_mutations.append((lineage1_mutation['mutation_data']['type'],lineage1_mutation['mutation_data']['position']));
             for lineage2_mutation_cnt,lineage2_mutation in enumerate(lineage2_mutations):
                 print('lineage2 mutation type/position ' + lineage2_mutation['mutation_data']['type'] + '/' + str(lineage2_mutation['mutation_data']['position']));
                 if lineage2_mutation_cnt == 0 and \
@@ -181,7 +181,7 @@ class stage01_resequencing_endpoints_dependencies():
                     data_O.append(data_tmp);
                     matched_mutations[(lineage1,lineage1_mutation['mutation_data']['type'],lineage1_mutation['mutation_data']['position'])] += 1;
                 if lineage1_mutation_cnt == 0: # record lineage 2 mutations only once for all lineage 1 mutations
-                    analyzed_lineage2_mutations.update((lineage2_mutation['mutation_data']['type'],lineage2_mutation['mutation_data']['position']));
+                    analyzed_lineage2_mutations.append((lineage2_mutation['mutation_data']['type'],lineage2_mutation['mutation_data']['position']));
         return matched_mutations,analyzed_lineage1_mutations,analyzed_lineage2_mutations,data_O;
 
     def _match_mutations(self,mutations1_I,mutations2_I):

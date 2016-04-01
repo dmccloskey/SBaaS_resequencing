@@ -26,9 +26,10 @@ sys.path.append(pg_settings.datadir_settings['github']+'/r_statistics')
 sys.path.append(pg_settings.datadir_settings['github']+'/listDict')
 sys.path.append(pg_settings.datadir_settings['github']+'/ddt_python')
 
-#from SBaaS_resequencing.stage01_resequencing_gd_execute import stage01_resequencing_gd_execute
-#execute01 = stage01_resequencing_gd_execute(session,engine,pg_settings.datadir_settings);
-##execute01.execute_mapGeneName2ModelReaction_mutationsAnnotated(
+from SBaaS_resequencing.stage01_resequencing_gd_execute import stage01_resequencing_gd_execute
+exgd01 = stage01_resequencing_gd_execute(session,engine,pg_settings.datadir_settings);
+exgd01.initialize_dataStage01_resequencing_gd();
+##exgd01.execute_mapGeneName2ModelReaction_mutationsAnnotated(
 ##            experiment_id='ALEsKOs01',
 ##            filename_O='ALEsKOs01_mutationsAnnotated_modelReactions.csv',
 ##            biologicalmaterial_id_I = 'MG1655',
@@ -45,7 +46,7 @@ sys.path.append(pg_settings.datadir_settings['github']+'/ddt_python')
 #                    #'INS__4294403',
 #                    'DEL_pyrE-/-rph_3813882',
 #                    'SNP_wcaA_2130811']
-#execute01.export_dataStage01ResequencingMutationsAnnotated_js(
+#exgd01.export_dataStage01ResequencingMutationsAnnotated_js(
 #    analysis_id_I='ALEsKOs01_evo04pgi_0_11_heatmap',
 #    mutation_id_exclusion_list=mutation_id_base01);
 
@@ -99,6 +100,11 @@ for analysis in analysis_ids:
     #endpoint lineages
     endpoints01.reset_dataStage01_resequencing_endpointLineages(analysis_id_I = analysis);
     endpoints01.execute_analyzeLineageReplicates_population(analysis);
+    endpoints01.execute_annotateMutations_endpointLineages(
+        analysis_id_I = analysis,
+        ref_genome_I='C:/Users/dmccloskey-sbrg/Documents/GitHub/SBaaS_resequencing/SBaaS_resequencing/data/U00096.2.gb',
+        ref_I = 'genbank',
+        biologicalmaterial_id_I='MG1655')
 #    #generate the histograms
 #    hist01.reset_dataStage01_resequencing_histogram(analysis_id_I=analysis);
 #    hist01.execute_binFeatures(
@@ -128,3 +134,11 @@ for analysis in analysis_ids:
 #count01.export_dataStage01ResequencingCountPerSample_js('ALEsKOs01_1-2-11_evo04pgiEv01');
 #gd01.export_dataStage01ResequencingMutationsAnnotatedLineageArea_js('ALEsKOs01_1-2-11_evo04pgiEv01');
 
+#exgd01.execute_mutateFilteredMutations('ALEsKOs01',
+#         annotation_I='C:/Users/dmccloskey-sbrg/Documents/GitHub/SBaaS_resequencing/SBaaS_resequencing/data/U00096.2.gb',
+#         annotation_ref_I = 'genbank',
+#         sequence_I='C:/Users/dmccloskey-sbrg/Documents/GitHub/SBaaS_resequencing/SBaaS_resequencing/data/U00096.2.fas',
+#         sequence_ref_I = 'fasta',
+#        IS_sequences_I='C:/Users/dmccloskey-sbrg/Documents/GitHub/SBaaS_resequencing/SBaaS_resequencing/data/ecoli_IS_sequences.fasta',
+#        IS_sequences_ref_I = 'fasta',
+#         translation_table_I='Bacterial',);

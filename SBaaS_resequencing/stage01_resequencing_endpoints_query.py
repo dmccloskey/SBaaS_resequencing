@@ -139,7 +139,218 @@ class stage01_resequencing_endpoints_query(sbaas_template_query):
             return data_O;
         except SQLAlchemyError as e:
             print(e);
+    def getAggregateFunction_rows_analysisID_dataStage01ResequencingEndpoints(self,
+                analysis_id_I,
+                column_name_I = 'analysis_id',
+                aggregate_function_I='count',
+                aggregate_label_I='count_1',
+                query_I={},
+                output_O='scalar',
+                dictColumn_I=None):
+        '''Query row count by analysis_id from data_stage01_resequencing_endpoints
+        INPUT:
+        analysis_id_I = string
+        column_name_I = string
+        aggregate_function_I = name of the aggregate function to call on the column
+        output_O = string
+        dictColumn_I = string
+        OPTIONAL INPUT:
+        query_I = additional query blocks
+        OUTPUT:
+        data_O = output specified by output_O and dictColumn_I
+        '''
 
+        tables = ['data_stage01_resequencing_endpoints'];
+        # get the listDict data
+        data_O = [];
+        query = {};
+        query['select'] = [
+            {"table_name":tables[0],
+             "column_name":column_name_I,
+             'aggregate_function':aggregate_function_I,
+             'label':aggregate_label_I,
+             }
+            ];
+        query['where'] = [
+            {"table_name":tables[0],
+            'column_name':'analysis_id',
+            'value':analysis_id_I,
+            'operator':'LIKE',
+            'connector':'AND'
+                        },
+            #{"table_name":tables[0],
+            #'column_name':'used_',
+            #'value':'true',
+            #'operator':'IS',
+            #'connector':'AND'
+            #    },
+	    ];
+
+        #additional query blocks
+        for k,v in query_I.items():
+            if not k in query.keys():
+                query[k]=[];
+            for r in v:
+                query[k].append(r);
+        
+        data_O = self.get_rows_tables(
+            tables_I=tables,
+            query_I=query,
+            output_O=output_O,
+            dictColumn_I=dictColumn_I);
+        return data_O;
+    def getGroupAndCount_analysisIDAndMutationTypeAndMutationPositionAndMutationGenes_analysisID_dataStage01ResequencingEndpoints(self,
+                analysis_id_I,
+                column_name_I = 'analysis_id',
+                aggregate_function_I='count',
+                aggregate_label_I='count_1',
+                query_I={},
+                output_O='listDict',
+                dictColumn_I=None):
+        '''Query row count by analysis_id from data_stage01_resequencing_endpoints
+        INPUT:
+        analysis_id_I = string
+        column_name_I = string
+        aggregate_function_I = name of the aggregate function to call on the column
+        output_O = string
+        dictColumn_I = string
+        OPTIONAL INPUT:
+        query_I = additional query blocks
+        OUTPUT:
+        data_O = output specified by output_O and dictColumn_I
+        '''
+
+        tables = ['data_stage01_resequencing_endpoints'];
+        # get the listDict data
+        data_O = [];
+        query = {};
+        query['select'] = [
+            {"table_name":tables[0],
+             "column_name":'analysis_id',
+             },
+            {"table_name":tables[0],
+             "column_name":'mutation_type',
+             },
+            {"table_name":tables[0],
+             "column_name":'mutation_position',
+             },
+            {"table_name":tables[0],
+             "column_name":'mutation_genes',
+             },
+            ];
+        query['group_by'] = [
+            {"table_name":tables[0],
+             "column_name":'analysis_id',
+             },
+            {"table_name":tables[0],
+             "column_name":'mutation_type',
+             },
+            {"table_name":tables[0],
+             "column_name":'mutation_position',
+             },
+            {"table_name":tables[0],
+             "column_name":'mutation_genes',
+             },
+	    ];
+        query['order_by'] = [
+            {"table_name":tables[0],
+            'column_name':'mutation_position',
+            'order':'ASC',
+                        },
+	    ];
+
+        #additional query blocks
+        for k,v in query_I.items():
+            if not k in query.keys():
+                query[k]=[];
+            for r in v:
+                query[k].append(r);
+
+        data_O = self.getAggregateFunction_rows_analysisID_dataStage01ResequencingEndpoints(
+                analysis_id_I=analysis_id_I,
+                column_name_I=column_name_I,
+                aggregate_function_I=aggregate_function_I,
+                aggregate_label_I=aggregate_label_I,
+                query_I=query,
+                output_O=output_O,
+                dictColumn_I=dictColumn_I
+            );
+        return data_O;
+    def getGroupAndCount_analysisIDAndSampleNameAndMutationGenes_analysisID_dataStage01ResequencingEndpoints(self,
+                analysis_id_I,
+                column_name_I = 'analysis_id',
+                aggregate_function_I='count',
+                aggregate_label_I='count_1',
+                query_I={},
+                output_O='listDict',
+                dictColumn_I=None):
+        '''Query row count by analysis_id from data_stage01_resequencing_endpoints
+        INPUT:
+        analysis_id_I = string
+        column_name_I = string
+        aggregate_function_I = name of the aggregate function to call on the column
+        output_O = string
+        dictColumn_I = string
+        OPTIONAL INPUT:
+        query_I = additional query blocks
+        OUTPUT:
+        data_O = output specified by output_O and dictColumn_I
+        '''
+
+        tables = ['data_stage01_resequencing_endpoints'];
+        # get the listDict data
+        data_O = [];
+        query = {};
+        query['select'] = [
+            {"table_name":tables[0],
+             "column_name":'analysis_id',
+             },
+            {"table_name":tables[0],
+             "column_name":'sample_name',
+             },
+            {"table_name":tables[0],
+             "column_name":'mutation_genes',
+             },
+            ];
+        query['group_by'] = [
+            {"table_name":tables[0],
+             "column_name":'analysis_id',
+             },
+            {"table_name":tables[0],
+             "column_name":'sample_name',
+             },
+            {"table_name":tables[0],
+             "column_name":'mutation_genes',
+             },
+	    ];
+        query['order_by'] = [
+            {"table_name":tables[0],
+            'column_name':'sample_name',
+            'order':'ASC',
+                        },
+            {"table_name":tables[0],
+            'column_name':'mutation_genes',
+            'order':'ASC',
+                        },
+	    ];
+
+        #additional query blocks
+        for k,v in query_I.items():
+            if not k in query.keys():
+                query[k]=[];
+            for r in v:
+                query[k].append(r);
+
+        data_O = self.getAggregateFunction_rows_analysisID_dataStage01ResequencingEndpoints(
+                analysis_id_I=analysis_id_I,
+                column_name_I=column_name_I,
+                aggregate_function_I=aggregate_function_I,
+                aggregate_label_I=aggregate_label_I,
+                query_I=query,
+                output_O=output_O,
+                dictColumn_I=dictColumn_I
+            );
+        return data_O;
     
     def get_rows_analysisID_dataStage01ResequencingEndpointLineages(self,
                 analysis_id_I,
@@ -205,4 +416,216 @@ class stage01_resequencing_endpoints_query(sbaas_template_query):
             query_I=query,
             output_O=output_O,
             dictColumn_I=dictColumn_I);
+        return data_O;
+    def getAggregateFunction_rows_analysisID_dataStage01ResequencingEndpointLineages(self,
+                analysis_id_I,
+                column_name_I = 'analysis_id',
+                aggregate_function_I='count',
+                aggregate_label_I='count_1',
+                query_I={},
+                output_O='scalar',
+                dictColumn_I=None):
+        '''Query row count by analysis_id from data_stage01_resequencing_endpointLineages
+        INPUT:
+        analysis_id_I = string
+        column_name_I = string
+        aggregate_function_I = name of the aggregate function to call on the column
+        output_O = string
+        dictColumn_I = string
+        OPTIONAL INPUT:
+        query_I = additional query blocks
+        OUTPUT:
+        data_O = output specified by output_O and dictColumn_I
+        '''
+
+        tables = ['data_stage01_resequencing_endpointLineages'];
+        # get the listDict data
+        data_O = [];
+        query = {};
+        query['select'] = [
+            {"table_name":tables[0],
+             "column_name":column_name_I,
+             'aggregate_function':aggregate_function_I,
+             'label':aggregate_label_I,
+             }
+            ];
+        query['where'] = [
+            {"table_name":tables[0],
+            'column_name':'analysis_id',
+            'value':analysis_id_I,
+            'operator':'LIKE',
+            'connector':'AND'
+                        },
+            #{"table_name":tables[0],
+            #'column_name':'used_',
+            #'value':'true',
+            #'operator':'IS',
+            #'connector':'AND'
+            #    },
+	    ];
+
+        #additional query blocks
+        for k,v in query_I.items():
+            if not k in query.keys():
+                query[k]=[];
+            for r in v:
+                query[k].append(r);
+        
+        data_O = self.get_rows_tables(
+            tables_I=tables,
+            query_I=query,
+            output_O=output_O,
+            dictColumn_I=dictColumn_I);
+        return data_O;
+    def getGroupAndCount_analysisIDAndMutationTypeAndMutationPositionAndMutationGenes_analysisID_dataStage01ResequencingEndpointLineages(self,
+                analysis_id_I,
+                column_name_I = 'analysis_id',
+                aggregate_function_I='count',
+                aggregate_label_I='count_1',
+                query_I={},
+                output_O='listDict',
+                dictColumn_I=None):
+        '''Query row count by analysis_id from data_stage01_resequencing_endpointLineages
+        INPUT:
+        analysis_id_I = string
+        column_name_I = string
+        aggregate_function_I = name of the aggregate function to call on the column
+        output_O = string
+        dictColumn_I = string
+        OPTIONAL INPUT:
+        query_I = additional query blocks
+        OUTPUT:
+        data_O = output specified by output_O and dictColumn_I
+        '''
+
+        tables = ['data_stage01_resequencing_endpointLineages'];
+        # get the listDict data
+        data_O = [];
+        query = {};
+        query['select'] = [
+            {"table_name":tables[0],
+             "column_name":'analysis_id',
+             },
+            {"table_name":tables[0],
+             "column_name":'mutation_type',
+             },
+            {"table_name":tables[0],
+             "column_name":'mutation_position',
+             },
+            {"table_name":tables[0],
+             "column_name":'mutation_genes',
+             },
+            ];
+        query['group_by'] = [
+            {"table_name":tables[0],
+             "column_name":'analysis_id',
+             },
+            {"table_name":tables[0],
+             "column_name":'mutation_type',
+             },
+            {"table_name":tables[0],
+             "column_name":'mutation_position',
+             },
+            {"table_name":tables[0],
+             "column_name":'mutation_genes',
+             },
+	    ];
+        query['order_by'] = [
+            {"table_name":tables[0],
+            'column_name':'mutation_position',
+            'order':'ASC',
+                        },
+	    ];
+
+        #additional query blocks
+        for k,v in query_I.items():
+            if not k in query.keys():
+                query[k]=[];
+            for r in v:
+                query[k].append(r);
+
+        data_O = self.getAggregateFunction_rows_analysisID_dataStage01ResequencingEndpointLineages(
+                analysis_id_I=analysis_id_I,
+                column_name_I=column_name_I,
+                aggregate_function_I=aggregate_function_I,
+                aggregate_label_I=aggregate_label_I,
+                query_I=query,
+                output_O=output_O,
+                dictColumn_I=dictColumn_I
+            );
+        return data_O;
+    def getGroupAndCount_analysisIDAndLineageNameAndMutationGenes_analysisID_dataStage01ResequencingEndpointLineages(self,
+                analysis_id_I,
+                column_name_I = 'analysis_id',
+                aggregate_function_I='count',
+                aggregate_label_I='count_1',
+                query_I={},
+                output_O='listDict',
+                dictColumn_I=None):
+        '''Query row count by analysis_id from data_stage01_resequencing_endpointLineages
+        INPUT:
+        analysis_id_I = string
+        column_name_I = string
+        aggregate_function_I = name of the aggregate function to call on the column
+        output_O = string
+        dictColumn_I = string
+        OPTIONAL INPUT:
+        query_I = additional query blocks
+        OUTPUT:
+        data_O = output specified by output_O and dictColumn_I
+        '''
+
+        tables = ['data_stage01_resequencing_endpointLineages'];
+        # get the listDict data
+        data_O = [];
+        query = {};
+        query['select'] = [
+            {"table_name":tables[0],
+             "column_name":'analysis_id',
+             },
+            {"table_name":tables[0],
+             "column_name":'lineage_name',
+             },
+            {"table_name":tables[0],
+             "column_name":'mutation_genes',
+             },
+            ];
+        query['group_by'] = [
+            {"table_name":tables[0],
+             "column_name":'analysis_id',
+             },
+            {"table_name":tables[0],
+             "column_name":'lineage_name',
+             },
+            {"table_name":tables[0],
+             "column_name":'mutation_genes',
+             },
+	    ];
+        query['order_by'] = [
+            {"table_name":tables[0],
+            'column_name':'lineage_name',
+            'order':'ASC',
+                        },
+            {"table_name":tables[0],
+            'column_name':'mutation_genes',
+            'order':'ASC',
+                        },
+	    ];
+
+        #additional query blocks
+        for k,v in query_I.items():
+            if not k in query.keys():
+                query[k]=[];
+            for r in v:
+                query[k].append(r);
+
+        data_O = self.getAggregateFunction_rows_analysisID_dataStage01ResequencingEndpointLineages(
+                analysis_id_I=analysis_id_I,
+                column_name_I=column_name_I,
+                aggregate_function_I=aggregate_function_I,
+                aggregate_label_I=aggregate_label_I,
+                query_I=query,
+                output_O=output_O,
+                dictColumn_I=dictColumn_I
+            );
         return data_O;

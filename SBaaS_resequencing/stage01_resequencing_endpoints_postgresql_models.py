@@ -90,7 +90,6 @@ class data_stage01_resequencing_endpointLineages(Base):
     experiment_id = Column(String(50))
     analysis_id = Column(String(500))
     lineage_name = Column(String(100))
-    mutation_frequency = Column(Float)
     mutation_type = Column(String(3))
     mutation_position = Column(Integer)
     mutation_data = Column(postgresql.JSON)
@@ -110,7 +109,6 @@ class data_stage01_resequencing_endpointLineages(Base):
         self.experiment_id=row_dict_I['experiment_id'];
         self.analysis_id=row_dict_I['analysis_id'];
         self.lineage_name=row_dict_I['lineage_name'];
-        self.mutation_frequency=row_dict_I['mutation_frequency'];
         self.mutation_type=row_dict_I['mutation_type'];
         self.mutation_position=row_dict_I['mutation_position'];
         self.mutation_data=row_dict_I['mutation_data'];
@@ -124,7 +122,6 @@ class data_stage01_resequencing_endpointLineages(Base):
     def __set__row__(self, experiment_id_I,
                 analysis_id_I,
                 lineage_name_I,
-                mutation_frequency_I,
                 mutation_type_I,
                 mutation_position_I,
                 mutation_data_I,
@@ -137,7 +134,6 @@ class data_stage01_resequencing_endpointLineages(Base):
         self.experiment_id=experiment_id_I
         self.analysis_id=analysis_id_I
         self.lineage_name=lineage_name_I
-        self.mutation_frequency=mutation_frequency_I
         self.mutation_type=mutation_type_I
         self.mutation_position=mutation_position_I
         self.mutation_data=mutation_data_I
@@ -153,7 +149,6 @@ class data_stage01_resequencing_endpointLineages(Base):
                 'experiment_id':self.experiment_id,
                 'analysis_id':self.analysis_id,
                 'lineage_name':self.lineage_name,
-                'mutation_frequency':self.mutation_frequency,
                 'mutation_type':self.mutation_type,
                 'mutation_position':self.mutation_position,
                 'mutation_data':self.mutation_data,

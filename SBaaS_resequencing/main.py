@@ -97,14 +97,14 @@ mutation_id_base01 = ['MOB_insA-/-uspC_1977510',
                     'SNP_wcaA_2130811']
 for analysis in analysis_ids:
     print('running analysis ' + analysis);
-    #endpoint lineages
-    endpoints01.reset_dataStage01_resequencing_endpointLineages(analysis_id_I = analysis);
-    endpoints01.execute_analyzeLineageReplicates_population(analysis);
-    endpoints01.execute_annotateMutations_endpointLineages(
-        analysis_id_I = analysis,
-        ref_genome_I='C:/Users/dmccloskey-sbrg/Documents/GitHub/SBaaS_resequencing/SBaaS_resequencing/data/U00096.2.gb',
-        ref_I = 'genbank',
-        biologicalmaterial_id_I='MG1655')
+    ##endpoint lineages
+    #endpoints01.reset_dataStage01_resequencing_endpointLineages(analysis_id_I = analysis);
+    #endpoints01.execute_analyzeLineageReplicates_population(analysis);
+    #endpoints01.execute_annotateMutations_endpointLineages(
+    #    analysis_id_I = analysis,
+    #    ref_genome_I='C:/Users/dmccloskey-sbrg/Documents/GitHub/SBaaS_resequencing/SBaaS_resequencing/data/U00096.2.gb',
+    #    ref_I = 'genbank',
+    #    biologicalmaterial_id_I='MG1655')
 #    #generate the histograms
 #    hist01.reset_dataStage01_resequencing_histogram(analysis_id_I=analysis);
 #    hist01.execute_binFeatures(
@@ -142,3 +142,8 @@ for analysis in analysis_ids:
 #        IS_sequences_I='C:/Users/dmccloskey-sbrg/Documents/GitHub/SBaaS_resequencing/SBaaS_resequencing/data/ecoli_IS_sequences.fasta',
 #        IS_sequences_ref_I = 'fasta',
 #         translation_table_I='Bacterial',);
+
+#endpoints01.export_dataStage01ResequencingEndpointLineages_js('ALEsKOs01_1-2-3-11_evo04pgi');
+#endpoints01.export_dataStage01ResequencingEndpointLineages_genesPerLineage_js('ALEsKOs01_1-2-3-11_evo04pgi');
+#endpoints01.export_dataStage01ResequencingEndpoints_js('ALEsKOs01_11_evo04pgi');
+endpoints01.export_dataStage01ResequencingEndpoints_genesPerSample_js('ALEsKOs01_11_evo04pgi');

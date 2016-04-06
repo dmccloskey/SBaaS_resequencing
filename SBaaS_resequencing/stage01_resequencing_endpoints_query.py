@@ -253,6 +253,10 @@ class stage01_resequencing_endpoints_query(sbaas_template_query):
              },
 	    ];
         query['order_by'] = [
+            {
+            'label':'count_1',
+            'order':'ASC',
+                        },
             {"table_name":tables[0],
             'column_name':'mutation_position',
             'order':'ASC',
@@ -531,6 +535,10 @@ class stage01_resequencing_endpoints_query(sbaas_template_query):
              },
 	    ];
         query['order_by'] = [
+            {
+            'label':'count_1',
+            'order':'ASC',
+                        },
             {"table_name":tables[0],
             'column_name':'mutation_position',
             'order':'ASC',

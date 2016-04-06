@@ -145,5 +145,5 @@ for analysis in analysis_ids:
 
 #endpoints01.export_dataStage01ResequencingEndpointLineages_js('ALEsKOs01_1-2-3-11_evo04pgi');
 #endpoints01.export_dataStage01ResequencingEndpointLineages_genesPerLineage_js('ALEsKOs01_1-2-3-11_evo04pgi');
-#endpoints01.export_dataStage01ResequencingEndpoints_js('ALEsKOs01_11_evo04pgi');
-endpoints01.export_dataStage01ResequencingEndpoints_genesPerSample_js('ALEsKOs01_11_evo04pgi');
+endpoints01.export_dataStage01ResequencingEndpoints_js('ALEsKOs01_11_evo04pgi');
+#endpoints01.export_dataStage01ResequencingEndpoints_genesPerSample_js('ALEsKOs01_11_evo04pgi');

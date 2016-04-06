@@ -56,6 +56,9 @@ class stage01_resequencing_endpoints_io(stage01_resequencing_endpoints_query,sba
             d['mutation_id'] = genomediff._make_mutationID(
                 d['mutation_genes'],d['mutation_type'],d['mutation_position']
                 );
+            if d['mutation_genes']:
+                d['mutation_genes']=";".join([x for x in d['mutation_genes'] if x is not None]);
+            else: d['mutation_genes']=d['mutation_genes'];
         
         # make the tile objects  
         #data1 = filter menu and table    
@@ -129,6 +132,15 @@ class stage01_resequencing_endpoints_io(stage01_resequencing_endpoints_query,sba
                 query_I=query_I,
                 output_O='listDict',
                 dictColumn_I=None);
+        #add in the mutationID
+        genomediff = genome_diff();
+        for d in data_O:
+            d['mutation_id'] = genomediff._make_mutationID(
+                d['mutation_genes'],d['mutation_type'],d['mutation_position']
+                );
+            if d['mutation_genes']:
+                d['mutation_genes']=";".join([x for x in d['mutation_genes'] if x is not None]);
+            else: d['mutation_genes']=d['mutation_genes'];
         
         # make the tile objects  
         #data1 = filter menu and table    
@@ -198,13 +210,16 @@ class stage01_resequencing_endpoints_io(stage01_resequencing_endpoints_query,sba
                 query_I=query_I,
                 output_O='listDict',
                 dictColumn_I=None);
-
+        
         #add in the mutationID
         genomediff = genome_diff();
         for d in data_O:
             d['mutation_id'] = genomediff._make_mutationID(
                 d['mutation_genes'],d['mutation_type'],d['mutation_position']
                 );
+            if d['mutation_genes']:
+                d['mutation_genes']=";".join([x for x in d['mutation_genes'] if x is not None]);
+            else: d['mutation_genes']=d['mutation_genes'];
         
         # make the tile objects  
         #data1 = filter menu and table    
@@ -276,6 +291,15 @@ class stage01_resequencing_endpoints_io(stage01_resequencing_endpoints_query,sba
                 query_I=query_I,
                 output_O='listDict',
                 dictColumn_I=None);
+        #add in the mutationID
+        genomediff = genome_diff();
+        for d in data_O:
+            d['mutation_id'] = genomediff._make_mutationID(
+                d['mutation_genes'],d['mutation_type'],d['mutation_position']
+                );
+            if d['mutation_genes']:
+                d['mutation_genes']=";".join([x for x in d['mutation_genes'] if x is not None]);
+            else: d['mutation_genes']=d['mutation_genes'];
         
         # make the tile objects  
         #data1 = filter menu and table    

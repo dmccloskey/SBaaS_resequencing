@@ -133,11 +133,7 @@ class stage01_resequencing_endpoints_io(stage01_resequencing_endpoints_query,sba
                 output_O='listDict',
                 dictColumn_I=None);
         #add in the mutationID
-        genomediff = genome_diff();
         for d in data_O:
-            d['mutation_id'] = genomediff._make_mutationID(
-                d['mutation_genes'],d['mutation_type'],d['mutation_position']
-                );
             if d['mutation_genes']:
                 d['mutation_genes']=";".join([x for x in d['mutation_genes'] if x is not None]);
             else: d['mutation_genes']=d['mutation_genes'];
@@ -149,11 +145,11 @@ class stage01_resequencing_endpoints_io(stage01_resequencing_endpoints_query,sba
                       'mutation_genes',
                       'count_1',
                     ];
-        data1_nestkeys = ['lineage_name'];
+        data1_nestkeys = ['mutation_genes'];
         data1_keymap = {
             'xdata':'mutation_genes',
             'ydata':'count_1',
-            'serieslabel':'mutation_genes',
+            'serieslabel':'lineage_name',
             'featureslabel':'mutation_genes',
             'tooltiplabel':'lineage_name',
             };     
@@ -292,11 +288,7 @@ class stage01_resequencing_endpoints_io(stage01_resequencing_endpoints_query,sba
                 output_O='listDict',
                 dictColumn_I=None);
         #add in the mutationID
-        genomediff = genome_diff();
         for d in data_O:
-            d['mutation_id'] = genomediff._make_mutationID(
-                d['mutation_genes'],d['mutation_type'],d['mutation_position']
-                );
             if d['mutation_genes']:
                 d['mutation_genes']=";".join([x for x in d['mutation_genes'] if x is not None]);
             else: d['mutation_genes']=d['mutation_genes'];
@@ -314,7 +306,7 @@ class stage01_resequencing_endpoints_io(stage01_resequencing_endpoints_query,sba
             'ydata':'count_1',
             'serieslabel':'sample_name',
             'featureslabel':'mutation_genes',
-            'tooltiplabel':'sample_name',
+            'tooltiplabel':'mutation_genes',
             };     
         
         nsvgtable = ddt_container_filterMenuAndChart2dAndTable();

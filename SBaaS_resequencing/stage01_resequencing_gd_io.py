@@ -326,7 +326,7 @@ class stage01_resequencing_gd_io(stage01_resequencing_gd_query,
                 if mutation['mutation_frequency']<frequency_threshold:
                     continue;
                 # mutation id
-                mutation_id = genomediff._make_mutationID2(mutation['mutation_genes'],mutation['mutation_type'],mutation['mutation_position'],mutation['dna_sequence_ref'],mutation['dna_sequence_new']);
+                mutation_id = genomediff._make_mutationID2(mutation['mutation_genes'],mutation['mutation_type'],mutation['peptide_feature_position'],mutation['peptide_feature_ref'],mutation['peptide_feature_new']);
                 if mutation_id in mutation_id_exclusion_list:
                     continue;
                 tmp = {};

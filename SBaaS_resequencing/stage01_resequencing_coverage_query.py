@@ -102,21 +102,22 @@ class stage01_resequencing_coverage_query(sbaas_template_query):
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage01_resequencing_coverage(
+                    data_add = data_stage01_resequencing_coverage(d
                     #d['analysis_id'],
-                    d['experiment_id'],
-                    d['sample_name'],
-                    d['data_dir'],
-                    d['genome_chromosome'],
-                    d['genome_strand'],
-                    d['genome_index'],
-                    d['strand_start'],
-                    d['strand_stop'],
-                    d['reads'],
-                    d['scale_factor'],
-                    d['downsample_factor'],
-                    d['used_'],
-                    d['comment_']);
+                    #d['experiment_id'],
+                    #d['sample_name'],
+                    #d['data_dir'],
+                    #d['genome_chromosome'],
+                    #d['genome_strand'],
+                    #d['genome_index'],
+                    #d['strand_start'],
+                    #d['strand_stop'],
+                    #d['reads'],
+                    #d['scale_factor'],
+                    #d['downsample_factor'],
+                    #d['used_'],
+                    #d['comment_']
+                    );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);
@@ -126,26 +127,27 @@ class stage01_resequencing_coverage_query(sbaas_template_query):
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage01_resequencing_coverageStats(
+                    data_add = data_stage01_resequencing_coverageStats(d
                     #d['analysis_id'],
-                    d['experiment_id'],
-                    d['sample_name'],
-                    d['genome_chromosome'],
-                    d['genome_strand'],
-                    d['strand_start'],
-                    d['strand_stop'],
-                    d['reads_min'],
-                    d['reads_max'],
-                    d['reads_lb'],
-                    d['reads_ub'],
-                    d['reads_iq1'],
-                    d['reads_iq3'],
-                    d['reads_median'],
-                    d['reads_mean'],
-                    d['reads_var'],
-                    d['reads_n'],
-                    d['used_'],
-                    d['comment_']);
+                    #d['experiment_id'],
+                    #d['sample_name'],
+                    #d['genome_chromosome'],
+                    #d['genome_strand'],
+                    #d['strand_start'],
+                    #d['strand_stop'],
+                    #d['reads_min'],
+                    #d['reads_max'],
+                    #d['reads_lb'],
+                    #d['reads_ub'],
+                    #d['reads_iq1'],
+                    #d['reads_iq3'],
+                    #d['reads_median'],
+                    #d['reads_mean'],
+                    #d['reads_var'],
+                    #d['reads_n'],
+                    #d['used_'],
+                    #d['comment_']
+                    );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);
@@ -155,26 +157,27 @@ class stage01_resequencing_coverage_query(sbaas_template_query):
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage01_resequencing_amplifications(
+                    data_add = data_stage01_resequencing_amplifications(d
                         #d['analysis_id'],
-                        d['experiment_id'],
-                        d['sample_name'],
-                        d['genome_chromosome'],
-                        d['genome_strand'],
-                        d['genome_index'],
-                        d['strand_start'],
-                        d['strand_stop'],
-                        d['reads'],
-                        d['reads_min'],
-                        d['reads_max'],
-                        d['indices_min'],
-                        d['consecutive_tol'],
-                        d['scale_factor'],
-                        d['downsample_factor'],
-                        d['amplification_start'],
-                        d['amplification_stop'],
-                    d['used_'],
-                    d['comment_']);
+                        #d['experiment_id'],
+                        #d['sample_name'],
+                        #d['genome_chromosome'],
+                        #d['genome_strand'],
+                        #d['genome_index'],
+                        #d['strand_start'],
+                        #d['strand_stop'],
+                        #d['reads'],
+                        #d['reads_min'],
+                        #d['reads_max'],
+                        #d['indices_min'],
+                        #d['consecutive_tol'],
+                        #d['scale_factor'],
+                        #d['downsample_factor'],
+                        #d['amplification_start'],
+                        #d['amplification_stop'],
+                        #d['used_'],
+                        #d['comment_']
+                        );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);
@@ -184,28 +187,29 @@ class stage01_resequencing_coverage_query(sbaas_template_query):
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage01_resequencing_amplificationStats(
+                    data_add = data_stage01_resequencing_amplificationStats(d
                     #d['analysis_id'],
-                    d['experiment_id'],
-                    d['sample_name'],
-                    d['genome_chromosome'],
-                    d['genome_strand'],
-                    d['strand_start'],
-                    d['strand_stop'],
-                    d['reads_min'],
-                    d['reads_max'],
-                    d['reads_lb'],
-                    d['reads_ub'],
-                    d['reads_iq1'],
-                    d['reads_iq3'],
-                    d['reads_median'],
-                    d['reads_mean'],
-                    d['reads_var'],
-                    d['reads_n'],
-                    d['amplification_start'],
-                    d['amplification_stop'],
-                    d['used_'],
-                    d['comment_']);
+                    #d['experiment_id'],
+                    #d['sample_name'],
+                    #d['genome_chromosome'],
+                    #d['genome_strand'],
+                    #d['strand_start'],
+                    #d['strand_stop'],
+                    #d['reads_min'],
+                    #d['reads_max'],
+                    #d['reads_lb'],
+                    #d['reads_ub'],
+                    #d['reads_iq1'],
+                    #d['reads_iq3'],
+                    #d['reads_median'],
+                    #d['reads_mean'],
+                    #d['reads_var'],
+                    #d['reads_n'],
+                    #d['amplification_start'],
+                    #d['amplification_stop'],
+                    #d['used_'],
+                    #d['comment_']
+                    );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);
@@ -215,25 +219,26 @@ class stage01_resequencing_coverage_query(sbaas_template_query):
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage01_resequencing_amplificationAnnotations(
+                    data_add = data_stage01_resequencing_amplificationAnnotations(d
                     #d['analysis_id'],
-                    d['experiment_id'],
-                    d['sample_name'],
-                    d['genome_chromosome'],
-                    d['genome_strand'],
-                    d['strand_start'],
-                    d['strand_stop'],
-                    d['feature_annotations'],
-                    d['feature_genes'],
-                    d['feature_locations'],
-                    d['feature_links'],
-                    d['feature_start'],
-                    d['feature_stop'],
-                    d['feature_types'],
-                    d['amplification_start'],
-                    d['amplification_stop'],
-                    d['used_'],
-                    d['comment_']);
+                    #d['experiment_id'],
+                    #d['sample_name'],
+                    #d['genome_chromosome'],
+                    #d['genome_strand'],
+                    #d['strand_start'],
+                    #d['strand_stop'],
+                    #d['feature_annotations'],
+                    #d['feature_genes'],
+                    #d['feature_locations'],
+                    #d['feature_links'],
+                    #d['feature_start'],
+                    #d['feature_stop'],
+                    #d['feature_types'],
+                    #d['amplification_start'],
+                    #d['amplification_stop'],
+                    #d['used_'],
+                    #d['comment_']
+                    );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);

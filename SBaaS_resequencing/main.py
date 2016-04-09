@@ -28,7 +28,8 @@ sys.path.append(pg_settings.datadir_settings['github']+'/ddt_python')
 
 from SBaaS_resequencing.stage01_resequencing_gd_execute import stage01_resequencing_gd_execute
 exgd01 = stage01_resequencing_gd_execute(session,engine,pg_settings.datadir_settings);
-exgd01.initialize_dataStage01_resequencing_gd();
+exgd01.initialize_supportedTables()
+exgd01.initialize_tables();
 ##exgd01.execute_mapGeneName2ModelReaction_mutationsAnnotated(
 ##            experiment_id='ALEsKOs01',
 ##            filename_O='ALEsKOs01_mutationsAnnotated_modelReactions.csv',
@@ -49,6 +50,15 @@ exgd01.initialize_dataStage01_resequencing_gd();
 #exgd01.export_dataStage01ResequencingMutationsAnnotated_js(
 #    analysis_id_I='ALEsKOs01_evo04pgi_0_11_heatmap',
 #    mutation_id_exclusion_list=mutation_id_base01);
+exgd01.execute_mutateFilteredMutations('ALEsKOs01',
+    annotation_I='C:/Users/dmccloskey-sbrg/Documents/GitHub/SBaaS_resequencing/SBaaS_resequencing/data/U00096.2.gb',
+    annotation_ref_I = 'genbank',
+    sequence_I='C:/Users/dmccloskey-sbrg/Documents/GitHub/SBaaS_resequencing/SBaaS_resequencing/data/U00096.2.fas',
+    sequence_ref_I = 'fasta',
+    IS_sequences_I='C:/Users/dmccloskey-sbrg/Documents/GitHub/SBaaS_resequencing/SBaaS_resequencing/data/ecoli_IS_sequences.fasta',
+    IS_sequences_ref_I = 'fasta',
+    codonUsageTable_I = pg_settings.datadir_settings['workspace_data']+'/_input/160409_Resequencing_EColiCodonUsageTable.csv',
+    translation_table_I='Bacterial',);
 
 #make the histogram table
 from SBaaS_resequencing.stage01_resequencing_histogram_execute import stage01_resequencing_histogram_execute
@@ -145,5 +155,5 @@ for analysis in analysis_ids:
 
 #endpoints01.export_dataStage01ResequencingEndpointLineages_js('ALEsKOs01_1-2-3-11_evo04pgi');
 #endpoints01.export_dataStage01ResequencingEndpointLineages_genesPerLineage_js('ALEsKOs01_1-2-3-11_evo04pgi');
-endpoints01.export_dataStage01ResequencingEndpoints_js('ALEsKOs01_11_evo04pgi');
+#endpoints01.export_dataStage01ResequencingEndpoints_js('ALEsKOs01_11_evo04pgi');
 #endpoints01.export_dataStage01ResequencingEndpoints_genesPerSample_js('ALEsKOs01_11_evo04pgi');

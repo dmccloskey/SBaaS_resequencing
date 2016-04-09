@@ -136,6 +136,7 @@ class stage01_resequencing_gd_execute(stage01_resequencing_gd_io,
                                                  annotation_ref_I = 'genbank',
                                                  sequence_I='data/U00096.2.fas',
                                                  sequence_ref_I = 'fasta',
+                                                 codonUsageTable_I='data/ecoli_codonUsageTable.csv',
                                                 IS_sequences_I='data/ecoli_IS_sequences.fasta',
                                                 IS_sequences_ref_I = 'fasta',
                                                  translation_table_I='Bacterial',
@@ -148,14 +149,16 @@ class stage01_resequencing_gd_execute(stage01_resequencing_gd_io,
         annotation_ref_I = string, reference file data base source
         sequence_I = string, reference file for the sequence
         sequence_I = string, reference file format
+        codonUsageTable_I = string, reference file for the codon usage table
         IS_sequences_I = string, reference file for the insertion element sequences
-        IS_sequences_I = string, reference file format
+        IS_sequences_ref_I = string, reference file format
         translation_table_I = string, translation table to use when converting from rna to peptide sequence
         '''
 
         genomeannotation = genome_annotations(annotation_I=annotation_I,annotation_ref_I=annotation_ref_I,
                                               sequence_I=sequence_I,sequence_ref_I=sequence_ref_I,
-                                              IS_sequences_I=IS_sequences_I,IS_sequences_ref_I=IS_sequences_ref_I);
+                                              IS_sequences_I=IS_sequences_I,IS_sequences_ref_I=IS_sequences_ref_I,
+                                              codonUsageTable_I=codonUsageTable_I);
 
         print('Executing annotation of filtered mutations...')
         data_O = [];
@@ -168,6 +171,7 @@ class stage01_resequencing_gd_execute(stage01_resequencing_gd_io,
         for sn in sample_names:
             print('analyzing sample_name ' + sn);
             data_O = [];
+            data_codon_O=[];
             # query mutation data:
             mutations = [];
             mutations = self.get_mutations_experimentIDAndSampleName_dataStage01ResequencingMutationsFiltered(experiment_id,sn);
@@ -211,9 +215,24 @@ class stage01_resequencing_gd_execute(stage01_resequencing_gd_io,
                 #data_tmp['mutation_data'] = mutation['mutation_data'];
                 data_tmp['used_'] = True;
                 data_tmp['comment_'] = None;
-                data_O.append(data_tmp);
+                #split into different tables depending on whether the peptide sequence changed
+                if mutation['mutation_data']['type']=='SNP' and 'synonymous' in annotation['mutation_class']:
+                    data_tmp['codon_triplet_ref'] = annotation['codon_triplet_ref'];
+                    data_tmp['codon_triplet_new'] = annotation['codon_triplet_new'];
+                    data_tmp['codon_triplet_position'] = annotation['codon_triplet_position']
+                    data_tmp['codon_fraction_ref'] = annotation['codon_fraction_ref']
+                    data_tmp['codon_fraction_new'] = annotation['codon_fraction_new']
+                    data_tmp['codon_frequency_ref'] = annotation['codon_frequency_ref']
+                    data_tmp['codon_frequency_new'] = annotation['codon_frequency_new']
+                    data_tmp['codon_frequency_units'] = annotation['codon_frequency_units']
+                    data_codon_O.append(data_tmp);
+                else:
+                    data_O.append(data_tmp);
             #upload the data to the database (each sample)
-            self.add_dataStage01ResequencingMutationsSeqChanges(data_O);
+            if data_O:
+                self.add_dataStage01ResequencingMutationsSeqChanges(data_O);
+            if data_codon_O:
+                self.add_rows_table('data_stage01_resequencing_mutationsCodonChanges',data_codon_O);
 
     def map_geneName2ModelReaction(self,
             biologicalmaterial_id_I,gene_name_I,

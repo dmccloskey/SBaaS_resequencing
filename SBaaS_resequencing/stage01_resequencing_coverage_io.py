@@ -52,6 +52,7 @@ class stage01_resequencing_coverage_io(
     def export_dataStage01ResequencingAmplifications_js(self,analysis_id_I,data_dir_I="tmp"):
         """export amplifications and statistics to js file"""
 
+        ddtutilities = ddt_container()
         # get the analysis info
         #analysis_info = {};
         #analysis_info = self.get_analysis_analysisID_dataStage01ResequencingAnalysis(analysis_id_I);
@@ -71,13 +72,13 @@ class stage01_resequencing_coverage_io(
         for sn_cnt,sn in enumerate(sample_names):
             data1_tmp = [];
             data1_tmp = self.get_rows_experimentIDAndSampleName_dataStage01ResequencingAmplifications_visualization(experiment_ids[sn_cnt],sn);
-            data1_O.extend(data1_tmp);
+            data1_O.extend(ddtutilities.make_listDict_JSONAndJSCompatible(data1_tmp));
             data2_tmp = [];
             data2_tmp = self.get_rows_experimentIDAndSampleName_dataStage01ResequencingAmplificationStats(experiment_ids[sn_cnt],sn);
-            data2_O.extend(data2_tmp);
+            data2_O.extend(ddtutilities.make_listDict_JSONAndJSCompatible(data2_tmp));
             data3_tmp = [];
             data3_tmp = self.get_rows_experimentIDAndSampleName_dataStage01ResequencingAmplificationAnnotations(experiment_ids[sn_cnt],sn);
-            data3_O.extend(data3_tmp);
+            data3_O.extend(ddtutilities.make_listDict_JSONAndJSCompatible(data3_tmp));
         # dump chart parameters to a js files
         data1_keys = ['experiment_id',
                     'sample_name',

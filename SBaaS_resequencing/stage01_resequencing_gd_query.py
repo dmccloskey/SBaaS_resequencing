@@ -21,6 +21,7 @@ class stage01_resequencing_gd_query(sbaas_template_query):
             'data_stage01_resequencing_mutationsAnnotated':data_stage01_resequencing_mutationsAnnotated,
             'data_stage01_resequencing_mutationsFiltered':data_stage01_resequencing_mutationsFiltered,
             'data_stage01_resequencing_mutationsSeqChanges':data_stage01_resequencing_mutationsSeqChanges,
+            'data_stage01_resequencing_mutationsCodonChanges':data_stage01_resequencing_mutationsCodonChanges,
             'data_stage01_resequencing_validation':data_stage01_resequencing_validation,
             'data_stage01_resequencing_evidence':data_stage01_resequencing_evidence,
                         };
@@ -105,6 +106,15 @@ class stage01_resequencing_gd_query(sbaas_template_query):
                 reset = self.session.query(data_stage01_resequencing_mutationsSeqChanges).filter(data_stage01_resequencing_mutationsSeqChanges.experiment_id.like(experiment_id_I)).delete(synchronize_session=False);
             else:
                 reset = self.session.query(data_stage01_resequencing_mutationsSeqChanges).delete(synchronize_session=False);
+            self.session.commit();
+        except SQLAlchemyError as e:
+            print(e);
+    def reset_dataStage01_mutationsCodonChanges(self,experiment_id_I = None):
+        try:
+            if experiment_id_I:
+                reset = self.session.query(data_stage01_resequencing_mutationsCodonChanges).filter(data_stage01_resequencing_mutationsCodonChanges.experiment_id.like(experiment_id_I)).delete(synchronize_session=False);
+            else:
+                reset = self.session.query(data_stage01_resequencing_mutationsCodonChanges).delete(synchronize_session=False);
             self.session.commit();
         except SQLAlchemyError as e:
             print(e);

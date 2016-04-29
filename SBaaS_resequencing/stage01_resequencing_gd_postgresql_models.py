@@ -5,11 +5,15 @@ class data_stage01_resequencing_metadata(Base):
     __tablename__ = 'data_stage01_resequencing_metadata'
     id = Column(Integer, Sequence('data_stage01_resequencing_metadata_id_seq'), primary_key=True)
     experiment_id = Column(String(50))
-    sample_name = Column(String(100), unique=True)
+    sample_name = Column(String(100))
     genome_diff = Column(Float)
     refseq = Column(String(500))
     readseq = Column(postgresql.ARRAY(String(500)))
     author = Column(String(100))
+
+    __table_args__ = (
+        UniqueConstraint('sample_name'),
+            )
     
     def __init__(self,
                 row_dict_I,
@@ -234,6 +238,10 @@ class data_stage01_resequencing_mutationsAnnotated(Base):
     mutation_links = Column(postgresql.ARRAY(String(500)))
     used_ = Column(Boolean)
     comment_ = Column(Text)
+
+    __table_args__ = (
+            UniqueConstraint('experiment_id','sample_name','mutation_type','mutation_position'),
+            )
     
     def __init__(self,
                 row_dict_I,
@@ -326,6 +334,10 @@ class data_stage01_resequencing_mutationsSeqChanges(Base):
     mutation_data = Column(postgresql.JSON)
     used_ = Column(Boolean)
     comment_ = Column(Text)
+
+    __table_args__ = (
+            UniqueConstraint('experiment_id','sample_name','mutation_type','mutation_position'),
+            )
     
     def __init__(self,
                 row_dict_I,
@@ -489,6 +501,10 @@ class data_stage01_resequencing_mutationsCodonChanges(Base):
     mutation_data = Column(postgresql.JSON)
     used_ = Column(Boolean)
     comment_ = Column(Text)
+
+    __table_args__ = (
+            UniqueConstraint('experiment_id','sample_name','mutation_type','mutation_position'),
+            )
     
     def __init__(self,
                 row_dict_I,

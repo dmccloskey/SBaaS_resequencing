@@ -18,9 +18,9 @@ class data_stage01_resequencing_endpoints(Base):
     mutation_links = Column(postgresql.ARRAY(String(500)))
     comment_ = Column(Text)
 
-    #__table_args__ = (
-    #    UniqueConstraint('analysis_id','experiment_id','sample_name'),
-    #        )
+    __table_args__ = (
+        UniqueConstraint('analysis_id','experiment_id','sample_name','mutation_type','mutation_position'),
+            )
     def __init__(self,
                 row_dict_I,
                 ):
@@ -100,9 +100,9 @@ class data_stage01_resequencing_endpointLineages(Base):
     mutation_links = Column(postgresql.ARRAY(String(500)))
     comment_ = Column(Text)
 
-    #__table_args__ = (
-    #    UniqueConstraint('analysis_id','experiment_id','lineage_name'),
-    #        )
+    __table_args__ = (
+        UniqueConstraint('analysis_id','experiment_id','lineage_name','mutation_type','mutation_position'),
+            )
     def __init__(self,
                 row_dict_I,
                 ):

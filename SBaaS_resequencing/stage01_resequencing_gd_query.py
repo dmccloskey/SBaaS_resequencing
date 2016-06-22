@@ -578,7 +578,12 @@ class stage01_resequencing_gd_query(sbaas_template_query):
         try:
             data = self.session.query(data_stage01_resequencing_mutationsAnnotated).filter(
                     data_stage01_resequencing_mutationsAnnotated.experiment_id.like(experiment_id_I),
-                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I)).all();
+                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I),
+                    data_stage01_resequencing_mutationsAnnotated.used_).order_by(
+                    data_stage01_resequencing_mutationsAnnotated.mutation_position.asc(),
+                    data_stage01_resequencing_mutationsAnnotated.mutation_type.asc(),
+                    data_stage01_resequencing_mutationsAnnotated.mutation_genes.asc(),
+                    data_stage01_resequencing_mutationsAnnotated.mutation_frequency.asc()).all();
             data_O = [];
             for d in data: 
                 data_dict = {'experiment_id':d.experiment_id,

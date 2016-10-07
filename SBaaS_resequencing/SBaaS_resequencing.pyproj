@@ -75,6 +75,10 @@
     <Compile Include="stage01_resequencing_lineage_io.py" />
     <Compile Include="stage01_resequencing_lineage_postgresql_models.py" />
     <Compile Include="stage01_resequencing_lineage_query.py" />
+    <Compile Include="stage01_resequencing_omniExpressExome_execute.py" />
+    <Compile Include="stage01_resequencing_omniExpressExome_io.py" />
+    <Compile Include="stage01_resequencing_omniExpressExome_postgresql_models.py" />
+    <Compile Include="stage01_resequencing_omniExpressExome_query.py" />
     <Compile Include="__init__.py" />
   </ItemGroup>
   <PropertyGroup>

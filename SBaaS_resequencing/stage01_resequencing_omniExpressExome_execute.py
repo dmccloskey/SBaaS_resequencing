@@ -1,0 +1,5 @@
+﻿#SBaaS
+from .stage01_resequencing_omniExpressExome_io import stage01_resequencing_omniExpressExome_io
+
+class stage01_resequencing_omniExpressExome_execute(stage01_resequencing_omniExpressExome_io):
+    pass

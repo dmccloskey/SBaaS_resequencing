@@ -1,4 +1,4 @@
-'''resequencing class'''
+﻿'''resequencing class'''
 from copy import copy
 #sbaas lims
 from SBaaS_LIMS.lims_biologicalMaterial_query import lims_biologicalMaterial_query
@@ -16,7 +16,13 @@ from python_statistics.calculate_interface import calculate_interface
 class stage01_resequencing_mutations_execute(stage01_resequencing_mutations_io,
                                       lims_biologicalMaterial_query,
                                       models_COBRA_query):
-    
+    #TODO:
+    #1. add in query_object_I
+    #2. add in query_func_I
+    #3. add in query_object_annotation_I
+    #4. add in query_object_annotation_func_I
+    #5. split into queryData, transformData, storeData functions
+    #6.
     def execute_annotateFilteredMutations(self,experiment_id,sample_names_I=[],
                                                  annotation_I='data/U00096.2.gb',
                                                  annotation_ref_I = 'genbank',
@@ -76,6 +82,7 @@ class stage01_resequencing_mutations_execute(stage01_resequencing_mutations_io,
                 data_tmp['mutation_position'] = mutation['mutation_data']['position']
                 data_tmp['mutation_type'] = mutation['mutation_data']['type']
                 data_tmp['mutation_data'] = mutation['mutation_data'];
+                data_tmp['mutation_chromosome'] = 1;
                 mutation_data_O.append(data_tmp);
                 # add data to the database
                 row = [];
@@ -218,7 +225,6 @@ class stage01_resequencing_mutations_execute(stage01_resequencing_mutations_io,
                 r['mutation_gene'] = gene_name_I;
                 rows_O.append(r);
         return rows_O;
-
     def execute_mapGeneName2ModelReaction_mutationsAnnotated(self,
             experiment_id,filename_O,
             biologicalmaterial_id_I,

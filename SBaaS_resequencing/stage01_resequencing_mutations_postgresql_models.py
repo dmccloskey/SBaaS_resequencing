@@ -1,7 +1,6 @@
-from SBaaS_base.postgresql_orm_base import *
+﻿from SBaaS_base.postgresql_orm_base import *
 
-#TODO: add column for chromosome
-#TODO: move to new module "stage01_resequencing_mutations"
+#TODO: add column for chromosome to postgresql
 class data_stage01_resequencing_mutationsAnnotated(Base):
     __tablename__ = 'data_stage01_resequencing_mutationsAnnotated'
     id = Column(Integer, Sequence('data_stage01_resequencing_mutationsAnnotated_id_seq'), primary_key=True)
@@ -9,6 +8,7 @@ class data_stage01_resequencing_mutationsAnnotated(Base):
     sample_name = Column(String(100))
     mutation_frequency = Column(Float)
     mutation_type = Column(String(3))
+    mutation_chromosome = Column(Integer) #Column(String(3))
     mutation_position = Column(Integer)
     mutation_data = Column(postgresql.JSON)
     mutation_annotations = Column(postgresql.ARRAY(String(500)))
@@ -19,7 +19,7 @@ class data_stage01_resequencing_mutationsAnnotated(Base):
     comment_ = Column(Text)
 
     __table_args__ = (
-            UniqueConstraint('experiment_id','sample_name','mutation_type','mutation_position'),
+            UniqueConstraint('experiment_id','sample_name','mutation_type','mutation_position','mutation_chromosome'),
             )
     
     def __init__(self,
@@ -30,6 +30,7 @@ class data_stage01_resequencing_mutationsAnnotated(Base):
         self.sample_name=row_dict_I['sample_name'];
         self.mutation_frequency=row_dict_I['mutation_frequency'];
         self.mutation_type=row_dict_I['mutation_type'];
+        self.mutation_chromosome=row_dict_I['mutation_chromosome'];
         self.mutation_position=row_dict_I['mutation_position'];
         self.mutation_data=row_dict_I['mutation_data'];
         self.mutation_annotations=row_dict_I['mutation_annotations'];
@@ -42,6 +43,7 @@ class data_stage01_resequencing_mutationsAnnotated(Base):
                 sample_name_I,
                 mutation_frequency_I,
                 mutation_type_I,
+                mutation_chromosome_I,
                 mutation_position_I,
                 mutation_data_I,
                 mutation_annotations_I,
@@ -54,6 +56,7 @@ class data_stage01_resequencing_mutationsAnnotated(Base):
         self.sample_name=sample_name_I
         self.mutation_frequency=mutation_frequency_I
         self.mutation_type=mutation_type_I
+        self.mutation_chromosome=mutation_chromosome_I
         self.mutation_position=mutation_position_I
         self.mutation_data=mutation_data_I
         self.mutation_annotations=mutation_annotations_I
@@ -69,6 +72,7 @@ class data_stage01_resequencing_mutationsAnnotated(Base):
                 'sample_name':self.sample_name,
                 'mutation_frequency':self.mutation_frequency,
                 'mutation_type':self.mutation_type,
+                'mutation_chromosome':self.mutation_chromosome,
                 'mutation_position':self.mutation_position,
                 'mutation_data':self.mutation_data,
                 'mutation_annotations':self.mutation_annotations,
@@ -87,6 +91,7 @@ class data_stage01_resequencing_mutationsSeqChanges(Base):
     sample_name = Column(String(100))
     mutation_frequency = Column(Float)
     mutation_type = Column(String(3))
+    mutation_chromosome = Column(Integer)
     mutation_position = Column(Integer)
     mutation_genes = Column(postgresql.ARRAY(String(25)))
     mutation_locations = Column(postgresql.ARRAY(String(100)))
@@ -114,7 +119,7 @@ class data_stage01_resequencing_mutationsSeqChanges(Base):
     comment_ = Column(Text)
 
     __table_args__ = (
-            UniqueConstraint('experiment_id','sample_name','mutation_type','mutation_position'),
+            UniqueConstraint('experiment_id','sample_name','mutation_type','mutation_chromosome','mutation_position'),
             )
     
     def __init__(self,
@@ -142,6 +147,7 @@ class data_stage01_resequencing_mutationsSeqChanges(Base):
         self.dna_sequence_ref=row_dict_I['dna_sequence_ref'];
         self.mutation_locations=row_dict_I['mutation_locations'];
         self.mutation_genes=row_dict_I['mutation_genes'];
+        self.mutation_chromosome=row_dict_I['mutation_chromosome'];
         self.mutation_position=row_dict_I['mutation_position'];
         self.mutation_type=row_dict_I['mutation_type'];
         self.mutation_frequency=row_dict_I['mutation_frequency'];
@@ -154,6 +160,7 @@ class data_stage01_resequencing_mutationsSeqChanges(Base):
                 sample_name_I,
                 mutation_frequency_I,
                 mutation_type_I,
+                mutation_chromosome_I,
                 mutation_position_I,
                 mutation_genes_I,
                 mutation_locations_I,
@@ -183,6 +190,7 @@ class data_stage01_resequencing_mutationsSeqChanges(Base):
         self.sample_name=sample_name_I
         self.mutation_frequency=mutation_frequency_I
         self.mutation_type=mutation_type_I
+        self.mutation_chromosome=mutation_chromosome_I
         self.mutation_position=mutation_position_I
         self.mutation_genes=mutation_genes_I
         self.mutation_locations=mutation_locations_I
@@ -215,6 +223,7 @@ class data_stage01_resequencing_mutationsSeqChanges(Base):
                 'sample_name':self.sample_name,
                 'mutation_frequency':self.mutation_frequency,
                 'mutation_type':self.mutation_type,
+                'mutation_chromosome':self.mutation_chromosome,
                 'mutation_position':self.mutation_position,
                 'mutation_genes':self.mutation_genes,
                 'mutation_locations':self.mutation_locations,
@@ -249,6 +258,7 @@ class data_stage01_resequencing_mutationsCodonChanges(Base):
     sample_name = Column(String(100))
     mutation_frequency = Column(Float)
     mutation_type = Column(String(3))
+    mutation_chromosome = Column(Integer)
     mutation_position = Column(Integer)
     mutation_genes = Column(postgresql.ARRAY(String(25)))
     mutation_locations = Column(postgresql.ARRAY(String(100)))
@@ -280,7 +290,7 @@ class data_stage01_resequencing_mutationsCodonChanges(Base):
     comment_ = Column(Text)
 
     __table_args__ = (
-            UniqueConstraint('experiment_id','sample_name','mutation_type','mutation_position'),
+            UniqueConstraint('experiment_id','sample_name','mutation_type','mutation_chromosome','mutation_position'),
             )
     
     def __init__(self,
@@ -307,6 +317,7 @@ class data_stage01_resequencing_mutationsCodonChanges(Base):
         self.dna_sequence_ref=row_dict_I['dna_sequence_ref'];
         self.mutation_locations=row_dict_I['mutation_locations'];
         self.mutation_genes=row_dict_I['mutation_genes'];
+        self.mutation_chromosome=row_dict_I['mutation_chromosome'];
         self.mutation_position=row_dict_I['mutation_position'];
         self.mutation_type=row_dict_I['mutation_type'];
         self.mutation_frequency=row_dict_I['mutation_frequency'];
@@ -324,6 +335,7 @@ class data_stage01_resequencing_mutationsCodonChanges(Base):
                 sample_name_I,
                 mutation_frequency_I,
                 mutation_type_I,
+                mutation_chromosome_I,
                 mutation_position_I,
                 mutation_genes_I,
                 mutation_locations_I,
@@ -353,6 +365,7 @@ class data_stage01_resequencing_mutationsCodonChanges(Base):
         self.sample_name=sample_name_I
         self.mutation_frequency=mutation_frequency_I
         self.mutation_type=mutation_type_I
+        self.mutation_chromosome=mutation_chromosome_I
         self.mutation_position=mutation_position_I
         self.mutation_genes=mutation_genes_I
         self.mutation_locations=mutation_locations_I
@@ -385,6 +398,7 @@ class data_stage01_resequencing_mutationsCodonChanges(Base):
                 'sample_name':self.sample_name,
                 'mutation_frequency':self.mutation_frequency,
                 'mutation_type':self.mutation_type,
+                'mutation_chromosome':self.mutation_chromosome,
                 'mutation_position':self.mutation_position,
                 'mutation_genes':self.mutation_genes,
                 'mutation_locations':self.mutation_locations,

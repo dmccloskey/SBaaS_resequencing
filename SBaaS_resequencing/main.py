@@ -76,14 +76,14 @@ oee01.initialize_tables();
 
 data_dir = 'F:/Users/dmccloskey-sbrg/Dropbox (UCSD SBRG)/BloodProject/'
 oee01.import_dataStage01ResequencingOmniExpressExome_add(
-    filename_I = data_dir + 'additional_snp_Palsson_FinalReport.txt',
-    table_I = 'data_stage01_resequencing_omniExpressExome'
-    )
-oee01.import_dataStage01ResequencingOmniExpressExome_add(
     filename_I = data_dir + 'Test_FinalReport.txt',
     table_I = 'data_stage01_resequencing_omniExpressExome'
     )
-oee01.import_dataStage01ResequencingOmniExpressExome_add(
-    filename_I = data_dir + 'HumanOmniExpressExome-8-v1-2-B.csv',
-    table_I = 'data_stage01_resequencing_omniExpressExome_annotations'
-    )
+#oee01.import_dataStage01ResequencingOmniExpressExome_add(
+#    filename_I = data_dir + 'additional_snp_Palsson_FinalReport.txt',
+#    table_I = 'data_stage01_resequencing_omniExpressExome'
+#    )
+#oee01.import_dataStage01ResequencingOmniExpressExome_add(
+#    filename_I = data_dir + 'HumanOmniExpressExome-8-v1-2-B.csv',
+#    table_I = 'data_stage01_resequencing_omniExpressExome_annotations'
+#    )

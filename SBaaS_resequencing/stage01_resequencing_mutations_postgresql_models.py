@@ -1,6 +1,5 @@
 ﻿from SBaaS_base.postgresql_orm_base import *
 
-#TODO: add column for chromosome to postgresql
 class data_stage01_resequencing_mutationsAnnotated(Base):
     __tablename__ = 'data_stage01_resequencing_mutationsAnnotated'
     id = Column(Integer, Sequence('data_stage01_resequencing_mutationsAnnotated_id_seq'), primary_key=True)
@@ -8,7 +7,7 @@ class data_stage01_resequencing_mutationsAnnotated(Base):
     sample_name = Column(String(100))
     mutation_frequency = Column(Float)
     mutation_type = Column(String(3))
-    mutation_chromosome = Column(Integer) #Column(String(3))
+    mutation_chromosome = Column(String(3))
     mutation_position = Column(Integer)
     mutation_data = Column(postgresql.JSON)
     mutation_annotations = Column(postgresql.ARRAY(String(500)))
@@ -91,7 +90,7 @@ class data_stage01_resequencing_mutationsSeqChanges(Base):
     sample_name = Column(String(100))
     mutation_frequency = Column(Float)
     mutation_type = Column(String(3))
-    mutation_chromosome = Column(Integer)
+    mutation_chromosome = Column(String(3))
     mutation_position = Column(Integer)
     mutation_genes = Column(postgresql.ARRAY(String(25)))
     mutation_locations = Column(postgresql.ARRAY(String(100)))
@@ -259,7 +258,7 @@ class data_stage01_resequencing_mutationsCodonChanges(Base):
     mutation_frequency = Column(Float)
     mutation_type = Column(String(3))
     mutation_chromosome = Column(Integer)
-    mutation_position = Column(Integer)
+    mutation_position = Column(String(3))
     mutation_genes = Column(postgresql.ARRAY(String(25)))
     mutation_locations = Column(postgresql.ARRAY(String(100)))
     dna_sequence_ref = Column(Text);

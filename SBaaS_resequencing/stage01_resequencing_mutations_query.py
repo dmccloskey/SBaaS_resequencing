@@ -1,9 +1,4 @@
 #sbaas
-from SBaaS_base.sbaas_base_query_update import sbaas_base_query_update
-from SBaaS_base.sbaas_base_query_drop import sbaas_base_query_drop
-from SBaaS_base.sbaas_base_query_initialize import sbaas_base_query_initialize
-from SBaaS_base.sbaas_base_query_insert import sbaas_base_query_insert
-from SBaaS_base.sbaas_base_query_select import sbaas_base_query_select
 from SBaaS_base.sbaas_base_query_delete import sbaas_base_query_delete
 
 from SBaaS_base.sbaas_template_query import sbaas_template_query
@@ -21,41 +16,27 @@ class stage01_resequencing_mutations_query(sbaas_template_query):
             'data_stage01_resequencing_mutationsCodonChanges':data_stage01_resequencing_mutationsCodonChanges,
                         };
         self.set_supportedTables(tables_supported);
-
+    def reset_dataStage01_mutations(self,
+            tables_I = [],
+            experiment_id_I = None,
+            warn_I=True):
         try:
-            if experiment_id_I:
-                reset = self.session.query(data_stage01_resequencing_mutationsFiltered).filter(data_stage01_resequencing_mutationsFiltered.experiment_id.like(experiment_id_I)).delete(synchronize_session=False);
-            else:
-                reset = self.session.query(data_stage01_resequencing_mutationsFiltered).delete(synchronize_session=False);
-            self.session.commit();
-        except SQLAlchemyError as e:
-            print(e);
-    def reset_dataStage01_mutationsSeqChanges(self,experiment_id_I = None):
-        try:
-            if experiment_id_I:
-                reset = self.session.query(data_stage01_resequencing_mutationsSeqChanges).filter(data_stage01_resequencing_mutationsSeqChanges.experiment_id.like(experiment_id_I)).delete(synchronize_session=False);
-            else:
-                reset = self.session.query(data_stage01_resequencing_mutationsSeqChanges).delete(synchronize_session=False);
-            self.session.commit();
-        except SQLAlchemyError as e:
-            print(e);
-    def reset_dataStage01_mutationsCodonChanges(self,experiment_id_I = None):
-        try:
-            if experiment_id_I:
-                reset = self.session.query(data_stage01_resequencing_mutationsCodonChanges).filter(data_stage01_resequencing_mutationsCodonChanges.experiment_id.like(experiment_id_I)).delete(synchronize_session=False);
-            else:
-                reset = self.session.query(data_stage01_resequencing_mutationsCodonChanges).delete(synchronize_session=False);
-            self.session.commit();
-        except SQLAlchemyError as e:
-            print(e);
-    def reset_dataStage01_mutationsAnnotated(self,experiment_id_I = None):
-        try:
-            if experiment_id_I:
-                reset = self.session.query(data_stage01_resequencing_mutationsAnnotated).filter(data_stage01_resequencing_mutationsAnnotated.experiment_id.like(experiment_id_I)).delete(synchronize_session=False);
-            else:
-                reset = self.session.query(data_stage01_resequencing_mutationsAnnotated).delete(synchronize_session=False);
-            self.session.commit();
-        except SQLAlchemyError as e:
+            querydelete = sbaas_base_query_delete(session_I=self.session,engine_I=self.engine,settings_I=self.settings,data_I=self.data);
+            for table in tables_I:
+                query = {};
+                query['delete_from'] = [{'table_name':table}];
+                query['where'] = [{
+                        'table_name':table,
+                        'column_name':'experiment_id',
+                        'value':experiment_id_I,
+		                'operator':'LIKE',
+                        'connector':'AND'
+                        }
+	                ];
+                table_model = self.convert_tableStringList2SqlalchemyModelDict([table]);
+                query = querydelete.make_queryFromString(table_model,query);
+                querydelete.reset_table_sqlalchemyModel(query_I=query,warn_I=warn_I);
+        except Exception as e:
             print(e);
 
     # query data from data_stage01_resequencing_mutationsAnnotated

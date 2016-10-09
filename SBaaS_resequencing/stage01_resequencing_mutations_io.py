@@ -17,7 +17,7 @@ from io_utilities.base_exportData import base_exportData
 from sequencing_analysis.genome_diff import genome_diff
 from ddt_python.ddt_container import ddt_container
 
-class stage01_resequencing_mutations_io(stage01_resequencing_mutations_query
+class stage01_resequencing_mutations_io(stage01_resequencing_mutations_query,
                                  sbaas_template_io):
     
     def export_dataStage01ResequencingMutationsSeqChangesAndAnnotated_js(self,analysis_id_I,mutation_id_exclusion_list=[],frequency_threshold=0.1,max_position=4630000,data_dir_I="tmp"):

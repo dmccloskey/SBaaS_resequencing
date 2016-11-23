@@ -4,6 +4,7 @@ from copy import copy
 from SBaaS_LIMS.lims_biologicalMaterial_query import lims_biologicalMaterial_query
 #SBaaS models
 from SBaaS_models.models_COBRA_query import models_COBRA_query
+from SBaaS_models.models_BioCyc_execute import models_BioCyc_execute
 #sbaas
 from .stage01_resequencing_mutations_io import stage01_resequencing_mutations_io
 #sbaas models
@@ -280,3 +281,148 @@ class stage01_resequencing_mutations_execute(stage01_resequencing_mutations_io,
                             data_O.append(r);
         #export the data to .csv
         self.export_mapGeneName2ModelReaction_csv(data_O,filename_O);
+
+    def calculate_distributionOfMutationsInBioCycParentClasses(
+        self,
+        experiment_id_I,
+        sample_names_I,
+        parent_classes_I=['Transcription related'],
+        database_I='ECOLI',
+        names_I=[]
+        ):
+        '''calculate the percentages of mutations in each BioCyc parent_classes
+        INPUT:
+        '''
+        #BioCyc dependencies
+        biocyc01 = models_BioCyc_execute(self.session,self.engine,self.settings);
+        biocyc01.initialize_supportedTables()
+        biocyc01.initialize_tables()
+
+        from SBaaS_models.models_BioCyc_dependencies import models_BioCyc_dependencies
+        biocyc01_dep = models_BioCyc_dependencies();
+
+        if parent_classes_I:
+            parent_classes = parent_classes_I;
+        else:
+            parent_classes = [];
+            parent_classes = biocyc01.getParsed_parentClasses_modelsBioCycPolymerSegments(
+                database_I='ECOLI'
+                );
+
+        pc2Genes = {};
+        for pc in parent_classes:
+            #join list of genes with alternative identifiers
+            biocyc_genes = biocyc01.getParsed_genesAndAccessionsAndSynonyms_namesAndParentClassesAndDatabase_modelsBioCycPolymerSegments(
+                names_I=names_I,
+                database_I=database_I,
+                parent_classes_I='%s"%s"%s'%('%',pc,'%'),
+                query_I={},
+                output_O='listDict',
+                dictColumn_I=None);
+            if biocyc_genes:
+                gene_ids = list(set([g['gene'] for g in biocyc_genes if g['gene']] +\
+                    [g['common_name'] for g in biocyc_genes if g['common_name']] +\
+                    [g['synonym'] for g in biocyc_genes if g['synonym']]));
+                pc2Genes[pc] = gene_ids;
+
+        #query all of the resequencing data
+        mutations_rows = self.get_mutations_experimentIDAndSampleNames_dataStage01ResequencingMutationsAnnotated(
+        experiment_id_I = experiment_id_I,
+        sample_names_I = sample_names_I);
+        mutated_genes = [];
+        for row in mutations_rows:
+            if row['mutation_genes']: #exclude non-annotated regions
+                mutated_genes.extend(row['mutation_genes']);
+        mutations_genes_cnt = len(list(set(mutated_genes)))
+
+        #calculate the distributions for each parent_class
+        data_O = [];
+        for parent_class,gene_ids in pc2Genes.items():
+            pc_genes_cnt = len(list(set([d for d in mutated_genes if d in gene_ids])))
+            genes_ratio = pc_genes_cnt/mutations_genes_cnt;
+            tmp = {'parent_class':parent_class,
+                   'mutation_genes_count':mutations_genes_cnt,
+                   'genes_count':pc_genes_cnt,
+                   'genes_fraction':genes_ratio};
+            data_O.append(tmp);
+
+        return data_O;        
+    def calculate_fractionOfMutationLocations(
+        self,
+        experiment_id_I,
+        sample_names_I,
+        mutation_locations_I = []
+        ):
+        '''calculate the percentages of mutations in each mutation_location
+        INPUT:
+        EXAMPLE:
+        sample_names = '140807_11_OxicEvo04Evo01EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04Evo02EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04gndEvo01EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04gndEvo02EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04gndEvo03EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04pgiEvo01EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04pgiEvo02EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04pgiEvo03EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04pgiEvo04EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04pgiEvo05EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04pgiEvo06EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04pgiEvo07EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04pgiEvo08EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04ptsHIcrrEvo01EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04ptsHIcrrEvo02EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04ptsHIcrrEvo03EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04ptsHIcrrEvo04EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04sdhCBEvo01EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04sdhCBEvo02EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04sdhCBEvo03EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04tpiAEvo01EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04tpiAEvo02EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04tpiAEvo03EPEcoliGlcM9_Broth-1,\
+        140807_11_OxicEvo04tpiAEvo04EPEcoliGlcM9_Broth-1';
+        mutation_locations_fractions = mut01.calculate_fractionOfMutationLocations(
+            experiment_id_I = 'ALEsKOs01',
+            sample_names_I = sample_names,);
+        #export the data to disk
+        from io_utilities.base_exportData import base_exportData
+        iobase = base_exportData(parent_classes_fractions);
+        iobase.write_dict2json(
+            pg_settings.datadir_settings['workspace_data']+\
+            '/_output/ALEsKOs01_0_11_parent_classes_fractions.json');
+        iobase.write_dict2csv(
+            pg_settings.datadir_settings['workspace_data']+\
+            '/_output/ALEsKOs01_0_11_parent_classes_fractions.csv');
+        '''
+
+
+        #query all of the resequencing data
+        mutations_rows = self.get_mutations_experimentIDAndSampleNames_dataStage01ResequencingMutationsAnnotated(
+        experiment_id_I = experiment_id_I,
+        sample_names_I = sample_names_I);
+
+        mutation_locations = {};
+        mutated_genes_coding = [];
+        for row in mutations_rows:
+            if row['mutation_genes'] : #exclude non-annotated regions
+                mutated_genes.extend(row['mutation_genes']);
+                if not row['mutation_location'] in mutation_locations:
+                    mutation_locations[row['mutation_location']]= [];
+                if mutation_locations_I and not row['mutation_location'] in mutation_locations_I:
+                    continue;
+                mutation_locations[row['mutation_location']].extend(row['mutation_genes'])
+        mutations_genes_cnt = len(list(set(mutated_genes)))
+
+        #calculate the distributions for each parent_class
+        data_O = [];
+        for parent_class,gene_ids in mutation_locations.items():
+            pc_genes_cnt = len(list(set([d for d in mutated_genes if d in gene_ids])))
+            genes_ratio = pc_genes_cnt/mutations_genes_cnt;
+            tmp = {'parent_class':parent_class,
+                   'mutation_genes_count':mutations_genes_cnt,
+                   'genes_count':pc_genes_cnt,
+                   'genes_fraction':genes_ratio};
+            data_O.append(tmp);
+
+        return data_O;
+
+

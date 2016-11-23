@@ -1,10 +1,12 @@
-#sbaas
+﻿#sbaas
 from SBaaS_base.sbaas_base_query_delete import sbaas_base_query_delete
 
 from SBaaS_base.sbaas_template_query import sbaas_template_query
 #sbaas models
 from .stage01_resequencing_mutations_postgresql_models import *
 from sequencing_analysis.genome_diff import genome_diff
+#resources
+from sqlalchemy.dialects.postgresql import Any
 
 class stage01_resequencing_mutations_query(sbaas_template_query):
     def initialize_supportedTables(self):
@@ -69,13 +71,46 @@ class stage01_resequencing_mutations_query(sbaas_template_query):
             return data_O;
         except SQLAlchemyError as e:
             print(e);
+    def get_mutations_experimentIDAndSampleNames_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_names_I,used__I=True):
+        '''Query mutation information from resequencing lineage
+        INPUT:
+        experiment_id_I = string
+        sample_names_I = string list of names
+        used__I = boolean
+        OUTPUT:
+        [{}]
+        '''
+        from SBaaS_base.postgresql_orm import execute_query
+        try:
+            cmd = '''SELECT *
+            FROM "data_stage01_resequencing_mutationsAnnotated"
+            WHERE experiment_id = '%s'
+            AND sample_name =ANY ('{%s}'::text[]) ''' %(
+                experiment_id_I,sample_names_I)
+            if used__I:
+                cmd += '''AND used_ '''
+            cmd += '''ORDER BY
+            mutation_position ASC,
+            mutation_type ASC,
+            mutation_genes ASC,
+            mutation_frequency ASC;'''
+            data_O = [dict(d) for d in execute_query(self.session,cmd,
+                verbose_I=False,
+                execute_I=True,
+                commit_I=False,
+                return_response_I=True,
+                return_cmd_I=False)];
+            return data_O;
+        except SQLAlchemyError as e:
+            print(e);
     # query mutation information from data_stage01_resequencing_mutationsAnnotated
-    def get_mutationData_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I):
+    def get_mutationData_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I,used__I=True):
         '''Query mutation information from resequencing lineage'''
         try:
             data = self.session.query(data_stage01_resequencing_mutationsAnnotated).filter(
                     data_stage01_resequencing_mutationsAnnotated.experiment_id.like(experiment_id_I),
-                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I)).all();
+                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I),
+                    data_stage01_resequencing_mutationsAnnotated.used_==used__I).all();
             data_O = [];
             for d in data: 
                 data_tmp_str = '';
@@ -89,12 +124,13 @@ class stage01_resequencing_mutations_query(sbaas_template_query):
         except SQLAlchemyError as e:
             print(e);
     # query column queries from data_stage01_resequencing_mutationsAnnotated
-    def get_mutationGenes_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I):
+    def get_mutationGenes_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I,used__I=True):
         '''Query mutation genes from data_stage01_resequencing_mutationsAnnotated'''
         try:
             data = self.session.query(data_stage01_resequencing_mutationsAnnotated.mutation_genes).filter(
                     data_stage01_resequencing_mutationsAnnotated.experiment_id.like(experiment_id_I),
-                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I)).group_by(
+                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I),
+                    data_stage01_resequencing_mutationsAnnotated.used_==used__I).group_by(
                     data_stage01_resequencing_mutationsAnnotated.mutation_genes).order_by(
                     data_stage01_resequencing_mutationsAnnotated.mutation_genes.asc()).all();
             data_O = [];
@@ -105,12 +141,13 @@ class stage01_resequencing_mutations_query(sbaas_template_query):
             return data_O;
         except SQLAlchemyError as e:
             print(e);
-    def get_mutationTypes_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I):
+    def get_mutationTypes_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I,used__I=True):
         '''Query mutation_types from data_stage01_resequencing_mutationsAnnotated'''
         try:
             data = self.session.query(data_stage01_resequencing_mutationsAnnotated.mutation_type).filter(
                     data_stage01_resequencing_mutationsAnnotated.experiment_id.like(experiment_id_I),
-                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I)).group_by(
+                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I),
+                    data_stage01_resequencing_mutationsAnnotated.used_==used__I).group_by(
                     data_stage01_resequencing_mutationsAnnotated.mutation_type).order_by(
                     data_stage01_resequencing_mutationsAnnotated.mutation_type.asc()).all();
             data_O = [];
@@ -119,12 +156,13 @@ class stage01_resequencing_mutations_query(sbaas_template_query):
             return data_O;
         except SQLAlchemyError as e:
             print(e);
-    def get_mutationPositions_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I):
+    def get_mutationPositions_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I,used__I=True):
         '''Query mutation_positions from data_stage01_resequencing_mutationsAnnotated'''
         try:
             data = self.session.query(data_stage01_resequencing_mutationsAnnotated.mutation_position).filter(
                     data_stage01_resequencing_mutationsAnnotated.experiment_id.like(experiment_id_I),
-                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I)).group_by(
+                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I),
+                    data_stage01_resequencing_mutationsAnnotated.used_==used__I).group_by(
                     data_stage01_resequencing_mutationsAnnotated.mutation_position).order_by(
                     data_stage01_resequencing_mutationsAnnotated.mutation_position.asc()).all();
             data_O = [];
@@ -133,12 +171,13 @@ class stage01_resequencing_mutations_query(sbaas_template_query):
             return data_O;
         except SQLAlchemyError as e:
             print(e);
-    def get_mutationLocations_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I):
+    def get_mutationLocations_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I,used__I=True):
         '''Query mutation_locations from data_stage01_resequencing_mutationsAnnotated'''
         try:
             data = self.session.query(data_stage01_resequencing_mutationsAnnotated.mutation_locations).filter(
                     data_stage01_resequencing_mutationsAnnotated.experiment_id.like(experiment_id_I),
-                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I)).group_by(
+                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I),
+                    data_stage01_resequencing_mutationsAnnotated.used_==used__I).group_by(
                     data_stage01_resequencing_mutationsAnnotated.mutation_locations).order_by(
                     data_stage01_resequencing_mutationsAnnotated.mutation_locations.asc()).all();
             data_O = [];
@@ -147,14 +186,15 @@ class stage01_resequencing_mutations_query(sbaas_template_query):
             return data_O;
         except SQLAlchemyError as e:
             print(e);
-    def get_mutationIDs_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I):
+    def get_mutationIDs_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I,used__I=True):
         '''Query mutation genes from data_stage01_resequencing_mutationsAnnotated'''
         try:
             data = self.session.query(data_stage01_resequencing_mutationsAnnotated.mutation_genes,
                     data_stage01_resequencing_mutationsAnnotated.mutation_type,
                     data_stage01_resequencing_mutationsAnnotated.mutation_position).filter(
                     data_stage01_resequencing_mutationsAnnotated.experiment_id.like(experiment_id_I),
-                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I)).group_by(
+                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I),
+                    data_stage01_resequencing_mutationsAnnotated.used_==used__I).group_by(
                     data_stage01_resequencing_mutationsAnnotated.mutation_genes,
                     data_stage01_resequencing_mutationsAnnotated.mutation_type,
                     data_stage01_resequencing_mutationsAnnotated.mutation_position).order_by(
@@ -169,12 +209,13 @@ class stage01_resequencing_mutations_query(sbaas_template_query):
             return data_O;
         except SQLAlchemyError as e:
             print(e);        
-    def get_AllMutationGenes_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I):
+    def get_AllMutationGenes_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I,used__I=True):
         '''Query mutation genes from data_stage01_resequencing_mutationsAnnotated'''
         try:
             data = self.session.query(data_stage01_resequencing_mutationsAnnotated.mutation_genes).filter(
                     data_stage01_resequencing_mutationsAnnotated.experiment_id.like(experiment_id_I),
-                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I)).order_by(
+                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I),
+                    data_stage01_resequencing_mutationsAnnotated.used_==used__I).order_by(
                     data_stage01_resequencing_mutationsAnnotated.mutation_genes.asc()).all();
             data_O = [];
             genomediff = genome_diff();
@@ -184,12 +225,13 @@ class stage01_resequencing_mutations_query(sbaas_template_query):
             return data_O;
         except SQLAlchemyError as e:
             print(e);
-    def get_AllMutationTypes_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I):
+    def get_AllMutationTypes_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I,used__I=True):
         '''Query mutation_types from data_stage01_resequencing_mutationsAnnotated'''
         try:
             data = self.session.query(data_stage01_resequencing_mutationsAnnotated.mutation_type).filter(
                     data_stage01_resequencing_mutationsAnnotated.experiment_id.like(experiment_id_I),
-                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I)).order_by(
+                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I),
+                    data_stage01_resequencing_mutationsAnnotated.used_==used__I).order_by(
                     data_stage01_resequencing_mutationsAnnotated.mutation_type.asc()).all();
             data_O = [];
             for cnt,d in enumerate(data): 
@@ -197,12 +239,13 @@ class stage01_resequencing_mutations_query(sbaas_template_query):
             return data_O;
         except SQLAlchemyError as e:
             print(e);
-    def get_AllMutationPositions_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I):
+    def get_AllMutationPositions_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I,used__I=True):
         '''Query mutation_positions from data_stage01_resequencing_mutationsAnnotated'''
         try:
             data = self.session.query(data_stage01_resequencing_mutationsAnnotated.mutation_position).filter(
                     data_stage01_resequencing_mutationsAnnotated.experiment_id.like(experiment_id_I),
-                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I)).order_by(
+                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I),
+                    data_stage01_resequencing_mutationsAnnotated.used_==used__I).order_by(
                     data_stage01_resequencing_mutationsAnnotated.mutation_position.asc()).all();
             data_O = [];
             for cnt,d in enumerate(data): 
@@ -210,12 +253,13 @@ class stage01_resequencing_mutations_query(sbaas_template_query):
             return data_O;
         except SQLAlchemyError as e:
             print(e);
-    def get_AllMutationLocations_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I):
+    def get_AllMutationLocations_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I,used__I=True):
         '''Query mutation_locations from data_stage01_resequencing_mutationsAnnotated'''
         try:
             data = self.session.query(data_stage01_resequencing_mutationsAnnotated.mutation_locations).filter(
                     data_stage01_resequencing_mutationsAnnotated.experiment_id.like(experiment_id_I),
-                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I)).order_by(
+                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I),
+                    data_stage01_resequencing_mutationsAnnotated.used_==used__I).order_by(
                     data_stage01_resequencing_mutationsAnnotated.mutation_locations.asc()).all();
             data_O = [];
             genomediff = genome_diff();
@@ -225,14 +269,15 @@ class stage01_resequencing_mutations_query(sbaas_template_query):
             return data_O;
         except SQLAlchemyError as e:
             print(e);
-    def get_AllMutationIDs_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I):
+    def get_AllMutationIDs_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I,used__I=True):
         '''Query mutation genes from data_stage01_resequencing_mutationsAnnotated'''
         try:
             data = self.session.query(data_stage01_resequencing_mutationsAnnotated.mutation_genes,
                     data_stage01_resequencing_mutationsAnnotated.mutation_type,
                     data_stage01_resequencing_mutationsAnnotated.mutation_position).filter(
                     data_stage01_resequencing_mutationsAnnotated.experiment_id.like(experiment_id_I),
-                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I)).order_by(
+                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I),
+                    data_stage01_resequencing_mutationsAnnotated.used_==used__I).order_by(
                     data_stage01_resequencing_mutationsAnnotated.mutation_genes.asc(),
                     data_stage01_resequencing_mutationsAnnotated.mutation_type.asc(),
                     data_stage01_resequencing_mutationsAnnotated.mutation_position.asc()).all();
@@ -244,12 +289,13 @@ class stage01_resequencing_mutations_query(sbaas_template_query):
             return data_O;
         except SQLAlchemyError as e:
             print(e);
-    def get_AllMutationFrequencies_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I):
+    def get_AllMutationFrequencies_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I,used__I=True):
         '''Query mutation_frequency from data_stage01_resequencing_mutationsAnnotated'''
         try:
             data = self.session.query(data_stage01_resequencing_mutationsAnnotated.mutation_frequency).filter(
                     data_stage01_resequencing_mutationsAnnotated.experiment_id.like(experiment_id_I),
-                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I)).order_by(
+                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I),
+                    data_stage01_resequencing_mutationsAnnotated.used_==used__I).order_by(
                     data_stage01_resequencing_mutationsAnnotated.mutation_frequency.asc()).all();
             data_O = [];
             for cnt,d in enumerate(data): 

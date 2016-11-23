@@ -1,7 +1,9 @@
+﻿
+
 #sbaas
 from .stage01_resequencing_count_io import stage01_resequencing_count_io
 from .stage01_resequencing_count_dependencies import stage01_resequencing_count_dependencies
-from .stage01_resequencing_gd_query import stage01_resequencing_gd_query
+from .stage01_resequencing_mutations_query import stage01_resequencing_mutations_query
 from .stage01_resequencing_analysis_query import stage01_resequencing_analysis_query
 #sbaas models
 from .stage01_resequencing_count_postgresql_models import *
@@ -11,7 +13,7 @@ from python_statistics.calculate_count import calculate_count
 
 class stage01_resequencing_count_execute(
             stage01_resequencing_count_io,
-            stage01_resequencing_gd_query,
+            stage01_resequencing_mutations_query,
             stage01_resequencing_analysis_query,
             stage01_resequencing_count_dependencies,
             ):

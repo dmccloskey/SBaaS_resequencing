@@ -94,40 +94,40 @@ oee01.initialize_tables();
 
 ##ADD TO COUNT METHODS...
 ##Query the fraction of mutations in BioCyc parent classes
-#make the mutations table
-from SBaaS_resequencing.stage01_resequencing_mutations_execute import stage01_resequencing_mutations_execute
-mut01 = stage01_resequencing_mutations_execute(session,engine,pg_settings.datadir_settings);
-mut01.initialize_supportedTables()
-mut01.initialize_tables();
-#query all of the resequencing data
-sample_names = '140807_11_OxicEvo04Evo01EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04Evo02EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04gndEvo01EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04gndEvo02EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04gndEvo03EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04pgiEvo01EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04pgiEvo02EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04pgiEvo03EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04pgiEvo04EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04pgiEvo05EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04pgiEvo06EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04pgiEvo07EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04pgiEvo08EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04ptsHIcrrEvo01EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04ptsHIcrrEvo02EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04ptsHIcrrEvo03EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04ptsHIcrrEvo04EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04sdhCBEvo01EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04sdhCBEvo02EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04sdhCBEvo03EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04tpiAEvo01EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04tpiAEvo02EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04tpiAEvo03EPEcoliGlcM9_Broth-1,\
-140807_11_OxicEvo04tpiAEvo04EPEcoliGlcM9_Broth-1';
+##make the mutations table
+#from SBaaS_resequencing.stage01_resequencing_mutations_execute import stage01_resequencing_mutations_execute
+#mut01 = stage01_resequencing_mutations_execute(session,engine,pg_settings.datadir_settings);
+#mut01.initialize_supportedTables()
+#mut01.initialize_tables();
+##query all of the resequencing data
+#sample_names = '140807_11_OxicEvo04Evo01EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04Evo02EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04gndEvo01EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04gndEvo02EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04gndEvo03EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04pgiEvo01EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04pgiEvo02EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04pgiEvo03EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04pgiEvo04EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04pgiEvo05EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04pgiEvo06EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04pgiEvo07EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04pgiEvo08EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04ptsHIcrrEvo01EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04ptsHIcrrEvo02EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04ptsHIcrrEvo03EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04ptsHIcrrEvo04EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04sdhCBEvo01EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04sdhCBEvo02EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04sdhCBEvo03EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04tpiAEvo01EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04tpiAEvo02EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04tpiAEvo03EPEcoliGlcM9_Broth-1,\
+#140807_11_OxicEvo04tpiAEvo04EPEcoliGlcM9_Broth-1';
 #parent_classes_fractions = mut01.calculate_distributionOfMutationsInBioCycParentClasses(
-#    experiment_id_I = 'ALEsKOs01',
+#    experiment_ids_I = 'ALEsKOs01',
 #    sample_names_I = sample_names,
-#    parent_classes_I=[],
+#    parent_classes_I=['Transcription related'],
 #    database_I='ECOLI',
 #    names_I=[]);
 ##export the data to disk
@@ -153,3 +153,11 @@ sample_names = '140807_11_OxicEvo04Evo01EPEcoliGlcM9_Broth-1,\
 #iobase.write_dict2csv(
 #    pg_settings.datadir_settings['workspace_data']+\
 #    '/_output/ALEsKOs01_0_11_parent_classes_fractions.csv');
+
+from SBaaS_resequencing.stage01_resequencing_count_execute import stage01_resequencing_count_execute
+count01 = stage01_resequencing_count_execute(session,engine,pg_settings.datadir_settings);
+count01.initialize_supportedTables()
+count01.initialize_tables();
+count01.execute_countElementsInFeatures(
+    analysis_id_I='ALEsKOs01_11',
+    features_I=['parent_classes'])

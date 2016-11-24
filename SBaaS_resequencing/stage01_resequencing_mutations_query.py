@@ -71,7 +71,7 @@ class stage01_resequencing_mutations_query(sbaas_template_query):
             return data_O;
         except SQLAlchemyError as e:
             print(e);
-    def get_mutations_experimentIDAndSampleNames_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_names_I,used__I=True):
+    def get_mutations_experimentIDsAndSampleNames_dataStage01ResequencingMutationsAnnotated(self,experiment_ids_I,sample_names_I,used__I=True):
         '''Query mutation information from resequencing lineage
         INPUT:
         experiment_id_I = string
@@ -84,9 +84,9 @@ class stage01_resequencing_mutations_query(sbaas_template_query):
         try:
             cmd = '''SELECT *
             FROM "data_stage01_resequencing_mutationsAnnotated"
-            WHERE experiment_id = '%s'
+            WHERE experiment_id =ANY ('{%s}'::text[])
             AND sample_name =ANY ('{%s}'::text[]) ''' %(
-                experiment_id_I,sample_names_I)
+                experiment_ids_I,sample_names_I)
             if used__I:
                 cmd += '''AND used_ '''
             cmd += '''ORDER BY

@@ -284,11 +284,12 @@ class stage01_resequencing_mutations_execute(stage01_resequencing_mutations_io,
 
     def calculate_distributionOfMutationsInBioCycParentClasses(
         self,
-        experiment_id_I,
+        experiment_ids_I,
         sample_names_I,
         parent_classes_I=['Transcription related'],
         database_I='ECOLI',
-        names_I=[]
+        names_I=[],
+        unique_I=True,
         ):
         '''calculate the percentages of mutations in each BioCyc parent_classes
         INPUT:
@@ -326,24 +327,39 @@ class stage01_resequencing_mutations_execute(stage01_resequencing_mutations_io,
                 pc2Genes[pc] = gene_ids;
 
         #query all of the resequencing data
-        mutations_rows = self.get_mutations_experimentIDAndSampleNames_dataStage01ResequencingMutationsAnnotated(
-        experiment_id_I = experiment_id_I,
+        mutations_rows = self.get_mutations_experimentIDsAndSampleNames_dataStage01ResequencingMutationsAnnotated(
+        experiment_ids_I = experiment_ids_I,
         sample_names_I = sample_names_I);
         mutated_genes = [];
         for row in mutations_rows:
             if row['mutation_genes']: #exclude non-annotated regions
                 mutated_genes.extend(row['mutation_genes']);
-        mutations_genes_cnt = len(list(set(mutated_genes)))
+        if unique_I:
+            mutations_genes_cnt = len(list(set(mutated_genes)))
+        else :
+            mutations_genes_cnt = len(mutated_genes)
 
         #calculate the distributions for each parent_class
         data_O = [];
         for parent_class,gene_ids in pc2Genes.items():
-            pc_genes_cnt = len(list(set([d for d in mutated_genes if d in gene_ids])))
+            if unique_I:
+                pc_genes_cnt = len(list(set([d for d in mutated_genes if d in gene_ids])))
+            else:
+                pc_genes_cnt = len([d for d in mutated_genes if d in gene_ids])
             genes_ratio = pc_genes_cnt/mutations_genes_cnt;
-            tmp = {'parent_class':parent_class,
-                   'mutation_genes_count':mutations_genes_cnt,
-                   'genes_count':pc_genes_cnt,
-                   'genes_fraction':genes_ratio};
+            tmp = {
+                'analysis_id':None,
+                'feature_id':'parent_class',
+                'feature_units':None,
+                'element_id':parent_class,
+                'frequency':pc_genes_cnt,
+                'fraction':genes_ratio,
+                'used_':True,
+                'comment_':None}
+            #tmp = {'parent_class':parent_class,
+            #       'mutation_genes_count':mutations_genes_cnt,
+            #       'genes_count':pc_genes_cnt,
+            #       'genes_fraction':genes_ratio};
             data_O.append(tmp);
 
         return data_O;        

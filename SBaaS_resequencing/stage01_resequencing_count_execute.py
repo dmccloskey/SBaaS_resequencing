@@ -1,10 +1,9 @@
-﻿
-
-#sbaas
+﻿#sbaas
 from .stage01_resequencing_count_io import stage01_resequencing_count_io
 from .stage01_resequencing_count_dependencies import stage01_resequencing_count_dependencies
 from .stage01_resequencing_mutations_query import stage01_resequencing_mutations_query
 from .stage01_resequencing_analysis_query import stage01_resequencing_analysis_query
+from .stage01_resequencing_mutations_execute import stage01_resequencing_mutations_execute
 #sbaas models
 from .stage01_resequencing_count_postgresql_models import *
 #resources
@@ -28,6 +27,7 @@ class stage01_resequencing_count_execute(
         '''
         data_O = [];
         calculatecount = calculate_count();
+        mut01 = stage01_resequencing_mutations_execute(self.session,self.engine,self.settings)
         #get the analysis information
         experiment_ids,sample_names = [],[];
         experiment_ids,sample_names = self.get_experimentIDAndSampleName_analysisID_dataStage01ResequencingAnalysis(analysis_id_I);
@@ -99,6 +99,19 @@ class stage01_resequencing_count_execute(
                 #count the elements of each feature
                 elements_unqiue,elements_count,elements_count_fraction = calculatecount.count_elements(data_count);
                 data_O.extend(self.record_count(analysis_id_I,features,'',elements_unqiue,elements_count,elements_count_fraction));
+            elif features == 'parent_classes':
+                data_count = [];
+                experiment_ids_str = ','.join(list(set(experiment_ids)))
+                sample_names_str = ','.join(list(set(sample_names)))
+                data_count = mut01.calculate_distributionOfMutationsInBioCycParentClasses(
+                    experiment_ids_I=experiment_ids_str,
+                    sample_names_I = sample_names_str,
+                    parent_classes_I=[],
+                    database_I='ECOLI',
+                    names_I=[],
+                    unique_I=True)
+                for d in data_count: d['analysis_id']=analysis_id_I;
+                data_O.extend(data_count);
             else:
                 print('feature not recongnized');
         #add the data to the database

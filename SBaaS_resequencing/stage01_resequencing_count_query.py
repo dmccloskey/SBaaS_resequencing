@@ -96,7 +96,12 @@ class stage01_resequencing_count_query(sbaas_template_query):
         try:
             data = self.session.query(data_stage01_resequencing_count).filter(
                     data_stage01_resequencing_count.analysis_id.like(analysis_id_I),
-                    data_stage01_resequencing_count.used_.is_(True)).all();
+                    data_stage01_resequencing_count.used_.is_(True)).order_by(
+                    data_stage01_resequencing_count.feature_id.asc(),
+                    data_stage01_resequencing_count.fraction.asc(),
+                    data_stage01_resequencing_count.element_id.asc(),
+                    #data_stage01_resequencing_count.fraction.asc()
+                    ).all();
             rows_O = {};
             if data: 
                 for d in data:

@@ -105,7 +105,7 @@ class data_stage01_resequencing_omniExpressExome_annotations(Base):
     AddressB_ID = Column(String(50))
     AlleleB_ProbeSeq = Column(String(100))
     GenomeBuild = Column(Integer)
-    Chr = Column(Integer)
+    Chr = Column(String(10))
     MapInfo = Column(Integer)
     Ploidy = Column(String(10))
     Species = Column(String(50))
@@ -200,4 +200,34 @@ class data_stage01_resequencing_omniExpressExome_annotations(Base):
         }
     def __repr__json__(self):
         return json.dumps(self.__repr__dict__())
-
+class data_stage01_resequencing_OmniExpressExome_annotationsAuxillary(Base):
+    __tablename__ = 'data_stage01_resequencing_OmniExpressExome_annotationsAuxillary'
+    id = Column(Integer, Sequence('data_stage01_resequencing_OmniExpressExome_annotationsAuxillary_id_seq'))
+    Name = Column(String(100))
+    RsID = Column(String(100))
+    used_ = Column(Boolean)
+    comment_ = Column(Text)
+    __table_args__ = (
+        UniqueConstraint('Name','RsID'),
+        PrimaryKeyConstraint('id'),
+    )
+    def __init__(self,row_dict_I,):
+        self.Name = row_dict_I['Name']
+        self.RsID = row_dict_I['RsID']
+        self.used_=row_dict_I['used_']
+        self.comment_=row_dict_I['comment_']
+    def __set__row__(self, Name_I,RsID_I,used__I,comment__I):
+        self.Name = Name_I
+        self.RsID = RsID_I
+        self.used_ = used__I
+        self.comment_ = comment__I
+    def __repr__dict__(self):
+        return {
+        'Name':self.Name,
+        'RsID':self.RsID,
+        'id':self.id,
+        'used_':self.used_,
+        'comment_':self.comment_,
+        }
+    def __repr__json__(self):
+        return json.dumps(self.__repr__dict__())

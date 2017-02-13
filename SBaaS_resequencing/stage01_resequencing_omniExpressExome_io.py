@@ -105,7 +105,8 @@ class stage01_resequencing_omniExpressExome_io(stage01_resequencing_omniExpressE
         filename_I,
         table_I='data_stage01_resequencing_OmniExpressExome',
         n_lines_I = 10000,
-        header_tag_I = '[Data]'):
+        header_tag_I = '[Data]',
+        deliminator_I = '\t'):
         '''
         import data from txt file and add to
         data_stage01_resequencing_OmniExpressExome_annotations or
@@ -128,7 +129,7 @@ class stage01_resequencing_omniExpressExome_io(stage01_resequencing_omniExpressE
         with open(filename_I,'r') as f:
             for i,line in enumerate(f):
                 #break when the maximum span is reached
-                if cnt>=n_lines_I:
+                if cnt>=n_lines_I and data_O:
                     self.add_rows_table(table_I,data_O);
                     data_O=[];
                     cnt = 0;
@@ -136,18 +137,19 @@ class stage01_resequencing_omniExpressExome_io(stage01_resequencing_omniExpressE
                     cnt+=1;
                 line = line.replace('\n','');
                 if headers_bool:
-                    if line == header_tag_I:
+                    header = line.split(deliminator_I);
+                    if header[0] == header_tag_I:
                         headers_bool = False;
                         columns_bool = True;
                         continue;
                 elif columns_bool:
-                    keys = line.split('\t');
+                    keys = line.split(deliminator_I);
                     keys_O = [s.replace(' - ','_').replace(' ','_') for s in keys];
                     columns_bool = False;
                     rows_bool = True;
                     continue;
                 elif rows_bool:
-                    row = line.split('\t');
+                    row = line.split(deliminator_I);
                     row_dict = {keys_O[i]:row[i] for i in range(len(keys_O))}
                     data_O.append(row_dict);
 

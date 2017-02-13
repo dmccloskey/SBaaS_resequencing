@@ -220,3 +220,22 @@ class stage01_resequencing_gd_query(sbaas_template_query):
             return data_O;
         except SQLAlchemyError as e:
             print(e);
+    def get_mutations_experimentID_dataStage01ResequencingMutationsFiltered(
+        self,
+        experiment_id_I,
+        sample_names_I = []
+        ):
+        '''Query mutation data'''
+        query_select = sbaas_base_query_select(self.session, self.engine, self.settings);
+        try:
+            query_cmd = '''SELECT * FROM "data_stage01_resequencing_mutationsFiltered" '''
+            query_cmd += '''WHERE experiment_id = '%s' ''' %(experiment_id_I);
+            if sample_names_I:
+                sample_names = query_select.convert_list2string(sample_names_I);
+                query_cmd += '''AND sample_name =ANY ('{%s}'::TEXT[]) ''' %(sample_names);
+            query_cmd += ';';
+
+            data_O = [dict(d) for d in query_select.execute_select(query_cmd)];
+            return data_O;
+        except SQLAlchemyError as e:
+            print(e);

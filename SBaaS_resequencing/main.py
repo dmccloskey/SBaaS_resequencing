@@ -1,13 +1,13 @@
 ﻿import sys
-# sys.path.append('C:/Users/dmccloskey-sbrg/Documents/GitHub/SBaaS_base')
-sys.path.append('C:/Users/dmccloskey/Documents/GitHub/SBaaS_base')
+sys.path.append('C:/Users/dmccloskey-sbrg/Documents/GitHub/SBaaS_base')
+#sys.path.append('C:/Users/dmccloskey/Documents/GitHub/SBaaS_base')
 from SBaaS_base.postgresql_settings import postgresql_settings
 from SBaaS_base.postgresql_orm import postgresql_orm
 
 # read in the settings file
-# filename = 'C:/Users/dmccloskey-sbrg/Google Drive/SBaaS_settings/settings_metabolomics.ini';
+filename = 'C:/Users/dmccloskey-sbrg/Google Drive/SBaaS_settings/settings_metabolomics.ini';
 #filename = 'C:/Users/dmccloskey/Google Drive/SBaaS_settings/settings_metabolomics_labtop.ini';
-filename = 'C:/Users/dmccloskey/Google Drive/SBaaS_settings/settings_metabolomics_remote.ini';
+#filename = 'C:/Users/dmccloskey/Google Drive/SBaaS_settings/settings_metabolomics_remote.ini';
 pg_settings = postgresql_settings(filename);
 
 # connect to the database from the settings file
@@ -77,7 +77,7 @@ oee01 = stage01_resequencing_omniExpressExome_execute(session,engine,pg_settings
 oee01.initialize_supportedTables()
 oee01.initialize_tables();
 
-#data_dir = 'F:/Users/dmccloskey-sbrg/Dropbox (UCSD SBRG)/BloodProject/'
+data_dir = 'F:/Users/dmccloskey-sbrg/Dropbox (UCSD SBRG)/BloodProject/'
 #oee01.import_dataStage01ResequencingOmniExpressExome_add(
 #    filename_I = data_dir + 'Test_FinalReport.txt',
 #    table_I = 'data_stage01_resequencing_omniExpressExome'
@@ -86,16 +86,17 @@ oee01.initialize_tables();
 #    filename_I = data_dir + 'additional_snp_Palsson_FinalReport.txt',
 #    table_I = 'data_stage01_resequencing_omniExpressExome'
 #    )
-#oee01.import_dataStage01ResequencingOmniExpressExome_add(
-#    filename_I = data_dir + 'HumanOmniExpressExome-8-v1-2-B.csv',
-#    table_I = 'data_stage01_resequencing_omniExpressExome_annotations'
-#    )
+oee01.import_dataStage01ResequencingOmniExpressExome_add(
+    filename_I = data_dir + 'HumanOmniExpressExome-8-v1-2-B.csv',
+    table_I = 'data_stage01_resequencing_omniExpressExome_annotations',
+    header_tag_I = '[Assay]',
+    deliminator_I = ',')
 
 ##TODO: add to template notebook
-from SBaaS_resequencing.stage01_resequencing_count_execute import stage01_resequencing_count_execute
-count01 = stage01_resequencing_count_execute(session,engine,pg_settings.datadir_settings);
-count01.initialize_supportedTables()
-count01.initialize_tables();
-count01.execute_countElementsInFeatures(
-    analysis_id_I='ALEsKOs01_11',
-    features_I=['parent_classes'])
+#from SBaaS_resequencing.stage01_resequencing_count_execute import stage01_resequencing_count_execute
+#count01 = stage01_resequencing_count_execute(session,engine,pg_settings.datadir_settings);
+#count01.initialize_supportedTables()
+#count01.initialize_tables();
+#count01.execute_countElementsInFeatures(
+#    analysis_id_I='ALEsKOs01_11',
+#    features_I=['parent_classes'])

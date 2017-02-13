@@ -1,4 +1,4 @@
-from .stage01_resequencing_omniExpressExome_query import stage01_resequencing_omniExpressExome_query
+﻿from .stage01_resequencing_omniExpressExome_query import stage01_resequencing_omniExpressExome_query
 from SBaaS_base.sbaas_template_io import sbaas_template_io
 # Resources
 from io_utilities.base_importData import base_importData
@@ -104,7 +104,8 @@ class stage01_resequencing_omniExpressExome_io(stage01_resequencing_omniExpressE
         self,
         filename_I,
         table_I='data_stage01_resequencing_OmniExpressExome',
-        n_lines_I = 10000):
+        n_lines_I = 10000,
+        header_tag_I = '[Data]'):
         '''
         import data from txt file and add to
         data_stage01_resequencing_OmniExpressExome_annotations or
@@ -135,7 +136,7 @@ class stage01_resequencing_omniExpressExome_io(stage01_resequencing_omniExpressE
                     cnt+=1;
                 line = line.replace('\n','');
                 if headers_bool:
-                    if line == '[Data]':
+                    if line == header_tag_I:
                         headers_bool = False;
                         columns_bool = True;
                         continue;

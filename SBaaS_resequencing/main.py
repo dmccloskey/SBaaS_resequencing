@@ -91,69 +91,7 @@ oee01.initialize_tables();
 #    table_I = 'data_stage01_resequencing_omniExpressExome_annotations'
 #    )
 
-
-##ADD TO COUNT METHODS...
-##Query the fraction of mutations in BioCyc parent classes
-##make the mutations table
-#from SBaaS_resequencing.stage01_resequencing_mutations_execute import stage01_resequencing_mutations_execute
-#mut01 = stage01_resequencing_mutations_execute(session,engine,pg_settings.datadir_settings);
-#mut01.initialize_supportedTables()
-#mut01.initialize_tables();
-##query all of the resequencing data
-#sample_names = '140807_11_OxicEvo04Evo01EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04Evo02EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04gndEvo01EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04gndEvo02EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04gndEvo03EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04pgiEvo01EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04pgiEvo02EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04pgiEvo03EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04pgiEvo04EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04pgiEvo05EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04pgiEvo06EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04pgiEvo07EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04pgiEvo08EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04ptsHIcrrEvo01EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04ptsHIcrrEvo02EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04ptsHIcrrEvo03EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04ptsHIcrrEvo04EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04sdhCBEvo01EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04sdhCBEvo02EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04sdhCBEvo03EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04tpiAEvo01EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04tpiAEvo02EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04tpiAEvo03EPEcoliGlcM9_Broth-1,\
-#140807_11_OxicEvo04tpiAEvo04EPEcoliGlcM9_Broth-1';
-#parent_classes_fractions = mut01.calculate_distributionOfMutationsInBioCycParentClasses(
-#    experiment_ids_I = 'ALEsKOs01',
-#    sample_names_I = sample_names,
-#    parent_classes_I=['Transcription related'],
-#    database_I='ECOLI',
-#    names_I=[]);
-##export the data to disk
-#from io_utilities.base_exportData import base_exportData
-#iobase = base_exportData(parent_classes_fractions);
-#iobase.write_dict2json(
-#    pg_settings.datadir_settings['workspace_data']+\
-#    '/_output/ALEsKOs01_0_11_parent_classes_fractions.json');
-#iobase.write_dict2csv(
-#    pg_settings.datadir_settings['workspace_data']+\
-#    '/_output/ALEsKOs01_0_11_parent_classes_fractions.csv');
-
-##ADD TO COUNT METHODS...
-#mutation_locations_fractions = mut01.calculate_fractionOfMutationLocations(
-#    experiment_id_I = 'ALEsKOs01',
-#    sample_names_I = sample_names,);
-##export the data to disk
-#from io_utilities.base_exportData import base_exportData
-#iobase = base_exportData(parent_classes_fractions);
-#iobase.write_dict2json(
-#    pg_settings.datadir_settings['workspace_data']+\
-#    '/_output/ALEsKOs01_0_11_parent_classes_fractions.json');
-#iobase.write_dict2csv(
-#    pg_settings.datadir_settings['workspace_data']+\
-#    '/_output/ALEsKOs01_0_11_parent_classes_fractions.csv');
-
+##TODO: add to template notebook
 from SBaaS_resequencing.stage01_resequencing_count_execute import stage01_resequencing_count_execute
 count01 = stage01_resequencing_count_execute(session,engine,pg_settings.datadir_settings);
 count01.initialize_supportedTables()

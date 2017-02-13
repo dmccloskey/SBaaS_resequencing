@@ -1,8 +1,8 @@
-from SBaaS_base.postgresql_orm_base import *
+﻿from SBaaS_base.postgresql_orm_base import *
 class data_stage01_resequencing_omniExpressExome_header(Base):
     __tablename__ = 'data_stage01_resequencing_omniExpressExome_header'
     id = Column(Integer, Sequence('data_stage01_resequencing_omniExpressExome_header_id_seq'))
-    GSGT_Version = Column(String(10))
+    GSGT_Version = Column(String(100))
     processing_date = Column(DateTime)
     kit_type = Column(String(100))
     experiment_id = Column(String(10))
@@ -45,7 +45,7 @@ class data_stage01_resequencing_omniExpressExome_header(Base):
 class data_stage01_resequencing_omniExpressExome(Base):
     __tablename__ = 'data_stage01_resequencing_omniExpressExome'
     id = Column(Integer, Sequence('data_stage01_resequencing_omniExpressExome_id_seq'))
-    experiment_id = Column(String(10))
+    experiment_id = Column(String(100))
     sample_name = Column(String(100))
     SNP_Name = Column(String(100))
     Sample_ID = Column(String(100))

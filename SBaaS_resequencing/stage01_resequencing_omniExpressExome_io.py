@@ -106,7 +106,8 @@ class stage01_resequencing_omniExpressExome_io(stage01_resequencing_omniExpressE
         table_I='data_stage01_resequencing_OmniExpressExome',
         n_lines_I = 10000,
         header_tag_I = '[Data]',
-        deliminator_I = '\t'):
+        deliminator_I = '\t',
+        headers_I = True):
         '''
         import data from txt file and add to
         data_stage01_resequencing_OmniExpressExome_annotations or
@@ -117,9 +118,14 @@ class stage01_resequencing_omniExpressExome_io(stage01_resequencing_omniExpressE
         '''
         ##SPLIT 3:
         #variable definitions
-        headers_bool = True;
-        columns_bool = False;
-        rows_bool = False;
+        if headers_I:
+            headers_bool = True;
+            columns_bool = False;
+            rows_bool = False;
+        else: 
+            headers_bool = False;
+            columns_bool = True;
+            rows_bool = False;
         cnt = 0;
         data_O=[];
         keys_O=[];

@@ -77,25 +77,13 @@ oee01 = stage01_resequencing_omniExpressExome_execute(session,engine,pg_settings
 oee01.initialize_supportedTables()
 oee01.initialize_tables();
 
-data_dir = 'F:/Users/dmccloskey-sbrg/Dropbox (UCSD SBRG)/BloodProject/'
-#oee01.import_dataStage01ResequencingOmniExpressExome_add(
-#    filename_I = data_dir + 'Test_FinalReport.txt',
-#    table_I = 'data_stage01_resequencing_omniExpressExome'
-#    )
-#oee01.import_dataStage01ResequencingOmniExpressExome_add(
-#    filename_I = data_dir + 'additional_snp_Palsson_FinalReport.txt',
-#    table_I = 'data_stage01_resequencing_omniExpressExome'
-#    )
-#oee01.import_dataStage01ResequencingOmniExpressExome_add(
-#    filename_I = data_dir + 'HumanOmniExpressExome-8-v1-2-B.csv',
-#    table_I = 'data_stage01_resequencing_omniExpressExome_annotations',
-#    header_tag_I = '[Assay]',
-#    deliminator_I = ',')
+import time as time
 
+st = time.time();
 result = oee01.getJoin_rows_experimentIDs_dataStage01ResequecingOmniExpressExomeAndAnnotations(
         experiment_ids_I='BloodProject01')
-print('end')
-
+elapsed_time = time.time() - st;
+print("Elapsed time: %.2fs" % elapsed_time)
 
 
 ##TODO: add to template notebook

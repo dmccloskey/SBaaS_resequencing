@@ -178,9 +178,7 @@ class stage01_resequencing_omniExpressExome_query(sbaas_template_query):
                 "data_stage01_resequencing_omniExpressExome_annotations"."TopGenomicSeq",
                 "data_stage01_resequencing_omniExpressExome_annotations"."BeadSetID",
                 "data_stage01_resequencing_omniExpressExome_annotations"."Exp_Clusters",
-                "data_stage01_resequencing_omniExpressExome_annotations"."RefStrand",
-                "subquery1"."Name",
-                "subquery1"."RsID"                '''
+                "data_stage01_resequencing_omniExpressExome_annotations"."RefStrand"  '''
             query_cmd+= '''FROM "data_stage01_resequencing_omniExpressExome_annotations", (%s) AS subquery1 ''' %subquery1
             query_cmd+= '''WHERE ("data_stage01_resequencing_omniExpressExome_annotations"."Name" ="subquery1"."RsID" 
                 OR "data_stage01_resequencing_omniExpressExome_annotations"."Name" LIKE '%,' || "subquery1"."RsID" 

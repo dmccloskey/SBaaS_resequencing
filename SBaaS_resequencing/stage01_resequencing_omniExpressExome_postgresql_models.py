@@ -200,9 +200,9 @@ class data_stage01_resequencing_omniExpressExome_annotations(Base):
         }
     def __repr__json__(self):
         return json.dumps(self.__repr__dict__())
-class data_stage01_resequencing_OmniExpressExome_annotationsAuxillary(Base):
-    __tablename__ = 'data_stage01_resequencing_OmniExpressExome_annotationsAuxillary'
-    id = Column(Integer, Sequence('data_stage01_resequencing_OmniExpressExome_annotationsAuxillary_id_seq'))
+class data_stage01_resequencing_omniExpressExome_annotations2(Base):
+    __tablename__ = 'data_stage01_resequencing_omniExpressExome_annotations2'
+    id = Column(Integer, Sequence('data_stage01_resequencing_omniExpressExome_annotations2_id_seq'))
     Name = Column(String(100))
     RsID = Column(String(100))
     used_ = Column(Boolean)

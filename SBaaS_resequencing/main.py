@@ -1,13 +1,13 @@
 ﻿import sys
-sys.path.append('C:/Users/dmccloskey-sbrg/Documents/GitHub/SBaaS_base')
-#sys.path.append('C:/Users/dmccloskey/Documents/GitHub/SBaaS_base')
+#sys.path.append('C:/Users/dmccloskey-sbrg/Documents/GitHub/SBaaS_base')
+sys.path.append('C:/Users/dmccloskey/Documents/GitHub/SBaaS_base')
 from SBaaS_base.postgresql_settings import postgresql_settings
 from SBaaS_base.postgresql_orm import postgresql_orm
 
 # read in the settings file
-filename = 'C:/Users/dmccloskey-sbrg/Google Drive/SBaaS_settings/settings_metabolomics.ini';
+#filename = 'C:/Users/dmccloskey-sbrg/Google Drive/SBaaS_settings/settings_metabolomics.ini';
 #filename = 'C:/Users/dmccloskey/Google Drive/SBaaS_settings/settings_metabolomics_labtop.ini';
-#filename = 'C:/Users/dmccloskey/Google Drive/SBaaS_settings/settings_metabolomics_remote.ini';
+filename = 'C:/Users/dmccloskey/Google Drive/SBaaS_settings/settings_metabolomics_remote.ini';
 pg_settings = postgresql_settings(filename);
 
 # connect to the database from the settings file
@@ -92,11 +92,8 @@ data_dir = 'F:/Users/dmccloskey-sbrg/Dropbox (UCSD SBRG)/BloodProject/'
 #    header_tag_I = '[Assay]',
 #    deliminator_I = ',')
 
-result = oee01._join_rows_experimentID_dataStage01ResequecingOmniExpressExome(
-        experiment_id_I='BloodProject01',
-        query_I={},
-        output_O = 'listDict',
-        dictColumn_I=None)
+result = oee01.getJoin_rows_experimentIDs_dataStage01ResequecingOmniExpressExome(
+        experiment_ids_I='BloodProject01')
 print('end')
 
 

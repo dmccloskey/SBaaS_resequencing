@@ -1,6 +1,7 @@
 ﻿from .stage01_resequencing_omniExpressExome_postgresql_models import *
 
 from SBaaS_base.sbaas_base_query_delete import sbaas_base_query_delete
+from SBaaS_base.sbaas_base_query_select import sbaas_base_query_select
 from SBaaS_base.sbaas_template_query import sbaas_template_query
 
 class stage01_resequencing_omniExpressExome_query(sbaas_template_query):
@@ -10,7 +11,7 @@ class stage01_resequencing_omniExpressExome_query(sbaas_template_query):
         tables_supported = {'data_stage01_resequencing_omniExpressExome':data_stage01_resequencing_omniExpressExome,
                             'data_stage01_resequencing_omniExpressExome_annotations':data_stage01_resequencing_omniExpressExome_annotations,
                             'data_stage01_resequencing_omniExpressExome_header':data_stage01_resequencing_omniExpressExome_header,
-                            'data_stage01_resequencing_OmniExpressExome_annotationsAuxillary':data_stage01_resequencing_OmniExpressExome_annotationsAuxillary,
+                            'data_stage01_resequencing_omniExpressExome_annotations2':data_stage01_resequencing_omniExpressExome_annotations2,
                         };
         self.set_supportedTables(tables_supported);
     #SPLIT 2:
@@ -101,8 +102,11 @@ class stage01_resequencing_omniExpressExome_query(sbaas_template_query):
             output_O=output_O,
             dictColumn_I=dictColumn_I);
         return data_O;
-    def getJoin_rows_experimentID_dataStage01ResequecingOmniExpressExome(
-        self,experiment_id_I):
+    def getJoin_rows_experimentIDs_dataStage01ResequecingOmniExpressExome(
+        self,
+        experiment_ids_I='',
+        sample_names_I='',
+        raise_I = False):
         '''Join rows between omniExpressExome, annotations, and annotations auxillary
         INPUT:
         experiment_id_I = string
@@ -140,65 +144,34 @@ class stage01_resequencing_omniExpressExome_query(sbaas_template_query):
                 "data_stage01_resequencing_omniExpressExome_annotations"."BeadSetID",
                 "data_stage01_resequencing_omniExpressExome_annotations"."Exp_Clusters",
                 "data_stage01_resequencing_omniExpressExome_annotations"."RefStrand",
-                "data_stage01_resequencing_OmniExpressExome_annotationsAuxillary"."Name",
-                "data_stage01_resequencing_OmniExpressExome_annotationsAuxillary"."RsID"
+                "data_stage01_resequencing_omniExpressExome_annotations2"."Name",
+                "data_stage01_resequencing_omniExpressExome_annotations2"."RsID"
                 '''
+            query_cmd+= '''FROM "data_stage01_resequencing_omniExpressExome",
+                "data_stage01_resequencing_omniExpressExome_annotations",
+                "data_stage01_resequencing_omniExpressExome_annotations2" '''
+            query_cmd+= '''WHERE "data_stage01_resequencing_omniExpressExome"."used_" '''
+            if experiment_ids_I:
+                cmd_q = '''AND "data_stage01_resequencing_omniExpressExome"."experiment_id" =ANY ('{%s}'::text[]) ''' %(self.convert_list2string(experiment_ids_I));
+                query_cmd+=cmd_q;
+            if sample_names_I:
+                cmd_q = '''AND "data_stage01_resequencing_omniExpressExome"."sample_name" =ANY ('{%s}'::text[]) ''' %(self.convert_list2string(sample_names_I));
+                query_cmd+=cmd_q;
+            query_cmd+= '''AND "data_stage01_resequencing_omniExpressExome"."SNP_Name" = "data_stage01_resequencing_omniExpressExome_annotations2"."Name" '''
+            query_cmd+= '''AND "data_stage01_resequencing_omniExpressExome_annotations"."Name" = "data_stage01_resequencing_omniExpressExome_annotations2"."RsID" '''
+            query_cmd+= '''ORDER BY "data_stage01_resequencing_omniExpressExome"."experiment_id" ASC, '''
+            query_cmd+= '''"data_stage01_resequencing_omniExpressExome"."sample_name" ASC, '''
+            query_cmd+= '''"data_stage01_resequencing_omniExpressExome_annotations"."Chr" ASC, '''
+            query_cmd+= '''"data_stage01_resequencing_omniExpressExome_annotations"."MapInfo" ASC '''
+            query_cmd+= ';';
 
-            query_cmd+= '''WHERE "data_stage01_resequencing_omniExpressExome"."experiment_id" = %s '''
-            if calculated_concentration_units_I:
-                cmd_q = "AND calculated_concentration_units =ANY ('{%s}'::text[]) " %(self.convert_list2string(calculated_concentration_units_I));
-                cmd+=cmd_q;
+            query_select = sbaas_base_query_select(self.session,self.engine,self.settings)
+            data_O = [dict(d) for d in query_select.execute_select(query_cmd)];
+
         except Exception as e:
             if raise_I: raise;
             else: print(e);
 
-        query['where'] = [
-            {"table_name":tables[0],
-            'column_name':'experiment_id',
-            'value':experiment_id_I,
-            'operator':'=',
-            'connector':'AND'
-                        },
-            {"table_name":tables[0],
-            'column_name':'used_',
-            'value':'true',
-            'operator':'IS',
-            'connector':'AND'
-                },
-            {"table_name":tables[0],
-            'column_name':"SNP_Name",
-            'value':'''"data_stage01_resequencing_OmniExpressExome_annotationsAuxillary".""Name" ''',
-            'operator':'=',
-            'connector':'AND'
-                },
-            {"table_name":tables[1],
-            'column_name':"Name",
-            'value':'''"data_stage01_resequencing_OmniExpressExome_annotationsAuxillary".""RsID" ''',
-            'operator':'=',
-            'connector':'AND'
-                },
-
-	    ];
-        query['order_by'] = [
-            {"table_name":tables[0],
-            'column_name':'experiment_id',
-            'order':'ASC',
-            },
-            {"table_name":tables[0],
-            'column_name':'sample_name',
-            'order':'ASC',
-            },
-            {"table_name":tables[0],
-            'column_name':'Chr',
-            'order':'ASC',
-            },
-            {"table_name":tables[0],
-            'column_name':"MapInfo",
-            'order':'ASC',
-            },
-        ];
-
-        data_O = [dict(d) for d in query_select.execute_select(query_cmd)];
         return data_O;
     
     #SPLIT 1:   

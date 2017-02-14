@@ -86,11 +86,20 @@ data_dir = 'F:/Users/dmccloskey-sbrg/Dropbox (UCSD SBRG)/BloodProject/'
 #    filename_I = data_dir + 'additional_snp_Palsson_FinalReport.txt',
 #    table_I = 'data_stage01_resequencing_omniExpressExome'
 #    )
-oee01.import_dataStage01ResequencingOmniExpressExome_add(
-    filename_I = data_dir + 'HumanOmniExpressExome-8-v1-2-B.csv',
-    table_I = 'data_stage01_resequencing_omniExpressExome_annotations',
-    header_tag_I = '[Assay]',
-    deliminator_I = ',')
+#oee01.import_dataStage01ResequencingOmniExpressExome_add(
+#    filename_I = data_dir + 'HumanOmniExpressExome-8-v1-2-B.csv',
+#    table_I = 'data_stage01_resequencing_omniExpressExome_annotations',
+#    header_tag_I = '[Assay]',
+#    deliminator_I = ',')
+
+result = oee01._join_rows_experimentID_dataStage01ResequecingOmniExpressExome(
+        experiment_id_I='BloodProject01',
+        query_I={},
+        output_O = 'listDict',
+        dictColumn_I=None)
+print('end')
+
+
 
 ##TODO: add to template notebook
 #from SBaaS_resequencing.stage01_resequencing_count_execute import stage01_resequencing_count_execute

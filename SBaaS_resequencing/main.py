@@ -92,7 +92,7 @@ data_dir = 'F:/Users/dmccloskey-sbrg/Dropbox (UCSD SBRG)/BloodProject/'
 #    header_tag_I = '[Assay]',
 #    deliminator_I = ',')
 
-result = oee01.getJoin_rows_experimentIDs_dataStage01ResequecingOmniExpressExome(
+result = oee01.getJoin_rows_experimentIDs_dataStage01ResequecingOmniExpressExomeAndAnnotations(
         experiment_ids_I='BloodProject01')
 print('end')
 

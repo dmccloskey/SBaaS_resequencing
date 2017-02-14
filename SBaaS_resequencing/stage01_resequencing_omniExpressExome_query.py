@@ -102,7 +102,7 @@ class stage01_resequencing_omniExpressExome_query(sbaas_template_query):
             output_O=output_O,
             dictColumn_I=dictColumn_I);
         return data_O;
-    def getJoin_rows_experimentIDs_dataStage01ResequecingOmniExpressExome(
+    def getJoin_rows_experimentIDs_dataStage01ResequecingOmniExpressExomeAndAnnotationsAndAnnotations2(
         self,
         experiment_ids_I='',
         sample_names_I='',
@@ -116,13 +116,48 @@ class stage01_resequencing_omniExpressExome_query(sbaas_template_query):
 
         data_O = [];
         try:
-            query_cmd = '''SELECT "data_stage01_resequencing_omniExpressExome"."experiment_id",
+            subquery2 = '''SELECT "data_stage01_resequencing_omniExpressExome"."experiment_id",
                 "data_stage01_resequencing_omniExpressExome"."sample_name",
                 "data_stage01_resequencing_omniExpressExome"."SNP_Name",
                 "data_stage01_resequencing_omniExpressExome"."Sample_ID",
                 "data_stage01_resequencing_omniExpressExome"."Allele1_Top",
                 "data_stage01_resequencing_omniExpressExome"."Allele2_Top",
-                "data_stage01_resequencing_omniExpressExome"."GC_Score",
+                "data_stage01_resequencing_omniExpressExome"."GC_Score"
+                '''
+            subquery2+= '''FROM "data_stage01_resequencing_omniExpressExome" '''
+            subquery2+= '''WHERE "data_stage01_resequencing_omniExpressExome"."used_" '''
+            if experiment_ids_I:
+                cmd_q = '''AND "data_stage01_resequencing_omniExpressExome"."experiment_id" =ANY ('{%s}'::text[]) ''' %(self.convert_list2string(experiment_ids_I));
+                subquery2+=cmd_q;
+            if sample_names_I:
+                cmd_q = '''AND "data_stage01_resequencing_omniExpressExome"."sample_name" =ANY ('{%s}'::text[]) ''' %(self.convert_list2string(sample_names_I));
+                subquery2+=cmd_q;
+            subquery2+= '''ORDER BY "data_stage01_resequencing_omniExpressExome"."experiment_id" ASC, '''
+            subquery2+= '''"data_stage01_resequencing_omniExpressExome"."sample_name" ASC '''
+
+            subquery1 = '''SELECT "subquery2"."experiment_id",
+                "subquery2"."sample_name",
+                "subquery2"."SNP_Name",
+                "subquery2"."Sample_ID",
+                "subquery2"."Allele1_Top",
+                "subquery2"."Allele2_Top",
+                "subquery2"."GC_Score",
+                "data_stage01_resequencing_omniExpressExome_annotations2"."Name",
+                "data_stage01_resequencing_omniExpressExome_annotations2"."RsID"
+                '''
+            subquery1+= '''FROM "data_stage01_resequencing_omniExpressExome_annotations2", (%s) AS subquery2 ''' %subquery2
+            subquery1+= '''WHERE "subquery2"."SNP_Name" = "data_stage01_resequencing_omniExpressExome_annotations2"."Name" '''
+            subquery1+= '''ORDER BY "subquery2"."experiment_id" ASC, '''
+            subquery1+= '''"subquery2"."sample_name" ASC, '''
+            subquery1+= '''"data_stage01_resequencing_omniExpressExome_annotations2"."Name" ASC '''
+
+            query_cmd = '''SELECT "subquery1"."experiment_id",
+                "subquery1"."sample_name",
+                "subquery1"."SNP_Name",
+                "subquery1"."Sample_ID",
+                "subquery1"."Allele1_Top",
+                "subquery1"."Allele2_Top",
+                "subquery1"."GC_Score",
                 "data_stage01_resequencing_omniExpressExome_annotations"."IlmnID",
                 "data_stage01_resequencing_omniExpressExome_annotations"."Name",
                 "data_stage01_resequencing_omniExpressExome_annotations"."IlmnStrand",
@@ -144,23 +179,92 @@ class stage01_resequencing_omniExpressExome_query(sbaas_template_query):
                 "data_stage01_resequencing_omniExpressExome_annotations"."BeadSetID",
                 "data_stage01_resequencing_omniExpressExome_annotations"."Exp_Clusters",
                 "data_stage01_resequencing_omniExpressExome_annotations"."RefStrand",
-                "data_stage01_resequencing_omniExpressExome_annotations2"."Name",
-                "data_stage01_resequencing_omniExpressExome_annotations2"."RsID"
+                "subquery1"."Name",
+                "subquery1"."RsID"                '''
+            query_cmd+= '''FROM "data_stage01_resequencing_omniExpressExome_annotations", (%s) AS subquery1 ''' %subquery1
+            query_cmd+= '''WHERE ("data_stage01_resequencing_omniExpressExome_annotations"."Name" ="subquery1"."RsID" 
+                OR "data_stage01_resequencing_omniExpressExome_annotations"."Name" LIKE '%,' || "subquery1"."RsID" 
+                OR "data_stage01_resequencing_omniExpressExome_annotations"."Name" LIKE "subquery1"."RsID" || ',%' 
+                OR "data_stage01_resequencing_omniExpressExome_annotations"."Name" LIKE '%,' || "subquery1"."RsID" || ',%') '''
+            query_cmd+= '''ORDER BY "subquery1"."experiment_id" ASC, '''
+            query_cmd+= '''"subquery1"."sample_name" ASC, '''
+            query_cmd+= '''"data_stage01_resequencing_omniExpressExome_annotations"."Chr" ASC, '''
+            query_cmd+= '''"data_stage01_resequencing_omniExpressExome_annotations"."MapInfo" ASC '''
+            query_cmd+= ';';
+
+            query_select = sbaas_base_query_select(self.session,self.engine,self.settings)
+            data_O = [dict(d) for d in query_select.execute_select(query_cmd)];
+
+        except Exception as e:
+            if raise_I: raise;
+            else: print(e);
+
+        return data_O;
+    def getJoin_rows_experimentIDs_dataStage01ResequecingOmniExpressExomeAndAnnotations(
+        self,
+        experiment_ids_I='',
+        sample_names_I='',
+        raise_I = False):
+        '''Join rows between omniExpressExome, annotations, and annotations auxillary
+        INPUT:
+        experiment_id_I = string
+        OUTPUT:
+        data_O = output specified by output_O and dictColumn_I
+        '''
+
+        data_O = [];
+        try:
+            subquery1 = '''SELECT "data_stage01_resequencing_omniExpressExome"."experiment_id",
+                "data_stage01_resequencing_omniExpressExome"."sample_name",
+                "data_stage01_resequencing_omniExpressExome"."SNP_Name",
+                "data_stage01_resequencing_omniExpressExome"."Sample_ID",
+                "data_stage01_resequencing_omniExpressExome"."Allele1_Top",
+                "data_stage01_resequencing_omniExpressExome"."Allele2_Top",
+                "data_stage01_resequencing_omniExpressExome"."GC_Score"
                 '''
-            query_cmd+= '''FROM "data_stage01_resequencing_omniExpressExome",
-                "data_stage01_resequencing_omniExpressExome_annotations",
-                "data_stage01_resequencing_omniExpressExome_annotations2" '''
-            query_cmd+= '''WHERE "data_stage01_resequencing_omniExpressExome"."used_" '''
+            subquery1+= '''FROM "data_stage01_resequencing_omniExpressExome" '''
+            subquery1+= '''WHERE "data_stage01_resequencing_omniExpressExome"."used_" '''
             if experiment_ids_I:
                 cmd_q = '''AND "data_stage01_resequencing_omniExpressExome"."experiment_id" =ANY ('{%s}'::text[]) ''' %(self.convert_list2string(experiment_ids_I));
-                query_cmd+=cmd_q;
+                subquery1+=cmd_q;
             if sample_names_I:
                 cmd_q = '''AND "data_stage01_resequencing_omniExpressExome"."sample_name" =ANY ('{%s}'::text[]) ''' %(self.convert_list2string(sample_names_I));
-                query_cmd+=cmd_q;
-            query_cmd+= '''AND "data_stage01_resequencing_omniExpressExome"."SNP_Name" = "data_stage01_resequencing_omniExpressExome_annotations2"."Name" '''
-            query_cmd+= '''AND "data_stage01_resequencing_omniExpressExome_annotations"."Name" = "data_stage01_resequencing_omniExpressExome_annotations2"."RsID" '''
-            query_cmd+= '''ORDER BY "data_stage01_resequencing_omniExpressExome"."experiment_id" ASC, '''
-            query_cmd+= '''"data_stage01_resequencing_omniExpressExome"."sample_name" ASC, '''
+                subquery1+=cmd_q;
+            subquery1+= '''ORDER BY "data_stage01_resequencing_omniExpressExome"."experiment_id" ASC, '''
+            subquery1+= '''"data_stage01_resequencing_omniExpressExome"."sample_name" ASC '''
+
+            query_cmd = '''SELECT "subquery1"."experiment_id",
+                "subquery1"."sample_name",
+                "subquery1"."SNP_Name",
+                "subquery1"."Sample_ID",
+                "subquery1"."Allele1_Top",
+                "subquery1"."Allele2_Top",
+                "subquery1"."GC_Score",
+                "data_stage01_resequencing_omniExpressExome_annotations"."IlmnID",
+                "data_stage01_resequencing_omniExpressExome_annotations"."Name",
+                "data_stage01_resequencing_omniExpressExome_annotations"."IlmnStrand",
+                "data_stage01_resequencing_omniExpressExome_annotations"."SNP",
+                "data_stage01_resequencing_omniExpressExome_annotations"."AddressA_ID",
+                "data_stage01_resequencing_omniExpressExome_annotations"."AlleleA_ProbeSeq",
+                "data_stage01_resequencing_omniExpressExome_annotations"."AddressB_ID",
+                "data_stage01_resequencing_omniExpressExome_annotations"."AlleleB_ProbeSeq",
+                "data_stage01_resequencing_omniExpressExome_annotations"."GenomeBuild",
+                "data_stage01_resequencing_omniExpressExome_annotations"."Chr",
+                "data_stage01_resequencing_omniExpressExome_annotations"."MapInfo",
+                "data_stage01_resequencing_omniExpressExome_annotations"."Ploidy",
+                "data_stage01_resequencing_omniExpressExome_annotations"."Species",
+                "data_stage01_resequencing_omniExpressExome_annotations"."Source",
+                "data_stage01_resequencing_omniExpressExome_annotations"."SourceVersion",
+                "data_stage01_resequencing_omniExpressExome_annotations"."SourceStrand",
+                "data_stage01_resequencing_omniExpressExome_annotations"."SourceSeq",
+                "data_stage01_resequencing_omniExpressExome_annotations"."TopGenomicSeq",
+                "data_stage01_resequencing_omniExpressExome_annotations"."BeadSetID",
+                "data_stage01_resequencing_omniExpressExome_annotations"."Exp_Clusters",
+                "data_stage01_resequencing_omniExpressExome_annotations"."RefStrand" '''
+            query_cmd+= '''FROM "data_stage01_resequencing_omniExpressExome_annotations", (%s) AS subquery1 ''' %subquery1
+            query_cmd+= '''WHERE "data_stage01_resequencing_omniExpressExome_annotations"."Name" = "subquery1"."SNP_Name" '''
+            query_cmd+= '''ORDER BY "subquery1"."experiment_id" ASC, '''
+            query_cmd+= '''"subquery1"."sample_name" ASC, '''
             query_cmd+= '''"data_stage01_resequencing_omniExpressExome_annotations"."Chr" ASC, '''
             query_cmd+= '''"data_stage01_resequencing_omniExpressExome_annotations"."MapInfo" ASC '''
             query_cmd+= ';';

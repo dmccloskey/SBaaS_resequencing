@@ -12,6 +12,7 @@ class stage01_resequencing_omniExpressExome_query(sbaas_template_query):
                             'data_stage01_resequencing_omniExpressExome_annotations':data_stage01_resequencing_omniExpressExome_annotations,
                             'data_stage01_resequencing_omniExpressExome_header':data_stage01_resequencing_omniExpressExome_header,
                             'data_stage01_resequencing_omniExpressExome_annotations2':data_stage01_resequencing_omniExpressExome_annotations2,
+                            'data_stage01_resequencing_omniExpressExomeFiltered':data_stage01_resequencing_omniExpressExomeFiltered,
                         };
         self.set_supportedTables(tables_supported);
     #SPLIT 2:
@@ -283,6 +284,16 @@ class stage01_resequencing_omniExpressExome_query(sbaas_template_query):
             data = self.session.query(data_stage01_resequencing_omniExpressExome).filter(
                     data_stage01_resequencing_omniExpressExome.experiment_id.like(experiment_id_I),
                     data_stage01_resequencing_omniExpressExome.used_.is_(True)).all();
+            rows_O = [d.__repr__dict__() for d in data];
+            return rows_O;
+        except SQLAlchemyError as e:
+            print(e);
+    def get_rows_experimentID_dataStage01ResequencingOmniExpressExomeFiltered(self,experiment_id_I):
+        '''Query rows that are used from the analysis'''
+        try:
+            data = self.session.query(data_stage01_resequencing_omniExpressExomeFiltered).filter(
+                    data_stage01_resequencing_omniExpressExomeFiltered.experiment_id.like(experiment_id_I),
+                    data_stage01_resequencing_omniExpressExomeFiltered.used_.is_(True)).all();
             rows_O = [d.__repr__dict__() for d in data];
             return rows_O;
         except SQLAlchemyError as e:

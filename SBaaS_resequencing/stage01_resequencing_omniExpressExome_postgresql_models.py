@@ -230,4 +230,61 @@ class data_stage01_resequencing_omniExpressExome_annotations2(Base):
         'comment_':self.comment_,
         }
     def __repr__json__(self):
+        return json.dumps(self.__repr__dict__())    
+class data_stage01_resequencing_omniExpressExomeFiltered(Base):
+    __tablename__ = 'data_stage01_resequencing_omniExpressExomeFiltered'
+    id = Column(Integer, Sequence('data_stage01_resequencing_omniExpressExomeFiltered_id_seq'))
+    experiment_id = Column(String(100))
+    sample_name = Column(String(100))
+    SNP_Name = Column(String(100))
+    GenomeBuild = Column(Integer)
+    Chr = Column(String(10))
+    MapInfo = Column(Integer)
+    mutation_data = Column(postgresql.JSON)
+    used_ = Column(Boolean)
+    comment_ = Column(Text)
+    __table_args__ = (
+        UniqueConstraint('experiment_id','sample_name','SNP_Name'),
+        PrimaryKeyConstraint('id'),
+    )
+    def __init__(self,row_dict_I,):
+        self.experiment_id = row_dict_I['experiment_id']
+        self.sample_name = row_dict_I['sample_name']
+        self.SNP_Name = row_dict_I['SNP_Name']
+        self.Chr = row_dict_I['Chr']
+        self.MapInfo = row_dict_I['MapInfo']
+        self.GenomeBuild = row_dict_I['GenomeBuild']
+        self.mutation_data=row_dict_I['mutation_data'];
+
+        self.used_=row_dict_I['used_']
+        self.comment_=row_dict_I['comment_']
+    def __set__row__(self, experiment_id_I,sample_name_I,SNP_Name_I,
+                     GenomeBuild_I,Chr_I,MapInfo_I,
+                     mutation_data_I,
+                     used__I,comment__I):
+        self.experiment_id = experiment_id_I
+        self.sample_name = sample_name_I
+        self.SNP_Name = SNP_Name_I
+        self.GenomeBuild = GenomeBuild_I
+        self.Chr = Chr_I
+        self.MapInfo = MapInfo_I
+        self.mutation_data=mutation_data_I
+
+        self.used_ = used__I
+        self.comment_ = comment__I
+    def __repr__dict__(self):
+        return {
+        'experiment_id':self.experiment_id,
+        'sample_name':self.sample_name,
+        'SNP_Name':self.SNP_Name,
+        'GenomeBuild':self.GenomeBuild,
+        'Chr':self.Chr,
+        'MapInfo':self.MapInfo,
+        'mutation_data':self.mutation_data,
+
+        'id':self.id,
+        'used_':self.used_,
+        'comment_':self.comment_,
+        }
+    def __repr__json__(self):
         return json.dumps(self.__repr__dict__())

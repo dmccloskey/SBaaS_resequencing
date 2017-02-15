@@ -24,4 +24,57 @@ class stage01_resequencing_omniExpressExome_execute(stage01_resequencing_omniExp
         '''
         filename = 'chr%s.fa'%(chr_I)
         return filename;
+    def execute_filterOmniExpressExome(self,
+            experiment_id_I='BloodProject01',
+            sample_names_I=''):
+        '''Filter omniExpressExome data
+        INPUT:
+        experiment_id_I = string
+        OUTPUT:
+        
+        NOTES:
+        no filtering is applied as of yet
+        '''
+        data_O = [];
+        omniExpressExome = self.getJoin_rows_experimentIDs_dataStage01ResequecingOmniExpressExomeAndAnnotations(
+            experiment_ids_I=experiment_id_I,
+            sample_names_I=sample_names_I
+            );
+        data_O = [{
+                'experiment_id':d['experiment_id'],
+                'sample_name':d['sample_name'],
+                'GenomeBuild':d['GenomeBuild'],
+                'Chr':d['Chr'],
+                'MapInfo':d['MapInfo'],
+                'mutation_data':{'SNP_Name':d['SNP_Name'],
+                    'new_seq':d['Allele1_Top'], #changed for compatibility with gd
+                    'Allele2_Top':d['Allele2_Top'],
+                    'GC_Score':d['GC_Score'],
+                    'IlmnID':d['IlmnID'],
+                    'Name':d['Name'],
+                    'IlmnStrand':d['IlmnStrand'],
+                    'SNP':d['SNP'],
+                    'AddressA_ID':d['AddressA_ID'],
+                    'AlleleA_ProbeSeq':d['AlleleA_ProbeSeq'],
+                    'AddressB_ID':d['AddressB_ID'],
+                    'AlleleB_ProbeSeq':d['AlleleB_ProbeSeq'],
+                    'GenomeBuild':d['GenomeBuild'],
+                    'chromosome':d['Chr'], #changed for compatibility with gd
+                    'position':d['MapInfo'], #changed for compatibility with gd
+                    'Ploidy':d['Ploidy'],
+                    'Species':d['Species'],
+                    'Source':d['Source'],
+                    'SourceVersion':d['SourceVersion'],
+                    'SourceStrand':d['SourceStrand'],
+                    'SourceSeq':d['SourceSeq'],
+                    'TopGenomicSeq':d['TopGenomicSeq'],
+                    'BeadSetID':d['BeadSetID'],
+                    'Exp_Clusters':d['Exp_Clusters'],
+                    'RefStrand':d['RefStrand'],
+                    'type':'SNP', #added for compatibility with gd
+                    'frequency':1.0, #added for compatibility with gd
+                    },
+            } for d in omniExpressExome]
+        self.add_rows_table('data_stage01_resequencing_omniExpressExomeFiltered',data_O);
+        
 

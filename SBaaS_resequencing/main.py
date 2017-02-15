@@ -77,6 +77,16 @@ oee01 = stage01_resequencing_omniExpressExome_execute(session,engine,pg_settings
 oee01.initialize_supportedTables()
 oee01.initialize_tables();
 
+sample_names = [
+    'BloodProject01_UID1',
+    ]
+#filter the data by sample_name
+for sample_name in sample_names:
+    print('filtering ' + sample_name);
+    oee01.execute_filterOmniExpressExome(
+        experiment_id_I='BloodProject01',
+        sample_names_I=sample_name)
+
 #import time as time
 
 #st = time.time();
@@ -85,38 +95,31 @@ oee01.initialize_tables();
 #elapsed_time = time.time() - st;
 #print("Elapsed time: %.2fs" % elapsed_time)
 
-from io_utilities.import_webData import import_webData
-from io_utilities.base_exportData import base_exportData
-from io_utilities.base_importData import base_importData
-i_webData = import_webData();
-o_data = base_exportData();
-i_data = base_importData();
-import gzip
+#from SBaaS_resequencing.stage01_resequencing_mutations_execute import stage01_resequencing_mutations_execute
+#mutations01 = stage01_resequencing_mutations_execute(session,engine,pg_settings.datadir_settings);
+#mutations01.initialize_supportedTables()
+#mutations01.initialize_tables();
 
-chromosomes = '1'.split(',')
-#0,XY do not have a annotation file
-species = 'Homo_sapiens'
-release = '87'
-server = "ftp.ensembl.org"
-ext = "/pub/release-87/genbank/homo_sapiens/"
-data_dir = 'C:/Users/dmccloskey/Downloads/'
+#annotation_dir = 'C:/Users/dmccloskey/Downloads/'
+#annotation_files = [
+#    'Homo_sapiens.GRCh38.87.chromosome.1.dat'
+#]
+#annotation_chromosome2File = {
+#    '1':'Homo_sapiens.GRCh38.87.chromosome.1.dat'
+#}
 
-for chr_I in chromosomes:
-    #make the filename
-    filename_i = oee01.make_annotationFilename(
-        species_I= species,
-        release_I= release,
-        chr_I= chr_I)
-    compressedFilename_i = '%s.gz'%filename_i;
-    ##print(server+ext+compressedFilename_i)
-    #read the file name from ftp
-    file = i_webData.get_ftp(server,ext,compressedFilename_i)
-    #export the file to disk
-    filename_o = data_dir+filename_i;
-    o_data.add_data(gzip.decompress(file.read()))
-    o_data.write_binaryFile(filename_o,length=131072);
-    o_data.clear_data();
-    file.close();
+#for annotation_file in annotation_files:
+#    mutations.execute_annotateFilteredMutations(
+#        experiment_id='BloodProject01',
+#        sample_names_I=[],
+#        annotation_dir_I=annotation_dir,
+#        annotation_files_I=['U00096.2.gb'],
+#        annotation_chromosome2File_I = annotation_chromosome2File,
+#        annotation_ref_I = 'genbank',
+#        biologicalmaterial_id_I=None, #no ecogene annotation
+#        query_object_I = 'stage01_resequencing_omniExpressExome_query',
+#        query_func_I = 'get_rows_experimentID_dataStage01ResequencingOmniExpressExomeFiltered',
+#        )
 
 ##TODO: add to template notebook
 #from SBaaS_resequencing.stage01_resequencing_count_execute import stage01_resequencing_count_execute

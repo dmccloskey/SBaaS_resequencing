@@ -26,7 +26,7 @@ class stage01_resequencing_mutations_execute(stage01_resequencing_mutations_io,
     #4. add in query_object_annotation_func_I
     #5. split into queryData, transformData, storeData functions
     #6.
-    def execute_annotateFilteredMutations(self,
+    def execute_annotateFilteredMutations_v01(self,
         experiment_id,sample_names_I=[],
         annotation_I='data/U00096.2.gb',
         annotation_ref_I = 'genbank',
@@ -43,7 +43,11 @@ class stage01_resequencing_mutations_execute(stage01_resequencing_mutations_io,
         biologicalmaterial_id_I = string
         '''
 
-        genomeannotation = genome_annotations(annotation_I=annotation_I,annotation_ref_I=annotation_ref_I);
+        #read in the annotations file
+        genomeannotation = genome_annotations(
+            annotation_I=annotation_I,
+            annotation_ref_I=annotation_ref_I
+            );
         
         # intantiate the query object:
         query_objects = {'stage01_resequencing_gd_query':stage01_resequencing_gd_query,
@@ -94,15 +98,16 @@ class stage01_resequencing_mutations_execute(stage01_resequencing_mutations_io,
             data_tmp['mutation_annotations'] = annotation['product']
             # generate a link to ecogene for the genes
             data_tmp['mutation_links'] = [];
-            for bnumber in annotation['locus_tag']:
-                if bnumber:
-                    ecogenes = [];
-                    ecogenes = self.get_ecogeneAccessionNumber_biologicalmaterialIDAndOrderedLocusName_biologicalMaterialGeneReferences(biologicalmaterial_id_I,bnumber);
-                    if ecogenes:
-                        ecogene = ecogenes[0];
-                        ecogene_link = genomeannotation._generate_httplink2gene_ecogene(ecogene['ecogene_accession_number']);
-                        data_tmp['mutation_links'].append(ecogene_link)
-                    else: print('no ecogene_accession_number found for ordered_locus_location ' + bnumber);
+            if biologicalmaterial_id_I and not biologicalmaterial_id_I is None:
+                for bnumber in annotation['locus_tag']:
+                    if bnumber:
+                        ecogenes = [];
+                        ecogenes = self.get_ecogeneAccessionNumber_biologicalmaterialIDAndOrderedLocusName_biologicalMaterialGeneReferences(biologicalmaterial_id_I,bnumber);
+                        if ecogenes:
+                            ecogene = ecogenes[0];
+                            ecogene_link = genomeannotation._generate_httplink2gene_ecogene(ecogene['ecogene_accession_number']);
+                            data_tmp['mutation_links'].append(ecogene_link)
+                        else: print('no ecogene_accession_number found for ordered_locus_location ' + bnumber);
             data_tmp['experiment_id'] = mutation['experiment_id'];
             data_tmp['sample_name'] = mutation['sample_name'];
             frequency = 1.0;
@@ -114,22 +119,110 @@ class stage01_resequencing_mutations_execute(stage01_resequencing_mutations_io,
             data_tmp['mutation_data'] = mutation['mutation_data'];
             data_tmp['mutation_chromosome'] = 1;
             mutation_data_O.append(data_tmp);
-        #    # add data to the database
-        #    row = [];
-        #    row = data_stage01_resequencing_mutationsAnnotated(data_tmp['experiment_id'],
-        #            data_tmp['sample_name'],
-        #            data_tmp['mutation_frequency'],
-        #            data_tmp['mutation_type'],
-        #            data_tmp['mutation_position'],
-        #            data_tmp['mutation_data'],
-        #            data_tmp['mutation_annotations'],
-        #            data_tmp['mutation_genes'],
-        #            data_tmp['mutation_locations'],
-        #            data_tmp['mutation_links'],
-        #            True,
-        #            None);
-        #    self.session.add(row);
-        #self.session.commit();
+
+        if mutation_data_O:
+            self.add_rows_table('data_stage01_resequencing_mutationsAnnotated',mutation_data_O);
+    def execute_annotateFilteredMutations(self,
+        experiment_id,sample_names_I=[],
+        annotation_dir_I='data/',
+        annotation_files_I=['U00096.2.gb'],
+        annotation_chromosome2File_I = {'1':'U00096.2.gb'},
+        annotation_ref_I = 'genbank',
+        biologicalmaterial_id_I='MG1655',
+        query_object_I = 'stage01_resequencing_gd_query',
+        query_func_I = 'get_mutations_experimentID_dataStage01ResequencingMutationsFiltered',
+        ):
+        '''Annotate filtered mutations using a reference annotation
+        INPUT:
+        experiment_id = string
+        sample_names_I = [] of strings
+        annotation_I = string, reference file for the sequencing annotation
+        annotation_ref_I = string, reference file data base source
+        biologicalmaterial_id_I = string
+        '''
+
+        #read in the annotations files
+        genomeannotation_dict = {}; #{subfile#:
+        for annotation_file in annotation_files_I:
+            annotation_filename = annotation_dir_I + annotation_file;
+            genomeannotation = genome_annotations(
+                annotation_I=annotation_filename,
+                annotation_ref_I=annotation_ref_I
+                );
+            genomeannotation_dict[annotation_file] = genomeannotation;
+        
+        # intantiate the query object:
+        query_objects = {'stage01_resequencing_gd_query':stage01_resequencing_gd_query,
+                         'stage01_resequencing_omniExpressExome_query':stage01_resequencing_omniExpressExome_query,
+                        };
+        if query_object_I in query_objects.keys():
+            query_object = query_objects[query_object_I];
+            query_instance = query_object(self.session,self.engine,self.settings);
+            query_instance.initialize_supportedTables();
+
+        print('Executing annotation of filtered mutations...')
+
+        #query the data:
+        data_listDict = [];
+        if hasattr(query_instance, query_func_I):
+            query_func = getattr(query_instance, query_func_I);
+            try:
+                data_listDict = query_func(
+                    #analysis_id_I,
+                    experiment_id_I=experiment_id,
+                    sample_names_I=sample_names_I,
+                    );
+            except AssertionError as e:
+                print(e);
+        else:
+            print('query instance does not have the required method.');
+        
+        mutation_data_O = [];
+        for end_cnt,mutation in enumerate(mutations):
+            print('analyzing mutations')
+            data_tmp = {};
+
+            # annotate each mutation based on the position
+            annotation = {};
+            if 'chromosome' in mutation['mutation_data'].keys():
+                chromosome = mutation['mutation_data']['chromosome']
+            else:
+                chromosome = '1';
+            if not chromosome in annotation_chromosome2File_I.keys(): continue;
+            if chromosome in annotation_chromosome2File_I.keys() and \
+                not annotation_chromosome2File_I[chromosome] in genomeannotation_dict.keys(): continue;
+            annotation = genomeannotation_dict[annotation_chromosome2File_I[chromosome]]._find_genesFromMutationPosition(
+                mutation['mutation_data']['position']);
+
+            # generate a link to ecogene for the genes
+            data_tmp['mutation_links'] = [];
+            if biologicalmaterial_id_I and not biologicalmaterial_id_I is None:
+                for bnumber in annotation['locus_tag']:
+                    if bnumber:
+                        ecogenes = [];
+                        ecogenes = self.get_ecogeneAccessionNumber_biologicalmaterialIDAndOrderedLocusName_biologicalMaterialGeneReferences(biologicalmaterial_id_I,bnumber);
+                        if ecogenes:
+                            ecogene = ecogenes[0];
+                            ecogene_link = genomeannotation._generate_httplink2gene_ecogene(ecogene['ecogene_accession_number']);
+                            data_tmp['mutation_links'].append(ecogene_link)
+                        else: print('no ecogene_accession_number found for ordered_locus_location ' + bnumber);
+                        
+            # record the data
+            data_tmp['mutation_genes'] = annotation['gene']
+            data_tmp['mutation_locations'] = annotation['location']
+            data_tmp['mutation_annotations'] = annotation['product']
+            data_tmp['experiment_id'] = mutation['experiment_id'];
+            data_tmp['sample_name'] = mutation['sample_name'];
+            frequency = 1.0;
+            if 'frequency' in mutation['mutation_data']:
+                frequency = mutation['mutation_data']['frequency'];
+            data_tmp['mutation_frequency'] = frequency
+            data_tmp['mutation_position'] = mutation['mutation_data']['position']
+            data_tmp['mutation_type'] = mutation['mutation_data']['type']
+            data_tmp['mutation_data'] = mutation['mutation_data'];
+            data_tmp['mutation_chromosome'] = chromosome;
+            mutation_data_O.append(data_tmp);
+
         if mutation_data_O:
             self.add_rows_table('data_stage01_resequencing_mutationsAnnotated',mutation_data_O);
     def execute_mutateFilteredMutations(self,experiment_id,sample_names_I=[],

@@ -22,6 +22,6 @@ class stage01_resequencing_omniExpressExome_execute(stage01_resequencing_omniExp
         old: 'chr1.fa'
 
         '''
-        filename = 'chr%s.fa'%(species_I,release_I,chr_I)
+        filename = 'chr%s.fa'%(chr_I)
         return filename;
 

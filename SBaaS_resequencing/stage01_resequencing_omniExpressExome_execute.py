@@ -18,10 +18,10 @@ class stage01_resequencing_omniExpressExome_execute(stage01_resequencing_omniExp
         chr_I= '10'):
         '''
         Example:
-        'hs_ref_GRCh38.p7_alts.fa' or 'hs_alt_CHM1_1.1_chr1.fa'?
+        current: 'hs_ref_GRCh38.p7_alts.fa' or 'hs_alt_CHM1_1.1_chr1.fa'?
+        old: 'chr1.fa'
 
         '''
-        #TODO
-        filename = '%s.GRCh38.%s.chromosome.%s.dat'%(species_I,release_I,chr_I)
+        filename = 'chr%s.fa'%(species_I,release_I,chr_I)
         return filename;
 

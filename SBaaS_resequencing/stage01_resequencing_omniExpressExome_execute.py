@@ -40,6 +40,14 @@ class stage01_resequencing_omniExpressExome_execute(stage01_resequencing_omniExp
             experiment_ids_I=experiment_id_I,
             sample_names_I=sample_names_I
             );
+        ##BUG: remove 'nan' from GC_Score
+        #GC_Score = [d['GC_Score'] for d in omniExpressExome]
+        GC_Score = [];
+        for i,d in enumerate(omniExpressExome):
+            if str(d['GC_Score'])=='nan':
+                GC_Score.append(0.0);
+            else:
+                GC_Score.append(d['GC_Score'])
         data_O = [{
                 'experiment_id':d['experiment_id'],
                 'sample_name':d['sample_name'],
@@ -49,7 +57,7 @@ class stage01_resequencing_omniExpressExome_execute(stage01_resequencing_omniExp
                 'mutation_data':{'SNP_Name':d['SNP_Name'],
                     'new_seq':d['Allele1_Top'], #changed for compatibility with gd
                     'Allele2_Top':d['Allele2_Top'],
-                    'GC_Score':d['GC_Score'],
+                    'GC_Score':GC_Score[i], #d['GC_Score'],
                     'IlmnID':d['IlmnID'],
                     'Name':d['Name'],
                     'IlmnStrand':d['IlmnStrand'],
@@ -74,7 +82,7 @@ class stage01_resequencing_omniExpressExome_execute(stage01_resequencing_omniExp
                     'type':'SNP', #added for compatibility with gd
                     'frequency':1.0, #added for compatibility with gd
                     },
-            } for d in omniExpressExome]
+            } for i,d in enumerate(omniExpressExome)]
         self.add_rows_table('data_stage01_resequencing_omniExpressExomeFiltered',data_O);
         
 

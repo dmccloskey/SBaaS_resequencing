@@ -78,7 +78,7 @@ oee01.initialize_supportedTables()
 oee01.initialize_tables();
 
 sample_names = [
-    'BloodProject01_UID1',
+    'BloodProject01_UID10',
     ]
 #filter the data by sample_name
 for sample_name in sample_names:

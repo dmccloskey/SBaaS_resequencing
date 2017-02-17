@@ -162,6 +162,7 @@ class stage01_resequencing_mutations_execute(stage01_resequencing_mutations_io,
 
         print('Executing annotation of filtered mutations...')
 
+        #TODO: break into seperate function
         #query the data:
         data_listDict = [];
         if hasattr(query_instance, query_func_I):
@@ -176,10 +177,19 @@ class stage01_resequencing_mutations_execute(stage01_resequencing_mutations_io,
                 print(e);
         else:
             print('query instance does not have the required method.');
+
+        ##Testing only
+        ##read in the data:
+        #from io_utilities.base_importData import base_importData
+        #filename_I = self.settings['workspace_data']+\
+        #    '/tmp/test.csv'
+        #iobase = base_importData();
+        #iobase.read_csv(filename_I);
+        #data_listDict = iobase.data;
         
         mutation_data_O = [];
-        for end_cnt,mutation in enumerate(mutations):
-            print('analyzing mutations')
+        for end_cnt,mutation in enumerate(data_listDict):
+            #print('analyzing mutations')
             data_tmp = {};
 
             # annotate each mutation based on the position

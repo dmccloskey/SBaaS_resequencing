@@ -54,6 +54,8 @@ class stage01_resequencing_omniExpressExome_execute(stage01_resequencing_omniExp
                 'GenomeBuild':d['GenomeBuild'],
                 'Chr':d['Chr'],
                 'MapInfo':d['MapInfo'],
+                'used_':True,
+                'comment_':None,
                 'mutation_data':{'SNP_Name':d['SNP_Name'],
                     'new_seq':d['Allele1_Top'], #changed for compatibility with gd
                     'Allele2_Top':d['Allele2_Top'],

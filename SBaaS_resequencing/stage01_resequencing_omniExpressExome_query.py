@@ -206,7 +206,8 @@ class stage01_resequencing_omniExpressExome_query(sbaas_template_query):
         raise_I = False):
         '''Join rows between omniExpressExome, annotations, and annotations auxillary
         INPUT:
-        experiment_id_I = string
+        experiment_ids_I = string or list
+        sample_names_I = string or list
         OUTPUT:
         data_O = output specified by output_O and dictColumn_I
         '''
@@ -299,4 +300,51 @@ class stage01_resequencing_omniExpressExome_query(sbaas_template_query):
         except SQLAlchemyError as e:
             print(e);
 
-    
+    def get_rows_experimentIDsAndSampleNames_dataStage01ResequencingOmniExpressExomeFiltered(
+        self,
+        experiment_id_I='',
+        sample_names_I='',
+        raise_I = False):
+        '''Query rows that are used from the analysis        
+        INPUT:
+        experiment_ids_I = string or list
+        sample_names_I = string or list
+        OUTPUT:
+        data_O = output specified by output_O and dictColumn_I
+        '''
+
+        data_O=[]
+        try:
+            query_cmd = '''SELECT "data_stage01_resequencing_omniExpressExomeFiltered"."id",
+                "data_stage01_resequencing_omniExpressExomeFiltered"."experiment_id",
+                "data_stage01_resequencing_omniExpressExomeFiltered"."sample_name",
+                "data_stage01_resequencing_omniExpressExomeFiltered"."SNP_Name",
+                "data_stage01_resequencing_omniExpressExomeFiltered"."GenomeBuild",
+                "data_stage01_resequencing_omniExpressExomeFiltered"."Chr",
+                "data_stage01_resequencing_omniExpressExomeFiltered"."MapInfo",
+                "data_stage01_resequencing_omniExpressExomeFiltered"."mutation_data",
+                "data_stage01_resequencing_omniExpressExomeFiltered"."used_",
+                "data_stage01_resequencing_omniExpressExomeFiltered"."comment_" '''
+            query_cmd+= '''FROM "data_stage01_resequencing_omniExpressExomeFiltered" '''
+            #query_cmd+= '''WHERE "data_stage01_resequencing_omniExpressExomeFiltered"."used_" '''
+            query_cmd+= '''WHERE '''
+            if experiment_id_I:
+                cmd_q = '''"data_stage01_resequencing_omniExpressExomeFiltered"."experiment_id" =ANY ('{%s}'::text[]) ''' %(self.convert_list2string(experiment_id_I));
+                #cmd_q = '''AND "data_stage01_resequencing_omniExpressExomeFiltered"."experiment_id" =ANY ('{%s}'::text[]) ''' %(self.convert_list2string(experiment_id_I));
+                query_cmd+=cmd_q;
+            if sample_names_I:
+                cmd_q = '''AND "data_stage01_resequencing_omniExpressExomeFiltered"."sample_name" =ANY ('{%s}'::text[]) ''' %(self.convert_list2string(sample_names_I));
+                query_cmd+=cmd_q;
+            query_cmd+= '''AND "data_stage01_resequencing_omniExpressExomeFiltered"."Chr"='1' ''' #testing only
+            query_cmd+= '''ORDER BY experiment_id ASC, sample_name ASC,
+                "Chr" ASC, "MapInfo" ASC '''
+            query_cmd+= ';';
+
+            query_select = sbaas_base_query_select(self.session,self.engine,self.settings)
+            data_O = [dict(d) for d in query_select.execute_select(query_cmd)];
+
+        except Exception as e:
+            if raise_I: raise;
+            else: print(e);
+
+        return data_O;

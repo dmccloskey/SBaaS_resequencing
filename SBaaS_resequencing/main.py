@@ -77,16 +77,6 @@ oee01 = stage01_resequencing_omniExpressExome_execute(session,engine,pg_settings
 oee01.initialize_supportedTables()
 oee01.initialize_tables();
 
-sample_names = [
-    'BloodProject01_UID10',
-    ]
-#filter the data by sample_name
-for sample_name in sample_names:
-    print('filtering ' + sample_name);
-    oee01.execute_filterOmniExpressExome(
-        experiment_id_I='BloodProject01',
-        sample_names_I=sample_name)
-
 #import time as time
 
 #st = time.time();
@@ -95,31 +85,32 @@ for sample_name in sample_names:
 #elapsed_time = time.time() - st;
 #print("Elapsed time: %.2fs" % elapsed_time)
 
-#from SBaaS_resequencing.stage01_resequencing_mutations_execute import stage01_resequencing_mutations_execute
-#mutations01 = stage01_resequencing_mutations_execute(session,engine,pg_settings.datadir_settings);
-#mutations01.initialize_supportedTables()
-#mutations01.initialize_tables();
+from SBaaS_resequencing.stage01_resequencing_mutations_execute import stage01_resequencing_mutations_execute
+mutations01 = stage01_resequencing_mutations_execute(session,engine,pg_settings.datadir_settings);
+mutations01.initialize_supportedTables()
+mutations01.initialize_tables();
 
-#annotation_dir = 'C:/Users/dmccloskey/Downloads/'
-#annotation_files = [
-#    'Homo_sapiens.GRCh38.87.chromosome.1.dat'
-#]
-#annotation_chromosome2File = {
-#    '1':'Homo_sapiens.GRCh38.87.chromosome.1.dat'
-#}
+annotation_dir = 'C:/Users/dmccloskey/Downloads/'
+annotation_files = [
+    'Homo_sapiens.GRCh38.87.chromosome.1.dat'
+]
+annotation_chromosome2File = {
+    '1':'Homo_sapiens.GRCh38.87.chromosome.1.dat'
+}
 
-#for annotation_file in annotation_files:
-#    mutations.execute_annotateFilteredMutations(
-#        experiment_id='BloodProject01',
-#        sample_names_I=[],
-#        annotation_dir_I=annotation_dir,
-#        annotation_files_I=['U00096.2.gb'],
-#        annotation_chromosome2File_I = annotation_chromosome2File,
-#        annotation_ref_I = 'genbank',
-#        biologicalmaterial_id_I=None, #no ecogene annotation
-#        query_object_I = 'stage01_resequencing_omniExpressExome_query',
-#        query_func_I = 'get_rows_experimentID_dataStage01ResequencingOmniExpressExomeFiltered',
-#        )
+for annotation_file in annotation_files:
+    mutations01.execute_annotateFilteredMutations(
+        experiment_id='BloodProject01',
+        sample_names_I=['BloodProject01_UID1'],
+        annotation_dir_I=annotation_dir,
+        annotation_files_I=[annotation_file],
+        #annotation_files_I=annotation_files,
+        annotation_chromosome2File_I = annotation_chromosome2File,
+        annotation_ref_I = 'genbank',
+        biologicalmaterial_id_I=None, #no ecogene annotation
+        query_object_I = 'stage01_resequencing_omniExpressExome_query',
+        query_func_I = 'get_rows_experimentIDsAndSampleNames_dataStage01ResequencingOmniExpressExomeFiltered',
+        )
 
 ##TODO: add to template notebook
 #from SBaaS_resequencing.stage01_resequencing_count_execute import stage01_resequencing_count_execute

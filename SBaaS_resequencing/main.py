@@ -1,13 +1,13 @@
 ﻿import sys
-#sys.path.append('C:/Users/dmccloskey-sbrg/Documents/GitHub/SBaaS_base')
-sys.path.append('C:/Users/dmccloskey/Documents/GitHub/SBaaS_base')
+sys.path.append('C:/Users/dmccloskey-sbrg/Documents/GitHub/SBaaS_base')
+#sys.path.append('C:/Users/dmccloskey/Documents/GitHub/SBaaS_base')
 from SBaaS_base.postgresql_settings import postgresql_settings
 from SBaaS_base.postgresql_orm import postgresql_orm
 
 # read in the settings file
-#filename = 'C:/Users/dmccloskey-sbrg/Google Drive/SBaaS_settings/settings_metabolomics.ini';
+filename = 'C:/Users/dmccloskey-sbrg/Google Drive/SBaaS_settings/settings_metabolomics.ini';
 #filename = 'C:/Users/dmccloskey/Google Drive/SBaaS_settings/settings_metabolomics_labtop.ini';
-filename = 'C:/Users/dmccloskey/Google Drive/SBaaS_settings/settings_metabolomics_remote.ini';
+#filename = 'C:/Users/dmccloskey/Google Drive/SBaaS_settings/settings_metabolomics_remote.ini';
 pg_settings = postgresql_settings(filename);
 
 # connect to the database from the settings file
@@ -90,7 +90,8 @@ mutations01 = stage01_resequencing_mutations_execute(session,engine,pg_settings.
 mutations01.initialize_supportedTables()
 mutations01.initialize_tables();
 
-annotation_dir = 'C:/Users/dmccloskey/Downloads/'
+#annotation_dir = 'C:/Users/dmccloskey/Downloads/'
+annotation_dir = 'F:/Users/dmccloskey-sbrg/Dropbox (UCSD SBRG)/BloodProject/'
 annotation_files = [
     'Homo_sapiens.GRCh38.87.chromosome.1.dat'
 ]

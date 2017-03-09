@@ -203,13 +203,19 @@ class stage01_resequencing_omniExpressExome_query(sbaas_template_query):
         self,
         experiment_ids_I='',
         sample_names_I='',
+        gc_score_I = 0.15,
+        include_nan_I = False,
         raise_I = False):
         '''Join rows between omniExpressExome, annotations, and annotations auxillary
         INPUT:
         experiment_ids_I = string or list
         sample_names_I = string or list
+        gc_score_I = float
+        include_nan_I = boolean
         OUTPUT:
         data_O = output specified by output_O and dictColumn_I
+
+        "GC_Score" != (SELECT CAST ('NaN' AS FLOAT))
         '''
 
         data_O = [];
@@ -229,6 +235,12 @@ class stage01_resequencing_omniExpressExome_query(sbaas_template_query):
                 subquery1+=cmd_q;
             if sample_names_I:
                 cmd_q = '''AND "data_stage01_resequencing_omniExpressExome"."sample_name" =ANY ('{%s}'::text[]) ''' %(self.convert_list2string(sample_names_I));
+                subquery1+=cmd_q;
+            if gc_score_I:
+                cmd_q = '''AND "data_stage01_resequencing_omniExpressExome"."GC_Score" < %s ''' %(gc_score_I);
+                subquery1+=cmd_q;
+            if not include_nan_I:
+                cmd_q = '''AND "data_stage01_resequencing_omniExpressExome"."GC_Score" != (SELECT CAST ('NaN' AS FLOAT)) ''';
                 subquery1+=cmd_q;
             subquery1+= '''ORDER BY "data_stage01_resequencing_omniExpressExome"."experiment_id" ASC, '''
             subquery1+= '''"data_stage01_resequencing_omniExpressExome"."sample_name" ASC '''

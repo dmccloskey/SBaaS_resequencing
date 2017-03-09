@@ -26,19 +26,26 @@ class stage01_resequencing_omniExpressExome_execute(stage01_resequencing_omniExp
         return filename;
     def execute_filterOmniExpressExome(self,
             experiment_id_I='BloodProject01',
-            sample_names_I=''):
+            sample_names_I='',
+            gc_score_I = 0.15,
+            include_nan_I = False,):
         '''Filter omniExpressExome data
         INPUT:
         experiment_id_I = string
         OUTPUT:
         
         NOTES:
-        no filtering is applied as of yet
+        gc_score <= 0.2 is considered poor quality by GenScore
+        gc_score < 0.2 is considered poor quality (sources: ...)
+        gc_score > 0.7 is considered to be high quality  (sources: ...)
+
         '''
         data_O = [];
         omniExpressExome = self.getJoin_rows_experimentIDs_dataStage01ResequecingOmniExpressExomeAndAnnotations(
             experiment_ids_I=experiment_id_I,
-            sample_names_I=sample_names_I
+            sample_names_I=sample_names_I,
+            gc_score_I = gc_score_I,
+            include_nan_I = include_nan_I,
             );
         ##BUG: remove 'nan' from GC_Score
         #GC_Score = [d['GC_Score'] for d in omniExpressExome]

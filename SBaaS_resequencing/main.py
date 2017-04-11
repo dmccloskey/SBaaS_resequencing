@@ -90,29 +90,64 @@ mutations01 = stage01_resequencing_mutations_execute(session,engine,pg_settings.
 mutations01.initialize_supportedTables()
 mutations01.initialize_tables();
 
+sample_names = [
+    'BloodProject01_UID1',
+    #'BloodProject01_UID10', #'Token "NaN is invalid'
+    #'BloodProject01_UID11',
+    #'BloodProject01_UID12',
+    #'BloodProject01_UID13',
+    #'BloodProject01_UID14',
+    #'BloodProject01_UID15', #'Token "NaN is invalid'
+    #'BloodProject01_UID16',
+    #'BloodProject01_UID18', #'Token "NaN is invalid'
+    #'BloodProject01_UID19',
+    #'BloodProject01_UID2',
+    #'BloodProject01_UID20',
+    #'BloodProject01_UID21', #'Token "NaN is invalid'
+    #'BloodProject01_UID22', #'Token "NaN is invalid'
+    #'BloodProject01_UID23', #'Token "NaN is invalid'
+    #'BloodProject01_UID24',
+    #'BloodProject01_UID25', #'Token "NaN is invalid'
+    #'BloodProject01_UID26',
+    #'BloodProject01_UID30',
+    #'BloodProject01_UID35',
+    #'BloodProject01_UID39',
+    #'BloodProject01_UID4',
+    #'BloodProject01_UID41',
+    #'BloodProject01_UID42', #'Token "NaN is invalid'
+    #'BloodProject01_UID5', #'Token "NaN is invalid'
+    #'BloodProject01_UID6',
+    #'BloodProject01_UID7',
+    #'BloodProject01_UID8',
+    #'BloodProject01_UID9'
+]
 #annotation_dir = 'C:/Users/dmccloskey/Downloads/'
 annotation_dir = 'F:/Users/dmccloskey-sbrg/Dropbox (UCSD SBRG)/BloodProject/'
 annotation_files = [
     'Homo_sapiens.GRCh38.87.chromosome.1.dat'
 ]
 annotation_chromosome2File = {
-    '1':'Homo_sapiens.GRCh38.87.chromosome.1.dat'
+    '2':'Homo_sapiens.GRCh38.87.chromosome.2.dat'
 }
 
+#annotate mutations per sample and per chromosome (to save memory...)
 st = time.time();
-for annotation_file in annotation_files:
-    mutations01.execute_annotateFilteredMutations(
-        experiment_id='BloodProject01',
-        sample_names_I=['BloodProject01_UID1'],
-        annotation_dir_I=annotation_dir,
-        annotation_files_I=[annotation_file],
-        #annotation_files_I=annotation_files,
-        annotation_chromosome2File_I = annotation_chromosome2File,
-        annotation_ref_I = 'genbank',
-        biologicalmaterial_id_I=None, #no ecogene annotation
-        query_object_I = 'stage01_resequencing_omniExpressExome_query',
-        query_func_I = 'get_rows_experimentIDsAndSampleNames_dataStage01ResequencingOmniExpressExomeFiltered',
-        )
+for sample_name in sample_names:
+    print(sample_name)
+    for chrom,file in annotation_chromosome2File.items():
+        print(chrom)
+        mutations01.execute_annotateFilteredMutations(
+            experiment_id='BloodProject01',
+            sample_names_I=[sample_name],
+            annotation_dir_I=annotation_dir,
+            annotation_files_I=[file],
+            annotation_chromosome2File_I = {chrom:file},
+#            annotation_chromosome2File_I = annotation_chromosome2File,
+            annotation_ref_I = 'genbank',
+            biologicalmaterial_id_I=None, #no ecogene annotation
+            query_object_I = 'stage01_resequencing_omniExpressExome_query',
+            query_func_I = 'get_rows_experimentIDsAndSampleNames_dataStage01ResequencingOmniExpressExomeFiltered',
+            )
 elapsed_time = time.time() - st;
 print("Elapsed time: %.2fs" % elapsed_time)
 

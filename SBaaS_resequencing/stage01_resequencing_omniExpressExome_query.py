@@ -316,11 +316,13 @@ class stage01_resequencing_omniExpressExome_query(sbaas_template_query):
         self,
         experiment_id_I='',
         sample_names_I='',
+        chromosomes_I='',
         raise_I = False):
         '''Query rows that are used from the analysis        
         INPUT:
         experiment_ids_I = string or list
         sample_names_I = string or list
+        chromosomes_I = string or list
         OUTPUT:
         data_O = output specified by output_O and dictColumn_I
         '''
@@ -347,7 +349,10 @@ class stage01_resequencing_omniExpressExome_query(sbaas_template_query):
             if sample_names_I:
                 cmd_q = '''AND "data_stage01_resequencing_omniExpressExomeFiltered"."sample_name" =ANY ('{%s}'::text[]) ''' %(self.convert_list2string(sample_names_I));
                 query_cmd+=cmd_q;
-            query_cmd+= '''AND "data_stage01_resequencing_omniExpressExomeFiltered"."Chr"='1' ''' #testing only
+            if chromosomes_I:
+                cmd_q = '''AND "data_stage01_resequencing_omniExpressExomeFiltered"."Chr" =ANY ('{%s}'::text[]) ''' %(self.convert_list2string(chromosomes_I));
+                query_cmd+=cmd_q;
+            #query_cmd+= '''AND "data_stage01_resequencing_omniExpressExomeFiltered"."Chr"='1' ''' #testing only
             query_cmd+= '''ORDER BY experiment_id ASC, sample_name ASC,
                 "Chr" ASC, "MapInfo" ASC '''
             query_cmd+= ';';

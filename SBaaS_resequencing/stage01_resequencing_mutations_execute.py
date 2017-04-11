@@ -162,6 +162,11 @@ class stage01_resequencing_mutations_execute(stage01_resequencing_mutations_io,
 
         print('Executing annotation of filtered mutations...')
 
+        #list out the number of chromosomes
+        chromosomes = None;
+        if annotation_chromosome2File_I:
+            chromosomes = list(annotation_chromosome2File_I.keys());
+
         #TODO: break into seperate function
         #query the data:
         data_listDict = [];
@@ -172,6 +177,7 @@ class stage01_resequencing_mutations_execute(stage01_resequencing_mutations_io,
                     #analysis_id_I,
                     experiment_id_I=experiment_id,
                     sample_names_I=sample_names_I,
+                    chromosomes_I=chromosomes,
                     );
             except AssertionError as e:
                 print(e);

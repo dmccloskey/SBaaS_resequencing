@@ -77,7 +77,7 @@ oee01 = stage01_resequencing_omniExpressExome_execute(session,engine,pg_settings
 oee01.initialize_supportedTables()
 oee01.initialize_tables();
 
-#import time as time
+import time as time
 
 #st = time.time();
 #result = oee01.getJoin_rows_experimentIDs_dataStage01ResequecingOmniExpressExomeAndAnnotations(
@@ -99,6 +99,7 @@ annotation_chromosome2File = {
     '1':'Homo_sapiens.GRCh38.87.chromosome.1.dat'
 }
 
+st = time.time();
 for annotation_file in annotation_files:
     mutations01.execute_annotateFilteredMutations(
         experiment_id='BloodProject01',
@@ -112,6 +113,8 @@ for annotation_file in annotation_files:
         query_object_I = 'stage01_resequencing_omniExpressExome_query',
         query_func_I = 'get_rows_experimentIDsAndSampleNames_dataStage01ResequencingOmniExpressExomeFiltered',
         )
+elapsed_time = time.time() - st;
+print("Elapsed time: %.2fs" % elapsed_time)
 
 ##TODO: add to template notebook
 #from SBaaS_resequencing.stage01_resequencing_count_execute import stage01_resequencing_count_execute

@@ -216,6 +216,8 @@ class stage01_resequencing_mutations_execute(stage01_resequencing_mutations_io,
                             ecogene_link = genomeannotation._generate_httplink2gene_ecogene(ecogene['ecogene_accession_number']);
                             data_tmp['mutation_links'].append(ecogene_link)
                         else: print('no ecogene_accession_number found for ordered_locus_location ' + bnumber);
+            elif annotation['locus_tag'] and not annotation['locus_tag'][0] is None:
+                data_tmp['mutation_links'] = annotation['locus_tag'];
                         
             # record the data
             data_tmp['mutation_genes'] = annotation['gene']

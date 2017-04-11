@@ -93,6 +93,5 @@ class stage01_resequencing_omniExpressExome_execute(stage01_resequencing_omniExp
                     'frequency':1.0, #added for compatibility with gd
                     },
             } for i,d in enumerate(omniExpressExome)]
-        self.add_rows_table('data_stage01_resequencing_omniExpressExomeFiltered',data_O);
-        
+        self.add_rows_table('data_stage01_resequencing_omniExpressExomeFiltered',data_O);     
 

@@ -77,80 +77,6 @@ oee01 = stage01_resequencing_omniExpressExome_execute(session,engine,pg_settings
 oee01.initialize_supportedTables()
 oee01.initialize_tables();
 
-import time as time
-
-#st = time.time();
-#result = oee01.getJoin_rows_experimentIDs_dataStage01ResequecingOmniExpressExomeAndAnnotations(
-#        experiment_ids_I='BloodProject01')
-#elapsed_time = time.time() - st;
-#print("Elapsed time: %.2fs" % elapsed_time)
-
-from SBaaS_resequencing.stage01_resequencing_mutations_execute import stage01_resequencing_mutations_execute
-mutations01 = stage01_resequencing_mutations_execute(session,engine,pg_settings.datadir_settings);
-mutations01.initialize_supportedTables()
-mutations01.initialize_tables();
-
-sample_names = [
-    'BloodProject01_UID1',
-    #'BloodProject01_UID10', #'Token "NaN is invalid'
-    #'BloodProject01_UID11',
-    #'BloodProject01_UID12',
-    #'BloodProject01_UID13',
-    #'BloodProject01_UID14',
-    #'BloodProject01_UID15', #'Token "NaN is invalid'
-    #'BloodProject01_UID16',
-    #'BloodProject01_UID18', #'Token "NaN is invalid'
-    #'BloodProject01_UID19',
-    #'BloodProject01_UID2',
-    #'BloodProject01_UID20',
-    #'BloodProject01_UID21', #'Token "NaN is invalid'
-    #'BloodProject01_UID22', #'Token "NaN is invalid'
-    #'BloodProject01_UID23', #'Token "NaN is invalid'
-    #'BloodProject01_UID24',
-    #'BloodProject01_UID25', #'Token "NaN is invalid'
-    #'BloodProject01_UID26',
-    #'BloodProject01_UID30',
-    #'BloodProject01_UID35',
-    #'BloodProject01_UID39',
-    #'BloodProject01_UID4',
-    #'BloodProject01_UID41',
-    #'BloodProject01_UID42', #'Token "NaN is invalid'
-    #'BloodProject01_UID5', #'Token "NaN is invalid'
-    #'BloodProject01_UID6',
-    #'BloodProject01_UID7',
-    #'BloodProject01_UID8',
-    #'BloodProject01_UID9'
-]
-#annotation_dir = 'C:/Users/dmccloskey/Downloads/'
-annotation_dir = 'F:/Users/dmccloskey-sbrg/Dropbox (UCSD SBRG)/BloodProject/'
-annotation_files = [
-    'Homo_sapiens.GRCh38.87.chromosome.1.dat'
-]
-annotation_chromosome2File = {
-    '2':'Homo_sapiens.GRCh38.87.chromosome.2.dat'
-}
-
-#annotate mutations per sample and per chromosome (to save memory...)
-st = time.time();
-for sample_name in sample_names:
-    print(sample_name)
-    for chrom,file in annotation_chromosome2File.items():
-        print(chrom)
-        mutations01.execute_annotateFilteredMutations(
-            experiment_id='BloodProject01',
-            sample_names_I=[sample_name],
-            annotation_dir_I=annotation_dir,
-            annotation_files_I=[file],
-            annotation_chromosome2File_I = {chrom:file},
-#            annotation_chromosome2File_I = annotation_chromosome2File,
-            annotation_ref_I = 'genbank',
-            biologicalmaterial_id_I=None, #no ecogene annotation
-            query_object_I = 'stage01_resequencing_omniExpressExome_query',
-            query_func_I = 'get_rows_experimentIDsAndSampleNames_dataStage01ResequencingOmniExpressExomeFiltered',
-            )
-elapsed_time = time.time() - st;
-print("Elapsed time: %.2fs" % elapsed_time)
-
 ##TODO: add to template notebook
 #from SBaaS_resequencing.stage01_resequencing_count_execute import stage01_resequencing_count_execute
 #count01 = stage01_resequencing_count_execute(session,engine,pg_settings.datadir_settings);
@@ -159,3 +85,55 @@ print("Elapsed time: %.2fs" % elapsed_time)
 #count01.execute_countElementsInFeatures(
 #    analysis_id_I='ALEsKOs01_11',
 #    features_I=['parent_classes'])
+
+#make the histogram table
+from SBaaS_resequencing.stage01_resequencing_histogram_execute import stage01_resequencing_histogram_execute
+hist01 = stage01_resequencing_histogram_execute(session,engine,pg_settings.datadir_settings);
+hist01.initialize_supportedTables()
+hist01.initialize_tables();
+
+#make the count table
+from SBaaS_resequencing.stage01_resequencing_count_execute import stage01_resequencing_count_execute
+count01 = stage01_resequencing_count_execute(session,engine,pg_settings.datadir_settings);
+count01.initialize_supportedTables()
+count01.initialize_tables();
+
+analysis_ids = [
+    'BloodProject01',
+    ]
+
+features_histogram = [    
+#     'mutation_position',
+    'mutation_chromosome',
+    'mutation_chromosomeAndPosition',
+];
+n_bins_histogram = [
+    500, # 0-4640000
+    9, # 0.1-1.0
+    ];
+features_count = [
+#     'mutation_position',
+    'mutation_chromosome',
+    'mutation_chromosomeAndPosition',
+#     'mutation_type',
+    'mutation_genes',
+    'mutation_locations',
+    'mutation_id',
+    'mutation_class',
+#     'parent_classes'
+];
+
+#run the histogram analyses
+for analysis in analysis_ids:
+   #generate the counts
+   count01.reset_dataStage01_resequencing_count(analysis_id_I=analysis);
+   count01.execute_countElementsInFeatures(
+       analysis_id_I=analysis,
+       features_I = features_count,
+       );
+   #generate the counts per sample
+#    count01.reset_dataStage01_resequencing_countPerSample(analysis_id_I=analysis);
+   count01.execute_countElementsInFeaturesPerSample(
+       analysis_id_I=analysis,
+       features_I = features_count,
+       );

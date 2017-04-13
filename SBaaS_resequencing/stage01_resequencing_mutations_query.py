@@ -239,6 +239,37 @@ class stage01_resequencing_mutations_query(sbaas_template_query):
             return data_O;
         except SQLAlchemyError as e:
             print(e);
+    def get_AllMutationChromosomes_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I,used__I=True):
+        '''Query mutation_chromosomes from data_stage01_resequencing_mutationsAnnotated'''
+        try:
+            data = self.session.query(data_stage01_resequencing_mutationsAnnotated.mutation_chromosome).filter(
+                    data_stage01_resequencing_mutationsAnnotated.experiment_id.like(experiment_id_I),
+                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I),
+                    data_stage01_resequencing_mutationsAnnotated.used_==used__I).order_by(
+                    data_stage01_resequencing_mutationsAnnotated.mutation_chromosome.asc()).all();
+            data_O = [];
+            for cnt,d in enumerate(data): 
+                data_O.append(d.mutation_chromosome);
+            return data_O;
+        except SQLAlchemyError as e:
+            print(e);
+    def get_AllMutationChromosomesAndPositions_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I,used__I=True):
+        '''Query mutation_chromosomes and mutation_positions from data_stage01_resequencing_mutationsAnnotated'''
+        try:
+            data = self.session.query(data_stage01_resequencing_mutationsAnnotated.mutation_chromosome,
+                    data_stage01_resequencing_mutationsAnnotated.mutation_position).filter(
+                    data_stage01_resequencing_mutationsAnnotated.experiment_id.like(experiment_id_I),
+                    data_stage01_resequencing_mutationsAnnotated.sample_name.like(sample_name_I),
+                    data_stage01_resequencing_mutationsAnnotated.used_==used__I).order_by(
+                    data_stage01_resequencing_mutationsAnnotated.mutation_chromosome.asc(),
+                    data_stage01_resequencing_mutationsAnnotated.mutation_position.asc()).all();
+            data_O = [];
+            for cnt,d in enumerate(data): 
+                chropos_str = '%s_%s' %(d.mutation_chromosome,d.mutation_position)
+                data_O.append(chropos_str);
+            return data_O;
+        except SQLAlchemyError as e:
+            print(e);
     def get_AllMutationPositions_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(self,experiment_id_I,sample_name_I,used__I=True):
         '''Query mutation_positions from data_stage01_resequencing_mutationsAnnotated'''
         try:

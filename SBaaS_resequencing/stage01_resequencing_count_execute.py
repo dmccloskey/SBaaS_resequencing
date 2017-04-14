@@ -81,7 +81,7 @@ class stage01_resequencing_count_execute(
                 #get all the data for the analysis
                 for sn_cnt,sn in enumerate(sample_names):
                     data_tmp = [];
-                    data_tmp = self.get_AllMutationTypes_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(experiment_ids[sn_cnt],sn);
+                    data_tmp = mut01.get_AllMutationTypes_experimentIDAndSampleName_dataStage01ResequencingMutationsAnnotated(experiment_ids[sn_cnt],sn);
                     if data_tmp:
                         data_count.extend(data_tmp);
                 #count the elements of each feature
